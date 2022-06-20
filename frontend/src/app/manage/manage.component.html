@@ -1,0 +1,68 @@
+<h4>Current assets:</h4>
+<div class="bg-secondary p-5">
+  <div class="row" style="background: #FFFFFF">
+
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Asset</th>
+        <th scope="col">Value</th>
+        <th scope="col">No. of Items</th>
+        <th scope="col">Percentage</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let asset of assets; let i = index">
+        <th scope="row">{{ asset.id }}</th>
+        <td>{{ asset.name}}</td>
+        <td>{{ asset.moneyValue }}</td>
+        <td>{{ asset.items.length }}</td>
+        <td>{{ percentages[asset.id]}} %</td>
+      </tr>
+
+      <tr>
+        <th scope="row">{{assets.length + 1}}</th>
+        <td><strong>SUM</strong></td>
+        <td><strong>{{sum}}</strong></td>
+        <td><strong>{{numberOfItems}}</strong></td>
+        <td><strong>100.00 %</strong></td>
+      </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<div class="row mt-3 p-3">
+  <div class="col bg-secondary m-2">
+    <div class="row">
+      <div class="mt-5 ml-5 mb-4 p-2" style="background: #D9D9D9;"><h4>Stock assets</h4></div>
+    </div>
+    <div class="row">
+      <div class="btn-group">
+        <button class="btn btn-lg btn-dark ml-5">66,66 %</button>
+        <button class="btn btn-lg btn-dark ml-5">23518.16</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mt-4 ml-5 mb-4 p-2" style="background: #D9D9D9;"><h4>Account assets</h4></div>
+    </div>
+    <div class="row">
+      <div class="btn-group mb-2">
+        <button class="btn btn-lg btn-dark ml-5">66,66 %</button>
+        <button class="btn btn-lg btn-dark ml-5">23518.16</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="col bg-secondary m-2">
+      <app-piechart class="m-2"></app-piechart>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="btn btn-secondary btn-lg btn-block mb-4">Create a new summary</button>
+
+

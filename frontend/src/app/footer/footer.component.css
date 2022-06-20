@@ -1,0 +1,14 @@
+.small-f {
+  font-size: 14px;
+  color: #FFFFFF;
+  font-weight: lighter;
+}
+.big-f {
+  font-size: 24px;
+  color: #FFFFFF;
+  font-weight: lighter;
+}
+
+.date {
+  font-size: 20px;
+}

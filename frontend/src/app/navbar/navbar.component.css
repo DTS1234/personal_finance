@@ -1,0 +1,30 @@
+a {
+  color: #000000;
+  text-underline: none;
+}
+
+a:hover {
+
+}
+
+.col {
+  background-color: #484848;
+  height: 103px;
+  width: 200px;
+}
+
+.isActive {
+  background-color: #c7c7c7;
+}
+
+.nav-color {
+  background-color: #212121;
+}
+
+h4 {
+  color: #fafafa;
+}
+
+.isActive h4 {
+  color: #212121;
+}
