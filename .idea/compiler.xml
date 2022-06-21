@@ -3,6 +3,15 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="personal_finance" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="personal_finance" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

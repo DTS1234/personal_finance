@@ -30,7 +30,7 @@ public class AssetService {
     }
 
     private double calculatePercentage(double sum, Asset asset) {
-        return BigDecimal.valueOf(asset.getMoneyValue())
+        return asset.getMoneyValue()
                 .divide(
                         BigDecimal.valueOf(sum), 4, RoundingMode.HALF_EVEN
                 )

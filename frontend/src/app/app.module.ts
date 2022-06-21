@@ -16,7 +16,8 @@ import {HomepageChartComponent} from './homepage/homepage-chart/homepage-chart.c
 import {ChartsModule, MDBBootstrapModule} from 'angular-bootstrap-md';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SummaryBoxComponent} from './homepage/summary-box/summary-box.component';
-import { PiechartComponent } from './manage/piechart/piechart.component';
+import {PiechartComponent} from './manage/piechart/piechart.component';
+import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
 
 @NgModule({
   declarations: [
@@ -30,8 +31,8 @@ import { PiechartComponent } from './manage/piechart/piechart.component';
     HomepageChartComponent,
     SummaryBoxComponent,
     PiechartComponent,
-    PiechartComponent
-  ],
+    PiechartComponent,
+    SummaryCreationComponent],
   imports: [
     BrowserModule, HttpClientModule, RouterModule, AppRoutingModule, MDBBootstrapModule.forRoot(),
     BrowserAnimationsModule, ChartsModule

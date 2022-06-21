@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * @author akazmierczak
@@ -21,6 +19,11 @@ import javax.persistence.ManyToOne;
 public class Item {
     @Id
     private Long id;
+    private BigDecimal moneyValue;
+    private String name;
+    @Column(precision = 20, scale = 7)
+    @Convert(converter = BigDecimalConverterQuantity.class)
+    private BigDecimal quantity;
 
     @ManyToOne
     @JoinColumn(name = "assetId")

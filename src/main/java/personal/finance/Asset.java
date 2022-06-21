@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class Asset {
 
     @Id
     private Long id;
-    private double moneyValue;
+    private BigDecimal moneyValue;
     private String name;
     @OneToMany(mappedBy = "asset")
     private List<Item> items;

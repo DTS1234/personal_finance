@@ -2,6 +2,7 @@ package acceptance;
 
 import personal.finance.Asset;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,18 +17,18 @@ public class GivenAssets {
                 Asset.builder()
                         .id(1L)
                         .name("Crypto")
-                        .moneyValue(500.31)
+                        .moneyValue(BigDecimal.valueOf(500.31))
                         .buildAsset(),
                 Asset.builder()
                         .id(2L)
                         .name("Account 1")
-                        .moneyValue(1500.12)
+                        .moneyValue(BigDecimal.valueOf(1500.12))
 
                         .buildAsset(),
                 Asset.builder()
                         .id(3L)
                         .name("Stocks 1")
-                        .moneyValue(2201.24)
+                        .moneyValue(BigDecimal.valueOf(2201.24))
                         .buildAsset());
                 // sum of values : 2000.43 + 2201.24 = 4201.67
                 // percentages: 11,91 %, 35,70%, 52,39%

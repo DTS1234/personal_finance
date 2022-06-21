@@ -2,12 +2,13 @@ package acceptance;
 
 import io.restassured.common.mapper.TypeRef;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import personal.finance.*;
-import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -42,17 +43,17 @@ class AcceptanceTests {
 
         Asset asset1 = assetRepository.findById(1L).get();
         itemRepository.saveAll(Arrays.asList(
-                Item.builder().id(1L).asset(asset1).build(),
-                Item.builder().id(2L).asset(asset1).build(),
-                Item.builder().id(3L).asset(asset1).build()));
+                Item.builder().id(1L).moneyValue(BigDecimal.valueOf(500.21)).quantity(BigDecimal.valueOf(0.0000123)).name("Bitcoin").asset(asset1).build(),
+                Item.builder().id(2L).moneyValue(BigDecimal.valueOf(1000.22)).quantity(BigDecimal.valueOf(0.00543)).name("Ethereum").asset(asset1).build(),
+                Item.builder().id(3L).moneyValue(BigDecimal.valueOf(500.01)).quantity(BigDecimal.valueOf(100.00)).name("Luna").asset(asset1).build()));
 
         Asset asset2 = assetRepository.findById(2L).get();
-        itemRepository.save(Item.builder().id(4L).asset(asset2).build());
+        itemRepository.save(Item.builder().moneyValue(BigDecimal.valueOf(2201.24)).id(4L).quantity(BigDecimal.valueOf(1)).name("ZL account").asset(asset2).build());
 
         Asset asset3 = assetRepository.findById(3L).get();
         itemRepository.saveAll(Arrays.asList(
-                Item.builder().id(5L).asset(asset3).build(),
-                Item.builder().id(6L).asset(asset3).build()));
+                Item.builder().id(5L).moneyValue(BigDecimal.valueOf(1201.12)).quantity(BigDecimal.valueOf(12)).name("CDP").asset(asset3).build(),
+                Item.builder().id(6L).moneyValue(BigDecimal.valueOf(1000.12)).quantity(BigDecimal.valueOf(43)).name("ALG").asset(asset3).build()));
 
         // when
         List<Asset> actual = when()
@@ -69,26 +70,41 @@ class AcceptanceTests {
         Asset firstAsset = actual.get(0);
         Assertions.assertThat(firstAsset)
                 .hasFieldOrPropertyWithValue("name", "Crypto")
-                .hasFieldOrPropertyWithValue("moneyValue", 500.31)
-                .hasFieldOrPropertyWithValue("items", Arrays.asList(
-                        Item.builder().id(1L).build(),
-                        Item.builder().id(2L).build(),
-                        Item.builder().id(3L).build()));
+                .hasFieldOrPropertyWithValue("moneyValue", BigDecimal.valueOf(500.31));
+        List<Item> expectedItems1 = Arrays.asList(
+                Item.builder().id(1L).moneyValue(BigDecimal.valueOf(500.21)).quantity(BigDecimal.valueOf(0.0000123)).name("Bitcoin").build(),
+                Item.builder().id(2L).moneyValue(BigDecimal.valueOf(1000.22)).quantity(BigDecimal.valueOf(0.00543)).name("Ethereum").build(),
+                Item.builder().id(3L).moneyValue(BigDecimal.valueOf(500.01)).quantity(BigDecimal.valueOf(100.00)).name("Luna").build());
+        List<Item> actualItems1 = firstAsset.getItems();
+        checkItemCorrectness(expectedItems1, actualItems1);
 
         Asset secondAsset = actual.get(1);
         Assertions.assertThat(secondAsset)
                 .hasFieldOrPropertyWithValue("name", "Account 1")
-                .hasFieldOrPropertyWithValue("moneyValue", 1500.12)
-                .hasFieldOrPropertyWithValue("items", Collections.singletonList(
-                        Item.builder().id(4L).build()));
+                .hasFieldOrPropertyWithValue("moneyValue", BigDecimal.valueOf(1500.12));
+
+        List<Item> expectedItems2 = Collections.singletonList(Item.builder().moneyValue(BigDecimal.valueOf(2201.24)).name("ZL account").quantity(BigDecimal.valueOf(1)).id(4L).build());
+        List<Item> actualItems2 = secondAsset.getItems();
+        checkItemCorrectness(expectedItems2, actualItems2);
 
         Asset thirdAsset = actual.get(2);
         Assertions.assertThat(thirdAsset)
                 .hasFieldOrPropertyWithValue("name", "Stocks 1")
-                .hasFieldOrPropertyWithValue("moneyValue", 2201.24)
-                .hasFieldOrPropertyWithValue("items", Arrays.asList(
-                        Item.builder().id(5L).build(),
-                        Item.builder().id(6L).build()));
+                .hasFieldOrPropertyWithValue("moneyValue", BigDecimal.valueOf(2201.24));
+        List<Item> expectedItems3 = Arrays.asList(
+                Item.builder().moneyValue(BigDecimal.valueOf(1201.12)).id(5L).name("CDP").quantity(BigDecimal.valueOf(12)).build(),
+                Item.builder().moneyValue(BigDecimal.valueOf(1000.12)).id(6L).name("ALG").quantity(BigDecimal.valueOf(43)).build());
+        List<Item> actualItems3 = thirdAsset.getItems();
+        checkItemCorrectness(expectedItems3, actualItems3);
+    }
+
+    private void checkItemCorrectness(List<Item> expectedItems1, List<Item> actualItems1) {
+        for (int i = 0; i < expectedItems1.size(); i++) {
+            Item currExpectedItem = expectedItems1.get(i);
+            Item currActualItem = actualItems1.get(i);
+            Assertions.assertThat(currActualItem).usingRecursiveComparison().ignoringFields("moneyValue", "asset").isEqualTo(currExpectedItem);
+            Assertions.assertThat(currActualItem.getMoneyValue()).isEqualByComparingTo(currExpectedItem.getMoneyValue());
+        }
     }
 
     @Test
