@@ -1,4 +1,4 @@
-package personal.finance;
+package personal.finance.asset;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class AssetService {
 
     private final AssetRepository assetRepository;
 
-    Map<Long, Double> getPercentages() {
+    public Map<Long, Double> getPercentages() {
         List<Asset> all = assetRepository.findAll();
         double sum = assetRepository.selectAssetMoneyValueSum();
         Map<Long, Double> result = new HashMap<>();
@@ -39,5 +39,4 @@ public class AssetService {
                 )
                 .doubleValue();
     }
-
 }

@@ -1,9 +1,11 @@
-package personal.finance;
+package personal.finance.asset.item;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Converter
 public class BigDecimalConverterQuantity implements AttributeConverter<BigDecimal, BigDecimal> {
 
     @Override

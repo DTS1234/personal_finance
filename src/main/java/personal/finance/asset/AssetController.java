@@ -1,4 +1,4 @@
-package personal.finance;
+package personal.finance.asset;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;

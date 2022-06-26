@@ -1,6 +1,6 @@
 package acceptance;
 
-import personal.finance.Asset;
+import personal.finance.asset.Asset;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -23,7 +23,6 @@ public class GivenAssets {
                         .id(2L)
                         .name("Account 1")
                         .moneyValue(BigDecimal.valueOf(1500.12))
-
                         .buildAsset(),
                 Asset.builder()
                         .id(3L)

@@ -1,9 +1,8 @@
-package personal.finance;
+package personal.finance.asset.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import personal.finance.asset.Asset;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,10 +13,13 @@ import java.math.BigDecimal;
  */
 @Entity
 @Builder
-@Data
+@ToString(exclude = "asset")
+@Getter
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Item {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private BigDecimal moneyValue;
     private String name;
@@ -25,9 +27,9 @@ public class Item {
     @Convert(converter = BigDecimalConverterQuantity.class)
     private BigDecimal quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "assetId")
+    @ManyToOne(optional = false)
     @JsonIgnore
+    @Setter
     private Asset asset;
 
     public Item() {

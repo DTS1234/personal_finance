@@ -6,12 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import personal.finance.asset.AssetRepository;
+import personal.finance.asset.AssetService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 /**
