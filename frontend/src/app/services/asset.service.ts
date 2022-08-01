@@ -8,19 +8,21 @@ import {Observable} from 'rxjs';
 })
 export class AssetService {
 
+  private basePath = 'http://localhost:8080';
+
   constructor(private http: HttpClient) {
   }
 
   getAssets(): Observable<Asset[]> {
-    return this.http.get<Asset[]>('http://localhost:8080/assets');
+    return this.http.get<Asset[]>(`${this.basePath}/assets`);
   }
 
   getPercentages(): Observable<[{ [key: number]: number }]> {
-    return this.http.get<[{ [key: number]: number }]>('http://localhost:8080/assets/percentages');
+    return this.http.get<[{ [key: number]: number }]>(`${this.basePath}/assets/percentages`);
   }
 
   getSum(): Observable<number> {
-    return this.http.get<number>('http://localhost:8080/assets/sum');
+    return this.http.get<number>(`${this.basePath}/assets/sum`);
   }
 
 }

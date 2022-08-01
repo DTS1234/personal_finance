@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {AssetService} from '../services/asset.service';
 import {Asset} from '../models/asset.model';
+import {SummaryService} from "../services/summary.service";
+import {Summary} from "../models/summary.model";
+import {Router} from "@angular/router";
+import {logger} from "codelyzer/util/logger";
 
 @Component({
   selector: 'app-manage',
@@ -14,7 +18,7 @@ export class ManageComponent implements OnInit {
   sum: number;
   numberOfItems: number;
 
-  constructor(private assetService: AssetService) {
+  constructor(private assetService: AssetService, private summaryService: SummaryService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -35,5 +39,18 @@ export class ManageComponent implements OnInit {
 
   }
 
+  createNewSummary(): void {
+    const date = new Date(Date.now());
+    console.log(date);
+    let newSummary: Summary = new Summary(null, '06/27/2022', 0);
+    this.summaryService.createNewSummary(newSummary).subscribe(
+      data => {
+        newSummary = data;
+        console.log(newSummary);
+        this.summaryService.setNewSummary(newSummary);
+        this.router.navigate([`/summary/${newSummary.id}/`]).then(r => console.log(r));
 
+      }
+    );
+  }
 }

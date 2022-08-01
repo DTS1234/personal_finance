@@ -1,11 +1,7 @@
 package personal.finance.summary.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 import personal.finance.asset.item.ItemDomain;
-import personal.finance.summary.SummaryState;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,6 +9,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class AssetDomain {
 
     @Getter

@@ -6,4 +6,8 @@ public class ItemMapper {
         return Item.builder().quantity(item.getQuantity()).name(item.getName()).moneyValue(item.getMoneyValue()).id(item.getId()).build();
 
     }
+
+    public static ItemDomain toDomain(Item item) {
+        return ItemDomain.builder().quantity(item.getQuantity()).name(item.getName()).moneyValue(item.getMoneyValue()).id(item.getId()).build();
+    }
 }

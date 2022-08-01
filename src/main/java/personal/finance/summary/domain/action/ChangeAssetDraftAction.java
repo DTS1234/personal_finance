@@ -14,7 +14,10 @@ public class ChangeAssetDraftAction implements Action {
     private final PersistenceAdapter persistenceAdapter;
 
     @Override
-    public void execute(AssetDomain asset, SummaryDomain summary) {
+    public SummaryDomain execute(AssetDomain asset, SummaryDomain summary) {
+        if (!persistenceAdapter.exists(summary)){
+            throw new SummaryDoesNotExist(String.format("Summary with id of %s, does not exist.", summary.getId()));
+        }
         if (summary.getState().compareTo(SummaryState.DRAFT) != 0){
             throw new IllegalStateException(String.format("Cannot edit summary in that state: %s.", summary.getState()));
         }
@@ -25,5 +28,6 @@ public class ChangeAssetDraftAction implements Action {
             throw new IllegalArgumentException("Money value cannot be negative!");
         }
 
+        return persistenceAdapter.updateAsset(summary, asset);
     }
 }

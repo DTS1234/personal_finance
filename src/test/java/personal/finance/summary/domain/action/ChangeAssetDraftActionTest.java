@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import personal.finance.asset.item.Item;
 import personal.finance.asset.item.ItemDomain;
 import personal.finance.summary.SummaryState;
 import personal.finance.summary.domain.PersistenceAdapter;
@@ -20,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class ChangeAssetDraftActionTest {
 
@@ -45,6 +46,17 @@ class ChangeAssetDraftActionTest {
     }
 
     @Test
+    void shouldThrowAnExceptionIfSummaryDoesNotExist() {
+        String message = String.format("Summary with id of %s, does not exist.", 99L);
+        Assertions.assertThatThrownBy(() -> subject.execute(
+                        AssetDomain.builder().id(99L).build(),
+                        SummaryDomain.builder().id(99L).state(SummaryState.DRAFT).build()
+                ))
+                .isInstanceOf(SummaryDoesNotExist.class)
+                .hasMessage(message);
+    }
+
+    @Test
     void shouldThrowAnExceptionIfAssetDoesNotExist() {
         String message = String.format("Asset with id of %s, does not exist.", 99L);
         Assertions.assertThatThrownBy(() -> subject.execute(
@@ -57,7 +69,8 @@ class ChangeAssetDraftActionTest {
 
     @Test
     void shouldThrowExceptionIfNewMoneyValueIsNegative() {
-        Mockito.when(persistenceAdapter.exists(any())).thenReturn(true);
+        Mockito.when(persistenceAdapter.exists((AssetDomain) any())).thenReturn(true);
+        Mockito.when(persistenceAdapter.exists((SummaryDomain) any())).thenReturn(true);
         Assertions.assertThatThrownBy(() -> subject.execute(
                         AssetDomain.builder().id(1L).moneyValue(BigDecimal.valueOf(-200)).build(),
                         SummaryDomain.builder().state(SummaryState.DRAFT).build()
@@ -68,29 +81,35 @@ class ChangeAssetDraftActionTest {
 
     @Test
     void shouldPersistChangesIfNewAssetIsValid() {
-        Mockito.when(persistenceAdapter.exists(any())).thenReturn(true);
+        Mockito.when(persistenceAdapter.exists((SummaryDomain) any())).thenReturn(true);
+        Mockito.when(persistenceAdapter.exists((AssetDomain) any())).thenReturn(true);
         BigDecimal newMoneyValue = BigDecimal.valueOf(200).setScale(2, RoundingMode.HALF_UP);
         BigDecimal oldMoneyValue = BigDecimal.valueOf(100).setScale(2, RoundingMode.HALF_UP);
-        subject.execute(AssetDomain.builder()
-                        .id(1L)
+        AssetDomain newAsset = AssetDomain.builder()
+                .id(1L)
+                .moneyValue(newMoneyValue)
+                .items(List.of(ItemDomain.builder()
                         .moneyValue(newMoneyValue)
-                        .items(List.of(ItemDomain.builder()
-                                .moneyValue(newMoneyValue)
-                                .quantity(BigDecimal.valueOf(2))
-                                .name("BTC")
-                                .build()))
-                        .name("Crypto").build(),
-                SummaryDomain.builder()
-                        .state(SummaryState.DRAFT)
-                        .id(1L)
-                        .localDate(LocalDate.of(2022, 1, 1))
-                        .assets(Collections.singletonList(
-                                AssetDomain.builder().id(1L).moneyValue(newMoneyValue).name("Crypto")
-                                        .items(List.of(ItemDomain.builder().moneyValue(oldMoneyValue).quantity(BigDecimal.valueOf(2)).name("Bitcoin").build()))
-                                        .build()
-                        ))
-                        .moneyValue(oldMoneyValue)
-                        .build());
+                        .quantity(BigDecimal.valueOf(2))
+                        .name("BTC")
+                        .build()))
+                .name("Crypto").build();
+        SummaryDomain summary = SummaryDomain.builder()
+                .state(SummaryState.DRAFT)
+                .id(1L)
+                .date(LocalDate.of(2022, 1, 1))
+                .assets(Collections.singletonList(
+                        AssetDomain.builder().id(1L).moneyValue(newMoneyValue).name("Crypto")
+                                .items(List.of(ItemDomain.builder().moneyValue(oldMoneyValue).quantity(BigDecimal.valueOf(2)).name("Bitcoin").build()))
+                                .build()
+                ))
+                .moneyValue(oldMoneyValue)
+                .build();
+        subject.execute(newAsset,
+                summary);
+
+        verify(persistenceAdapter, times(1)).updateAsset(summary, newAsset);
+
     }
 
 }

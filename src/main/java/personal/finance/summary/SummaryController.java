@@ -28,4 +28,24 @@ public class SummaryController {
         return summaryService.getAvailableAssets(id);
     }
 
+    @PostMapping("/summaries/{id}/add_asset")
+    public Summary addAssetToSummaryDraft(@PathVariable Long id, @RequestBody Asset asset) {
+        return summaryService.addAsset(id, asset);
+    }
+
+    @PostMapping("/summaries/{id}/confirm")
+    public Summary confirmSummary(@PathVariable Long id) {
+        return summaryService.confirmSummary(id);
+    }
+
+    @PostMapping("/summaries/{summaryId}/assets/{assetId}")
+    public Summary confirmSummary(@PathVariable Long summaryId, @PathVariable Long assetId, @RequestBody Asset editedAsset) {
+        return summaryService.editAsset(summaryId, assetId, editedAsset);
+    }
+
+    @PostMapping("/summaries/new")
+    public Summary createNewSummary(@RequestBody Summary summary) {
+        return summaryService.createNewSummary(summary);
+    }
+
 }

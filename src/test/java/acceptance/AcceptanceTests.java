@@ -1,13 +1,15 @@
 package acceptance;
 
 import io.restassured.common.mapper.TypeRef;
+import io.restassured.http.ContentType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import personal.finance.*;
+import personal.finance.PersonalFinanceApplication;
 import personal.finance.asset.Asset;
 import personal.finance.asset.AssetRepository;
 import personal.finance.asset.item.Item;
@@ -22,6 +24,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
 /**
@@ -30,7 +33,7 @@ import static io.restassured.RestAssured.when;
  */
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = {AssetRepository.class, PersonalFinanceApplication.class}
+        classes = {PersonalFinanceApplication.class}
 )
 class AcceptanceTests {
 
@@ -47,6 +50,13 @@ class AcceptanceTests {
     @Autowired
     private ItemRepository itemRepository;
 
+    @BeforeEach
+    void setUp() {
+        summaryRepository.deleteAll();
+        assetRepository.deleteAll();
+        itemRepository.deleteAll();
+    }
+
     @AfterEach
     void tearDown() {
         summaryRepository.deleteAll();
@@ -60,7 +70,12 @@ class AcceptanceTests {
         List<Asset> givenAssets = GivenAssets.assets();
         List<List<Item>> givenItems = GivenItems.itemLists(givenAssets);
         IntStream.range(0, 3).forEach(i -> givenAssets.get(i).addItems(givenItems.get(i)));
-        assetRepository.saveAll(givenAssets);
+        SummaryEntity saved = summaryRepository.save(SummaryEntity.builder().build());
+        saved.addAsset(givenAssets.get(0));
+        saved.addAsset(givenAssets.get(1));
+        saved.addAsset(givenAssets.get(2));
+        summaryRepository.save(saved);
+
         // when
         List<Asset> actual = when()
                 .get(String.format(BASE_PATH + "/assets", port))
@@ -108,7 +123,7 @@ class AcceptanceTests {
         for (int i = 0; i < expectedItems1.size(); i++) {
             Item currExpectedItem = expectedItems1.get(i);
             Item currActualItem = actualItems1.get(i);
-            Assertions.assertThat(currActualItem).usingRecursiveComparison().ignoringFields("moneyValue", "asset").isEqualTo(currExpectedItem);
+            Assertions.assertThat(currActualItem).usingRecursiveComparison().ignoringFields("moneyValue", "asset", "id").isEqualTo(currExpectedItem);
             Assertions.assertThat(currActualItem.getMoneyValue()).isEqualByComparingTo(currExpectedItem.getMoneyValue());
         }
     }
@@ -116,7 +131,13 @@ class AcceptanceTests {
     @Test
     void givenThreeAssetsWithMoneyValue_shouldReturnTheSumOfValue() {
         // given
-        assetRepository.saveAll(GivenAssets.assets());
+        List<Asset> givenAssets = GivenAssets.assets();
+        SummaryEntity saved = summaryRepository.save(SummaryEntity.builder().build());
+        saved.addAsset(givenAssets.get(0));
+        saved.addAsset(givenAssets.get(1));
+        saved.addAsset(givenAssets.get(2));
+        summaryRepository.save(saved);
+
         // when
         double actual = when()
                 .get(String.format(BASE_PATH + "/assets/sum", port))
@@ -132,7 +153,12 @@ class AcceptanceTests {
     void givenThreeAssetsWithMoneyValue_shouldReturnThePercentagesMap() {
         // given
         List<Asset> given = GivenAssets.assets();
-        assetRepository.saveAll(given);
+        SummaryEntity saved = summaryRepository.save(SummaryEntity.builder().build());
+        saved.addAsset(given.get(0));
+        saved.addAsset(given.get(1));
+        saved.addAsset(given.get(2));
+        summaryRepository.save(saved);
+
         // when
         HashMap<Long, Double> actual = when()
                 .get(String.format(BASE_PATH + "/assets/percentages", port))
@@ -141,10 +167,11 @@ class AcceptanceTests {
                 .as(new TypeRef<>() {
                 });
         // then
+        ArrayList<Long> ids = new ArrayList<>(actual.keySet());
         Map<Long, Double> expected = new HashMap<>();
-        expected.put(given.get(0).getId(), 11.91);
-        expected.put(given.get(1).getId(), 35.70);
-        expected.put(given.get(2).getId(), 52.39);
+        expected.put(ids.get(0), 11.91);
+        expected.put(ids.get(1), 35.70);
+        expected.put(ids.get(2), 52.39);
         Assertions.assertThat(actual).hasSize(3).containsExactlyEntriesOf(
                 expected
         );
@@ -155,11 +182,11 @@ class AcceptanceTests {
     void givenFiveSummaries_listOfThreeSummariesWithStateConfirmedShouldBeReturned() {
         // given
         summaryRepository.saveAll(
-                Arrays.asList(SummaryEntity.builder().id(1L).moneyValue(500.31).date(LocalDate.of(2022, 1, 1)).state(SummaryState.CONFIRMED).build(),
-                        SummaryEntity.builder().id(2L).moneyValue(1500.12).date(LocalDate.of(2022, 2, 1)).state(SummaryState.CANCELED).build(),
-                        SummaryEntity.builder().id(3L).moneyValue(2201.24).date(LocalDate.of(2022, 3, 1)).state(SummaryState.CONFIRMED).build(),
-                        SummaryEntity.builder().id(4L).moneyValue(3127.59).date(LocalDate.of(2022, 4, 1)).state(SummaryState.CONFIRMED).build(),
-                        SummaryEntity.builder().id(5L).moneyValue(1000.12).date(LocalDate.of(2022, 5, 1)).state(SummaryState.DRAFT).build()
+                Arrays.asList(SummaryEntity.builder().id(1L).moneyValue(BigDecimal.valueOf(500.31)).date(LocalDate.of(2022, 1, 1)).state(SummaryState.CONFIRMED).build(),
+                        SummaryEntity.builder().id(2L).moneyValue(BigDecimal.valueOf(1500.12)).date(LocalDate.of(2022, 2, 1)).state(SummaryState.CANCELED).build(),
+                        SummaryEntity.builder().id(3L).moneyValue(BigDecimal.valueOf(2201.24)).date(LocalDate.of(2022, 3, 1)).state(SummaryState.CONFIRMED).build(),
+                        SummaryEntity.builder().id(4L).moneyValue(BigDecimal.valueOf(3127.59)).date(LocalDate.of(2022, 4, 1)).state(SummaryState.CONFIRMED).build(),
+                        SummaryEntity.builder().id(5L).moneyValue(BigDecimal.valueOf(1000.12)).date(LocalDate.of(2022, 5, 1)).state(SummaryState.DRAFT).build()
                 ));
         // when
         List<Summary> actual = when()
@@ -174,22 +201,22 @@ class AcceptanceTests {
 
         Summary firstSummary = actual.get(0);
         Assertions.assertThat(firstSummary)
-                .hasFieldOrPropertyWithValue("id", 1L)
-                .hasFieldOrPropertyWithValue("moneyValue", 500.31)
+                .hasFieldOrPropertyWithValue("id", firstSummary.getId())
+                .hasFieldOrPropertyWithValue("moneyValue", BigDecimal.valueOf(500.31))
                 .hasFieldOrPropertyWithValue("state", SummaryState.CONFIRMED)
                 .hasFieldOrPropertyWithValue("date", LocalDate.of(2022, 1, 1));
 
         Summary thirdSummary = actual.get(1);
         Assertions.assertThat(thirdSummary)
-                .hasFieldOrPropertyWithValue("id", 3L)
-                .hasFieldOrPropertyWithValue("moneyValue", 2201.24)
+                .hasFieldOrPropertyWithValue("id", thirdSummary.getId())
+                .hasFieldOrPropertyWithValue("moneyValue",  BigDecimal.valueOf(2201.24))
                 .hasFieldOrPropertyWithValue("state", SummaryState.CONFIRMED)
                 .hasFieldOrPropertyWithValue("date", LocalDate.of(2022, 3, 1));
 
         Summary fourthSummary = actual.get(2);
         Assertions.assertThat(fourthSummary)
-                .hasFieldOrPropertyWithValue("id", 4L)
-                .hasFieldOrPropertyWithValue("moneyValue", 3127.59)
+                .hasFieldOrPropertyWithValue("id", fourthSummary.getId())
+                .hasFieldOrPropertyWithValue("moneyValue",  BigDecimal.valueOf(3127.59))
                 .hasFieldOrPropertyWithValue("state", SummaryState.CONFIRMED)
                 .hasFieldOrPropertyWithValue("date", LocalDate.of(2022, 4, 1));
 
@@ -198,7 +225,12 @@ class AcceptanceTests {
     @Test
     void givenBrandNewSummary_ShouldShowAllAssetsAsAvailableForSummaryCreation() {
 
-        assetRepository.saveAll(GivenAssets.assets());
+        List<Asset> given = GivenAssets.assets();
+        SummaryEntity saved = summaryRepository.save(SummaryEntity.builder().build());
+        saved.addAsset(given.get(0));
+        saved.addAsset(given.get(1));
+        saved.addAsset(given.get(2));
+        summaryRepository.save(saved);
 
         List<Asset> actual = when()
                 .get(String.format(BASE_PATH + "/summaries/1/available_assets", port))
@@ -209,25 +241,116 @@ class AcceptanceTests {
 
         Assertions.assertThat(actual).isEqualTo(Arrays.asList(
                 Asset.builder()
-                        .id(1L)
+                        .id(actual.get(0).getId())
                         .name("Crypto")
                         .moneyValue(BigDecimal.valueOf(500.31))
                         .items(Collections.emptyList())
                         .buildAsset(),
                 Asset.builder()
-                        .id(2L)
+                        .id(actual.get(1).getId())
                         .name("Account 1")
                         .moneyValue(BigDecimal.valueOf(1500.12))
                         .items(Collections.emptyList())
                         .buildAsset(),
                 Asset.builder()
-                        .id(3L)
+                        .id(actual.get(2).getId())
                         .name("Stocks 1")
                         .moneyValue(BigDecimal.valueOf(2201.24))
                         .items(Collections.emptyList())
                         .buildAsset()
         ));
 
+    }
+
+    @Test
+    void shouldCreateNewSummaryWithInitialValues() {
+        Summary build = Summary.builder().date(LocalDate.of(2022, 2, 1)).build();
+
+        Summary actual = given()
+                .contentType(ContentType.JSON)
+                .body(build)
+                .when()
+                .post(String.format(BASE_PATH + "/summaries/new", port))
+                .then()
+                .extract()
+                .as(new TypeRef<>() {
+                });
+
+        Assertions.assertThat(actual.getId()).isNotNull();
+        Assertions.assertThat(actual.getMoneyValue()).isEqualTo(BigDecimal.ZERO);
+        Assertions.assertThat(actual.getState()).isEqualTo(SummaryState.DRAFT);
+        Assertions.assertThat(actual.getDate()).isEqualTo(LocalDate.of(2022, 2, 1));
+        Assertions.assertThat(actual.getAssets()).isEmpty();
+    }
+
+    @Test
+    void shouldCreateSummaryAddOneAssetAndMoveToConfirmed() {
+        // create summary
+        Summary build = Summary.builder().date(LocalDate.of(2022, 2, 1)).build();
+
+        Summary actual = given()
+                .contentType(ContentType.JSON)
+                .body(build)
+                .when()
+                .post(String.format(BASE_PATH + "/summaries/new", port))
+                .then()
+                .extract()
+                .as(new TypeRef<>() {
+                });
+
+        // add one asset
+        Asset asset = GivenAssets.assets().get(0);
+        List<Item> items = GivenItems.itemLists(GivenAssets.assets()).get(0);
+        asset.addItems(items);
+
+        Summary afterAdding = given()
+                .contentType(ContentType.JSON)
+                .body(asset)
+                .when()
+                .post(String.format(BASE_PATH + "/summaries/" + actual.getId() + "/add_asset", port))
+                .then()
+                .extract()
+                .as(new TypeRef<>() {
+                });
+
+        Assertions.assertThat(afterAdding.getMoneyValue())
+                .isEqualTo(BigDecimal.valueOf(500.31));
+
+        Assertions.assertThat(afterAdding.getAssets())
+                .usingRecursiveComparison()
+                .ignoringFields("id", "items")
+                .isEqualTo(List.of(
+                        Asset.builder()
+                                .name("Crypto")
+                                .moneyValue(BigDecimal.valueOf(500.31))
+                                .items(items)
+                                .buildAsset()
+                ));
+
+        Assertions.assertThat(afterAdding.getAssets().get(0).getItems())
+                .usingRecursiveComparison()
+                .ignoringFields("id", "asset")
+                .isEqualTo(items);
+
+        // confirm
+        Summary confirmed = given()
+                .contentType(ContentType.JSON)
+                .body(afterAdding)
+                .when()
+                .post(String.format(BASE_PATH + "/summaries/" + actual.getId() + "/confirm", port))
+                .then()
+                .extract()
+                .as(new TypeRef<>() {
+                });
+
+        Assertions.assertThat(confirmed)
+                .isEqualTo(Summary.builder()
+                        .state(SummaryState.CONFIRMED)
+                        .id(confirmed.getId())
+                        .assets(afterAdding.getAssets())
+                        .moneyValue(asset.getMoneyValue())
+                        .date(LocalDate.of(2022, 2, 1))
+                        .build());
     }
 
 }

@@ -24,12 +24,22 @@ class AssetMapperTest {
 
         Asset asset = AssetMapper.toEntity(assetDomain);
 
+        Asset expectedIgnoringItems = Asset.builder()
+                .id(1L)
+                .moneyValue(BigDecimal.valueOf(200L))
+                .name("asset")
+                .buildAsset();
         Assertions.assertThat(asset)
-                .usingRecursiveComparison().isEqualTo(Asset.builder()
-                        .id(1L)
-                        .moneyValue(BigDecimal.valueOf(200L))
-                        .name("asset")
-                        .items(List.of(Item.builder().id(1L).moneyValue(BigDecimal.valueOf(200L)).name("item").quantity(BigDecimal.valueOf(2)).build()))
-                        .buildAsset());
+                .usingRecursiveComparison()
+                .ignoringFields("items")
+                .isEqualTo(expectedIgnoringItems);
+
+        Assertions.assertThat(asset.getItems())
+                .usingRecursiveComparison()
+                .ignoringFields("asset")
+                .isEqualTo(
+                        List.of(Item.builder().id(1L).moneyValue(BigDecimal.valueOf(200L)).name("item").quantity(BigDecimal.valueOf(2)).build())
+                );
     }
 }
+

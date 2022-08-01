@@ -3,8 +3,8 @@ package personal.finance.summary.domain.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import personal.finance.summary.SummaryState;
-import personal.finance.summary.domain.state.State;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,12 +21,13 @@ public class SummaryDomain {
     @Getter
     private List<AssetDomain> assets;
     @Getter
-    private LocalDate localDate;
+    private LocalDate date;
     @Getter
+    @Setter
     private BigDecimal moneyValue;
 
-    public void changeState(State state) {
-
+    public void changeState(SummaryState state) {
+        this.state = state;
     }
 
 }

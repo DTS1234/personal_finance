@@ -21,7 +21,7 @@ const appRoutes: Routes = [
     path: 'manage', component: ManageComponent,
   },
   {
-    path: 'summary/new', component: SummaryCreationComponent
+    path: 'summary/:id', component: SummaryCreationComponent
   }
 
 ];

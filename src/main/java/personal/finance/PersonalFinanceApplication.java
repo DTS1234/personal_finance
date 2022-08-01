@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.Transactional;
 import personal.finance.asset.Asset;
 import personal.finance.asset.AssetRepository;
 import personal.finance.asset.item.Item;
@@ -39,8 +40,9 @@ public class PersonalFinanceApplication implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
-        assetRepository.saveAll(Arrays.asList(
+        List<Asset> assets = Arrays.asList(
                 Asset.builder()
                         .id(1L)
                         .name("Crypto")
@@ -55,32 +57,22 @@ public class PersonalFinanceApplication implements CommandLineRunner {
                         .id(3L)
                         .name("Stocks 1")
                         .moneyValue(BigDecimal.valueOf(2201.24))
-                        .buildAsset()));
-
-        Asset asset1 = assetRepository.findById(1L).get();
-        asset1.addItems(Arrays.asList(
-                Item.builder().id(1L).moneyValue(BigDecimal.valueOf(500.21)).quantity(BigDecimal.valueOf(0.0000123)).name("Bitcoin").asset(asset1).build(),
-                Item.builder().id(2L).moneyValue(BigDecimal.valueOf(1000.22)).quantity(BigDecimal.valueOf(0.00543)).name("Ethereum").asset(asset1).build(),
-                Item.builder().id(3L).moneyValue(BigDecimal.valueOf(500.01)).quantity(BigDecimal.valueOf(100.00)).name("Luna").asset(asset1).build()));
-        assetRepository.save(asset1);
-
-        Asset asset2 = assetRepository.findById(2L).get();
-        asset2.addItems(List.of(
-                Item.builder().moneyValue(BigDecimal.valueOf(2201.24)).id(4L).quantity(BigDecimal.valueOf(1)).name("ZL account").asset(asset2).build()));
-        assetRepository.save(asset2);
-
-        Asset asset3 = assetRepository.findById(3L).get();
-        asset3.addItems(Arrays.asList(
-                Item.builder().id(5L).moneyValue(BigDecimal.valueOf(1201.12)).quantity(BigDecimal.valueOf(12)).name("CDP").asset(asset3).build(),
-                Item.builder().id(6L).moneyValue(BigDecimal.valueOf(1000.12)).quantity(BigDecimal.valueOf(43)).name("ALG").asset(asset3).build()));
-        assetRepository.save(asset3);
+                        .buildAsset());
 
         summaryRepository.saveAll(
-                Arrays.asList(SummaryEntity.builder().id(1L).moneyValue(500.31).date(LocalDate.of(2022, 1, 1)).build(),
-                        SummaryEntity.builder().id(2L).moneyValue(1500.12).date(LocalDate.of(2022, 2, 1)).build(),
-                        SummaryEntity.builder().id(3L).moneyValue(2201.24).date(LocalDate.of(2022, 3, 1)).build(),
-                        SummaryEntity.builder().id(4L).moneyValue(3127.59).date(LocalDate.of(2022, 4, 1)).build())
+                Arrays.asList(SummaryEntity.builder().id(1L).moneyValue(BigDecimal.valueOf(500.31)).date(LocalDate.of(2022, 1, 1)).build(),
+                        SummaryEntity.builder().id(2L).moneyValue(BigDecimal.valueOf(1500.12)).date(LocalDate.of(2022, 2, 1)).build(),
+                        SummaryEntity.builder().id(3L).moneyValue(BigDecimal.valueOf(2201.24)).date(LocalDate.of(2022, 3, 1)).build(),
+                        SummaryEntity.builder().id(4L).moneyValue(BigDecimal.valueOf(3127.59)).date(LocalDate.of(2022, 4, 1)).build())
         );
+
+        List<SummaryEntity> all = summaryRepository.findAll();
+
+        for (int i = 0; i < assets.size(); i++) {
+            SummaryEntity entity = all.get(i);
+            entity.addAsset(assets.get(i));
+            summaryRepository.save(entity);
+        }
 
     }
 

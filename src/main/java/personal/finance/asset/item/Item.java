@@ -2,10 +2,12 @@ package personal.finance.asset.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.Hibernate;
 import personal.finance.asset.Asset;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * @author akazmierczak
@@ -16,7 +18,6 @@ import java.math.BigDecimal;
 @ToString(exclude = "asset")
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,4 +37,16 @@ public class Item {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Item item = (Item) o;
+        return id != null && Objects.equals(id, item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
