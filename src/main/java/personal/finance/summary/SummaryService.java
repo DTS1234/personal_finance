@@ -2,9 +2,11 @@ package personal.finance.summary;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import personal.finance.asset.Asset;
 import personal.finance.asset.AssetMapper;
 import personal.finance.asset.AssetRepository;
+import personal.finance.asset.item.ItemRepository;
 import personal.finance.summary.domain.PersistenceAdapter;
 import personal.finance.summary.domain.action.Action;
 import personal.finance.summary.domain.action.AddAssetDraftAction;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
