@@ -4,7 +4,6 @@ import {Asset} from '../models/asset.model';
 import {SummaryService} from "../services/summary.service";
 import {Summary} from "../models/summary.model";
 import {Router} from "@angular/router";
-import {logger} from "codelyzer/util/logger";
 
 @Component({
   selector: 'app-manage',
@@ -42,7 +41,7 @@ export class ManageComponent implements OnInit {
   createNewSummary(): void {
     const date = new Date(Date.now());
     console.log(date);
-    let newSummary: Summary = new Summary(null, '06/27/2022', 0);
+    let newSummary: Summary = new Summary(null, '06/27/2022', 0, []);
     this.summaryService.createNewSummary(newSummary).subscribe(
       data => {
         newSummary = data;
