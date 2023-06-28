@@ -20,8 +20,6 @@ public class SummaryMapper {
                 .moneyValue(Optional.ofNullable(summaryDomain.getMoneyValue()).orElse(BigDecimal.ZERO))
                 .assets(Optional.ofNullable(summaryDomain.getAssets()).orElse(new ArrayList<>()).stream().map(AssetMapper::toEntity).collect(Collectors.toList()))
                 .build();
-        build.getAssets().forEach(asset ->
-                asset.setSummary(build));
         return build;
     }
 

@@ -11,11 +11,13 @@ import personal.finance.asset.Asset;
 import personal.finance.asset.AssetRepository;
 import personal.finance.asset.item.Item;
 import personal.finance.asset.item.ItemRepository;
+import personal.finance.summary.SummaryState;
 import personal.finance.summary.persistance.SummaryEntity;
 import personal.finance.summary.persistance.SummaryRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,23 +59,23 @@ public class PersonalFinanceApplication implements CommandLineRunner {
                         .id(3L)
                         .name("Stocks 1")
                         .moneyValue(BigDecimal.valueOf(2201.24))
-                        .buildAsset());
-
-        summaryRepository.saveAll(
-                Arrays.asList(SummaryEntity.builder().id(1L).moneyValue(BigDecimal.valueOf(500.31)).date(LocalDate.of(2022, 1, 1)).build(),
-                        SummaryEntity.builder().id(2L).moneyValue(BigDecimal.valueOf(1500.12)).date(LocalDate.of(2022, 2, 1)).build(),
-                        SummaryEntity.builder().id(3L).moneyValue(BigDecimal.valueOf(2201.24)).date(LocalDate.of(2022, 3, 1)).build(),
-                        SummaryEntity.builder().id(4L).moneyValue(BigDecimal.valueOf(3127.59)).date(LocalDate.of(2022, 4, 1)).build())
+                        .buildAsset()
         );
 
-        List<SummaryEntity> all = summaryRepository.findAll();
+        List<SummaryEntity> summaryEntities = summaryRepository.saveAll(
+            Arrays.asList(
+                SummaryEntity.builder().id(1L).state(SummaryState.CONFIRMED).moneyValue(BigDecimal.valueOf(500.31)).date(LocalDateTime.of(2022, 1, 1, 0, 0)).build(),
+                SummaryEntity.builder().id(2L).state(SummaryState.CONFIRMED).moneyValue(BigDecimal.valueOf(1500.12)).date(LocalDateTime.of(2022, 2, 1, 0, 0)).build(),
+                SummaryEntity.builder().id(3L).state(SummaryState.CONFIRMED).moneyValue(BigDecimal.valueOf(2201.24)).date(LocalDateTime.of(2022, 3, 1, 0, 0)).build(),
+                SummaryEntity.builder().id(4L).state(SummaryState.CONFIRMED).moneyValue(BigDecimal.valueOf(3127.59)).date(LocalDateTime.of(2022, 4, 1, 0, 0)).build())
+        );
 
-        for (int i = 0; i < assets.size(); i++) {
-            SummaryEntity entity = all.get(i);
-            entity.addAsset(assets.get(i));
-            summaryRepository.save(entity);
-        }
+        SummaryEntity summaryEntity = summaryEntities.get(3);
+        summaryEntity.addAsset(assets.get(0));
+        summaryEntity.addAsset(assets.get(1));
+        summaryEntity.addAsset(assets.get(2));
 
+        summaryRepository.save(summaryEntity);
     }
 
 

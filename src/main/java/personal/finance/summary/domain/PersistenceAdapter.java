@@ -1,6 +1,7 @@
 package personal.finance.summary.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import personal.finance.asset.Asset;
@@ -29,9 +30,6 @@ public class PersistenceAdapter {
         }
 
         Asset newAssetEntity = AssetMapper.toEntity(asset);
-        newAssetEntity.getItems().forEach(item -> item.setAsset(newAssetEntity));
-        newAssetEntity.setSummary(summaryEntity);
-
         summaryEntity.addAsset(newAssetEntity);
 
         return summaryRepository.save(summaryEntity);
@@ -46,11 +44,9 @@ public class PersistenceAdapter {
     }
 
     public SummaryDomain updateAsset(SummaryDomain summaryDomain, AssetDomain asset) {
-        SummaryEntity summaryEntity = summaryRepository.findById(summaryDomain.getId()).orElseThrow();
-        Asset oldAsset = summaryEntity.getAssets().stream().filter(currentAsset -> asset.getId().equals(currentAsset.getId())).findFirst().orElseThrow();
-        summaryEntity.getAssets().remove(oldAsset);
-        summaryEntity.addAsset(AssetMapper.toEntity(asset));
-        SummaryEntity saved = summaryRepository.save(summaryEntity);
-        return SummaryMapper.toDomain(saved);
+
+        assetRepository.save(AssetMapper.toEntity(asset));
+
+        return summaryDomain;
     }
 }

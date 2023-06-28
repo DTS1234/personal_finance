@@ -8,6 +8,7 @@ import personal.finance.summary.SummaryState;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -21,7 +22,7 @@ public class SummaryDomain {
     @Getter
     private List<AssetDomain> assets;
     @Getter
-    private LocalDate date;
+    private LocalDateTime date;
     @Getter
     @Setter
     private BigDecimal moneyValue;

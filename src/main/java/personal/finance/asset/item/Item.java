@@ -1,11 +1,21 @@
 package personal.finance.asset.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 import personal.finance.asset.Asset;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -19,6 +29,7 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 public class Item {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,19 +39,18 @@ public class Item {
     @Convert(converter = BigDecimalConverterQuantity.class)
     private BigDecimal quantity;
 
-    @ManyToOne(optional = false)
-    @JsonIgnore
-    @Setter
-    private Asset asset;
-
     public Item() {
 
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
         Item item = (Item) o;
         return id != null && Objects.equals(id, item.id);
     }

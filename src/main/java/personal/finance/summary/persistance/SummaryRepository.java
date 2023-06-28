@@ -14,5 +14,6 @@ import java.util.List;
 public interface SummaryRepository extends JpaRepository<SummaryEntity, Long> {
     
     List<SummaryEntity> findSummaryByStateEqualsOrderById(SummaryState state);
-    
+    List<SummaryEntity> findSummaryByStateEqualsOrderByDateDesc(SummaryState state);
+
 }

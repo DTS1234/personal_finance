@@ -1,12 +1,18 @@
 package personal.finance.asset;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 import personal.finance.asset.item.Item;
 import personal.finance.summary.persistance.SummaryEntity;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +37,13 @@ public class Asset {
     private Long id;
     private BigDecimal moneyValue;
     private String name;
-    @OneToMany(mappedBy = "asset", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<Item> items;
-
-    @Setter
-    @JsonIgnore
-    @ManyToOne(optional = false)
-    private SummaryEntity summary;
 
     public void addItem(Item item) {
         if (items == null) {
             items = new ArrayList<>();
         }
-        item.setAsset(this);
         items.add(item);
     }
 
@@ -51,6 +51,10 @@ public class Asset {
         items.forEach(
                 this::addItem
         );
+    }
+
+    public void clearItems() {
+        this.items.clear();
     }
 
     @Override

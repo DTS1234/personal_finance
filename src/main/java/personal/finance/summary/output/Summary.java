@@ -9,6 +9,7 @@ import personal.finance.summary.SummaryState;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -18,8 +19,7 @@ public class Summary {
 
     private Long id;
     private BigDecimal moneyValue;
-    @JsonFormat(pattern = "MM/dd/yyyy")
-    private LocalDate date;
+    private LocalDateTime date;
     private SummaryState state;
     private List<Asset> assets;
 

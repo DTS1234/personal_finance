@@ -17,7 +17,6 @@ public class AssetMapper {
                 .moneyValue(Optional.ofNullable(assetDomain.getMoneyValue()).orElse(BigDecimal.ZERO))
                 .items(Optional.ofNullable(assetDomain.getItems()).orElse(new ArrayList<>()).stream().map(ItemMapper::toEntity).collect(Collectors.toList()))
                 .buildAsset();
-        asset.getItems().forEach(item -> item.setAsset(asset));
         return asset;
 
     }

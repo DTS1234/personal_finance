@@ -21,7 +21,5 @@ public class ItemDomain {
     private String name;
     @Getter
     private BigDecimal quantity;
-    @Getter
-    private AssetDomain assetDomain;
 
 }
