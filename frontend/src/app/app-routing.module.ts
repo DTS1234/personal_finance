@@ -5,6 +5,8 @@ import {HistoryComponent} from './history/history.component';
 import {ManageComponent} from './manage/manage.component';
 import {CommonModule} from '@angular/common';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
+import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.component';
+import {EditAssetComponent} from "./manage/summary-creation/edit-asset/edit-asset.component";
 
 
 const appRoutes: Routes = [
@@ -22,13 +24,19 @@ const appRoutes: Routes = [
   },
   {
     path: 'summary/:id', component: SummaryCreationComponent
+  },
+  {
+    path: 'summary/:id/add-asset', component: AddAssetComponent
+  },
+  {
+    path: 'summary/:id/edit-asset', component: EditAssetComponent
   }
 
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }), CommonModule
+    RouterModule.forRoot(appRoutes, {relativeLinkResolution: 'legacy'}), CommonModule
   ],
   exports: [RouterModule]
 })

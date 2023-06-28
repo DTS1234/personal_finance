@@ -32,7 +32,6 @@ export class SummaryService {
   getSummaries(): Observable<Summary[]> {
 
     return this.http.get<Summary[]>('http://localhost:8080/summaries').pipe(tap(event => {
-      console.log(event);
     }));
 
   }
@@ -41,9 +40,24 @@ export class SummaryService {
     return this.http.post<Summary>('http://localhost:8080/summaries/new', summary);
   }
 
-  addAsset(asset: Asset, summary: Summary): Observable<Summary> {
-    summary.assets.push(asset);
-    return this.http.post<Summary>(`${this.basePath}/summaries/${summary.id}/add_asset`, summary);
+  updateSummary(summary: Summary): Observable<Summary> {
+    return this.http.post<Summary>(`${this.basePath}/summaries/${summary.id}/update`, summary);
+  }
+
+  updateAsset(summaryId: number, assetId: number, asset: Asset): Observable<Summary> {
+    return this.http.post<Summary>(`${this.basePath}/summaries/${summaryId}/updateAsset/${assetId}`, asset);
+  }
+
+  confirmSummary(summary: Summary): Observable<Summary> {
+    return this.http.post<Summary>(`${this.basePath}/summaries/${summary.id}/confirm`, summary);
+  }
+
+  getSummary(id: number): Observable<Summary> {
+    return this.http.get<Summary>(`${this.basePath}/summaries/${id}`);
+  }
+
+  getCurrentSummary(): Observable<Summary> {
+    return this.http.get<Summary>(`${this.basePath}/summaries/current`);
   }
 
 }

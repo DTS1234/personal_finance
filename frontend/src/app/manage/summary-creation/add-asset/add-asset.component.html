@@ -1,0 +1,43 @@
+<form [formGroup]="assetForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" formControlName="name">
+    <div *ngIf="assetForm.controls.name.touched && assetForm.controls.name.errors?.required" class="text-danger">
+      Name is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="moneyValue">Money Value</label>
+    <input type="number" class="form-control" id="moneyValue" formControlName="moneyValue">
+    <div *ngIf="assetForm.controls.moneyValue.touched && assetForm.controls.moneyValue.errors?.required" class="text-danger">
+      Money Value is required.
+    </div>
+  </div>
+
+  <!-- Item fields can be added dynamically using formArray -->
+  <!-- You can add logic to dynamically add/remove item fields -->
+  <!-- Here's an example with a single item field -->
+  <div formArrayName="items">
+    <div *ngFor="let item of assetForm.get('items')['controls']; let i=index" [formGroupName]="i">
+      <div class="form-group">
+        <label for="itemName{{i}}">Item Name</label>
+        <input type="text" class="form-control" id="itemName{{i}}" formControlName="name">
+      </div>
+
+      <div class="form-group">
+        <label for="itemMoneyValue{{i}}">Item Money Value</label>
+        <input type="number" class="form-control" id="itemMoneyValue{{i}}" formControlName="moneyValue">
+      </div>
+
+      <div class="form-group">
+        <label for="itemQuantity{{i}}">Item Quantity</label>
+        <input type="number" class="form-control" id="itemQuantity{{i}}" formControlName="quantity">
+      </div>
+    </div>
+  </div>
+
+  <button type="button" (click)="addItem()">Add Item</button>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

@@ -18,6 +18,19 @@
       <td>{{ asset.moneyValue }}</td>
       <td>{{ asset.items.length }}</td>
       <td>
+        <button (click)="edit(asset)">Edit</button>
+      </td>
+      <td>
+        <button (click)="remove(asset)">Remove</button>
+      </td>
+    </tr>
+
+    <tr *ngFor="let asset of newAssets; let i = index" style="background: green">
+      <th scope="row">{{ asset.id }}</th>
+      <td>{{ asset.name}}</td>
+      <td>{{ asset.moneyValue }}</td>
+      <td>{{ asset.items.length }}</td>
+      <td>
         <button>Edit</button>
       </td>
       <td>
@@ -50,7 +63,8 @@
       <td>{{ item.moneyValue }}</td>
       <td>{{ item.quantity }}</td>
     </tr>
-
     </tbody>
   </table>
 </div>
+
+<button (click)="confirmSummary()" class="btn btn-primary">SUBMIT SUMMARY</button>

@@ -14,7 +14,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let asset of assets; let i = index">
-        <th scope="row">{{ asset.id }}</th>
+        <th scope="row">{{ i + 1}}</th>
         <td>{{ asset.name}}</td>
         <td>{{ asset.moneyValue }}</td>
         <td>{{ asset.items.length }}</td>

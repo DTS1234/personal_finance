@@ -22,11 +22,13 @@ export class ManageComponent implements OnInit {
 
   ngOnInit(): void {
     let sumItems = 0;
-    this.assetService.getAssets().subscribe(data => {
-      this.assets = data;
-      this.assets.forEach(asset => sumItems += asset.items.length);
-      this.numberOfItems = sumItems;
-    });
+
+    this.summaryService.getCurrentSummary().subscribe(s => {
+        this.assets = s.assets;
+        this.assets.forEach(asset => sumItems += asset.items.length);
+        this.numberOfItems = sumItems;
+      }
+    );
 
     this.assetService.getPercentages().subscribe(data => {
       this.percentages = data;
@@ -39,16 +41,17 @@ export class ManageComponent implements OnInit {
   }
 
   createNewSummary(): void {
-    const date = new Date(Date.now());
-    console.log(date);
-    let newSummary: Summary = new Summary(null, '06/27/2022', 0, []);
+
+    const dateTime = new Date(); // Current date and time
+    const formattedDateTime = dateTime.toISOString().slice(0, 19);
+
+    let newSummary: Summary = new Summary(null, formattedDateTime, 0, []);
     this.summaryService.createNewSummary(newSummary).subscribe(
       data => {
         newSummary = data;
         console.log(newSummary);
         this.summaryService.setNewSummary(newSummary);
         this.router.navigate([`/summary/${newSummary.id}/`]).then(r => console.log(r));
-
       }
     );
   }

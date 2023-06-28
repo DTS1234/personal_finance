@@ -9,7 +9,9 @@ import {Asset} from '../../models/asset.model';
 export class AssetBoxComponent implements OnInit {
 
   @Input() asset: Asset;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

@@ -18,6 +18,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SummaryBoxComponent} from './homepage/summary-box/summary-box.component';
 import {PiechartComponent} from './manage/piechart/piechart.component';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
+import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {EditAssetComponent} from './manage/summary-creation/edit-asset/edit-asset.component';
+import {DatePipe} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -32,12 +36,14 @@ import {SummaryCreationComponent} from './manage/summary-creation/summary-creati
     SummaryBoxComponent,
     PiechartComponent,
     PiechartComponent,
-    SummaryCreationComponent],
+    SummaryCreationComponent,
+    AddAssetComponent,
+    EditAssetComponent],
   imports: [
     BrowserModule, HttpClientModule, RouterModule, AppRoutingModule, MDBBootstrapModule.forRoot(),
-    BrowserAnimationsModule, ChartsModule
+    BrowserAnimationsModule, ChartsModule, ReactiveFormsModule
   ],
-  providers: [AssetService],
+  providers: [AssetService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {
