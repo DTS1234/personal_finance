@@ -67,7 +67,7 @@ export class AddAssetComponent implements OnInit {
       assetData.items
     );
 
-    this.addAssetService.addAsset(asset);
+    this.addAssetService.addToNewAssets(asset);
 
     // Reset the form
     this.assetForm.reset();

@@ -63,7 +63,7 @@ export class SummaryCreationComponent implements OnInit {
 
     }));
 
-    this.addAssetService.availableAssets$.subscribe((assets) => {
+    this.addAssetService.newAssets$.subscribe((assets) => {
       this.newAssets = assets;
     });
   }
@@ -83,14 +83,20 @@ export class SummaryCreationComponent implements OnInit {
 
     this.summaryService.updateSummary(this.summary).subscribe(s => {
         console.log(s);
-        this.summaryService.confirmSummary(s).subscribe(confirmedSummary => console.log('summary confirmed : ' + confirmedSummary));
+        this.summaryService.confirmSummary(s).subscribe(confirmedSummary => {
+            this.summaryService.getSummaries().subscribe(summaries => {
+              summaries.push(confirmedSummary);
+              this.summaryService.setSummaries(summaries);
+            });
+          }
+        );
       }
     );
-    this.addAssetService.clearAssets();
 
-    const navigationExtras: NavigationExtras = {
-      queryParams: {reload: true} // Add a query parameter to force reload
-    };
+    this.addAssetService.clearNewAssets();
+
+    const navigationExtras: NavigationExtras = {queryParams: {reload: true}};
+    // Add a query parameter to force reload};
 
     this.router.navigate(['homepage'], navigationExtras).then(r => console.log(r));
   }
@@ -101,7 +107,7 @@ export class SummaryCreationComponent implements OnInit {
   }
 
   edit(asset: Asset): void {
-    this.router.navigate([`/summary/${this.summary.id}/edit-asset`],
-      {queryParams: {asset: JSON.stringify(asset)}}).then(r => console.log(r));
+    // tslint:disable-next-line:max-line-length
+    this.router.navigate([`/summary/${this.summary.id}/edit-asset`], {queryParams: {asset: JSON.stringify(asset)}}).then(r => console.log(r));
   }
 }

@@ -11,20 +11,20 @@ export class AssetSharedService {
   constructor(private assetService: AssetService) {
   }
 
-  private availableAssetsSubject = new BehaviorSubject<Asset[]>([]);
+  private newAssets = new BehaviorSubject<Asset[]>([]);
 
-  availableAssets$ = this.availableAssetsSubject.asObservable();
+  newAssets$ = this.newAssets.asObservable();
 
-  addAsset(asset: Asset): void {
-    const currentAssets = this.availableAssetsSubject.value;
+  addToNewAssets(asset: Asset): void {
+    const currentAssets = this.newAssets.value;
     currentAssets.push(asset);
-    this.availableAssetsSubject.next(currentAssets);
+    this.newAssets.next(currentAssets);
   }
 
-  clearAssets(): void {
-    const currentAssets = this.availableAssetsSubject.value;
+  clearNewAssets(): void {
+    const currentAssets = this.newAssets.value;
     currentAssets.splice(0);
-    this.availableAssetsSubject.next(currentAssets);
+    this.newAssets.next(currentAssets);
   }
 
 }

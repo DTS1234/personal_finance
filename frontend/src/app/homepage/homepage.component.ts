@@ -23,20 +23,30 @@ export class HomepageComponent implements OnInit {
 
     this.router.events.subscribe(event => {
       this.activatedRoute.queryParams.subscribe(params => {
-        if (params.reload) {// Perform data reloading or any other actions here
+        if (params.reload) {
+          console.log('RELOADING HOMEPAGER AFTER receving RELOAD PARAMETER!!!');
           this.loadData();
         }
       });
     });
 
+    console.log('RELOADING HOMEPAGE ON INIT!');
     this.loadData();
 
   }
 
   loadData(): void {
-    this.summaryService.getSummaries().subscribe(data => {
-      this.summaries = data.slice(data.length - 3);
-      this.assets = this.summaries[this.summaries.length - 1].assets;
+
+    this.summaryService.getSummaries().subscribe(summariues => {
+      if (summariues == null) {
+        this.summaryService.fetchSummaries().subscribe(data => {
+          this.summaries = data.slice(data.length - 3);
+          this.assets = this.summaries[this.summaries.length - 1].assets;
+        });
+      } else {
+        this.summaries = summariues.slice(summariues.length - 3);
+        this.assets = this.summaries[this.summaries.length - 1].assets;
+      }
     });
   }
 }

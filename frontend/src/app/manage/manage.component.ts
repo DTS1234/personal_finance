@@ -49,7 +49,6 @@ export class ManageComponent implements OnInit {
     this.summaryService.createNewSummary(newSummary).subscribe(
       data => {
         newSummary = data;
-        console.log(newSummary);
         this.summaryService.setNewSummary(newSummary);
         this.router.navigate([`/summary/${newSummary.id}/`]).then(r => console.log(r));
       }

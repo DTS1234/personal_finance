@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Summary} from '../models/summary.model';
-import {Asset} from "../models/asset.model";
+import {Asset} from '../models/asset.model';
 
 
 @Injectable({
@@ -13,6 +13,7 @@ export class SummaryService {
 
   private newSummary: BehaviorSubject<Summary> = new BehaviorSubject<Summary>(null);
   private basePath = 'http://localhost:8080';
+  private summaries: BehaviorSubject<Summary[]> = new BehaviorSubject<Summary[]>(null);
 
   constructor(private http: HttpClient) {
   }
@@ -29,11 +30,18 @@ export class SummaryService {
     this.newSummary.next(null);
   }
 
-  getSummaries(): Observable<Summary[]> {
-
+  fetchSummaries(): Observable<Summary[]> {
     return this.http.get<Summary[]>('http://localhost:8080/summaries').pipe(tap(event => {
+      console.log(event);
     }));
+  }
 
+  setSummaries(summaries: Summary[]): void {
+    this.summaries.next(summaries);
+  }
+
+  getSummaries(): Observable<Summary[]> {
+    return this.summaries.asObservable();
   }
 
   createNewSummary(summary: Summary): Observable<Summary> {

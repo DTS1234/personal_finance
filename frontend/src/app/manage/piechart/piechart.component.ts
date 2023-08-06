@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {SummaryService} from "../../services/summary.service";
 
 @Component({
   selector: 'app-piechart',
@@ -6,6 +7,10 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./piechart.component.css']
 })
 export class PiechartComponent implements OnInit {
+
+  constructor(private summaryService: SummaryService) {
+  }
+
   chartType = 'pie';
 
   chartDatasets = [
@@ -33,14 +38,27 @@ export class PiechartComponent implements OnInit {
   };
 
   chartClicked(event: any): void {
-    console.log(event);
   }
 
   chartHovered(event: any): void {
-    console.log(event);
   }
 
   ngOnInit(): void {
+    this.summaryService.getCurrentSummary().subscribe(
+      s => {
+        const labels = s.assets.map(a => a.name);
+        const sums = s.assets.map(a => a.moneyValue);
+
+
+        this.chartDatasets = [
+          {data: sums, label: 'My First dataset'}
+        ];
+
+        this.chartLabels = labels;
+
+      }
+    );
+
   }
 
 }

@@ -12,24 +12,24 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let asset of availableAssets; let i = index">
-      <th scope="row">{{ asset.id }}</th>
-      <td>{{ asset.name}}</td>
-      <td>{{ asset.moneyValue }}</td>
-      <td>{{ asset.items.length }}</td>
+    <tr *ngFor="let assetEntity of availableAssets; let i = index">
+      <th scope="row">{{ assetEntity.id }}</th>
+      <td>{{ assetEntity.name}}</td>
+      <td>{{ assetEntity.moneyValue }}</td>
+      <td>{{ assetEntity.items.length }}</td>
       <td>
-        <button (click)="edit(asset)">Edit</button>
+        <button (click)="edit(assetEntity)">Edit</button>
       </td>
       <td>
-        <button (click)="remove(asset)">Remove</button>
+        <button (click)="remove(assetEntity)">Remove</button>
       </td>
     </tr>
 
-    <tr *ngFor="let asset of newAssets; let i = index" style="background: green">
-      <th scope="row">{{ asset.id }}</th>
-      <td>{{ asset.name}}</td>
-      <td>{{ asset.moneyValue }}</td>
-      <td>{{ asset.items.length }}</td>
+    <tr *ngFor="let assetEntity of newAssets; let i = index" style="background: green">
+      <th scope="row">{{ assetEntity.id }}</th>
+      <td>{{ assetEntity.name}}</td>
+      <td>{{ assetEntity.moneyValue }}</td>
+      <td>{{ assetEntity.items.length }}</td>
       <td>
         <button>Edit</button>
       </td>
@@ -46,7 +46,7 @@
 
 </div>
 <div class="row">
-  <h4 class="m-4">Active asset: {{activeAsset.name}}</h4>
+  <h4 class="m-4">Active assetEntity: {{activeAsset.name}}</h4>
   <table class="table table-bordered ml-4 mr-4">
     <thead>
     <tr>

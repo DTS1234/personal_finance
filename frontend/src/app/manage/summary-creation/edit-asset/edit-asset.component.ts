@@ -70,7 +70,7 @@ export class EditAssetComponent implements OnInit {
       const summaryID = Number(summaryIdParam);
       console.log(summaryID);
       this.summaryService.updateAsset(summaryID, this.asset.id, this.asset).subscribe(
-        s => console.log(s)
+        s => this.summaryService.setNewSummary(s)
       );
     });
 
