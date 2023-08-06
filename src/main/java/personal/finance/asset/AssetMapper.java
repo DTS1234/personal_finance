@@ -1,6 +1,6 @@
-package personal.finance.asset;
+package personal.finance.summary.asset;
 
-import personal.finance.asset.item.ItemMapper;
+import personal.finance.summary.asset.item.ItemMapper;
 import personal.finance.summary.domain.model.AssetDomain;
 
 import java.math.BigDecimal;
@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class AssetMapper {
 
-    public static Asset toEntity(AssetDomain assetDomain) {
-        Asset asset = Asset.builder()
+    public static AssetEntity toEntity(AssetDomain assetDomain) {
+        AssetEntity asset = AssetEntity.builder()
                 .id(assetDomain.getId())
                 .name(assetDomain.getName())
                 .moneyValue(Optional.ofNullable(assetDomain.getMoneyValue()).orElse(BigDecimal.ZERO))
@@ -21,7 +21,7 @@ public class AssetMapper {
 
     }
 
-    public static AssetDomain toDomain(Asset asset) {
+    public static AssetDomain toDomain(AssetEntity asset) {
         return AssetDomain.builder()
                 .id(asset.getId())
                 .name(asset.getName())

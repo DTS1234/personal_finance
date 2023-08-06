@@ -1,17 +1,14 @@
 package personal.finance.asset;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import personal.finance.asset.item.Item;
-import personal.finance.summary.persistance.SummaryEntity;
+import personal.finance.item.Item;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,9 +24,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @ToString(exclude = {"summary"})
-public class Asset {
+public class AssetEntity {
 
-    public Asset() {
+    public AssetEntity() {
     }
 
     @Id
@@ -45,6 +42,8 @@ public class Asset {
             items = new ArrayList<>();
         }
         items.add(item);
+        BigDecimal sum = items.stream().map(Item::getMoneyValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.moneyValue = sum;
     }
 
     public void addItems(List<Item> items) {
@@ -61,7 +60,7 @@ public class Asset {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Asset asset = (Asset) o;
+        AssetEntity asset = (AssetEntity) o;
         return id != null && Objects.equals(id, asset.id);
     }
 

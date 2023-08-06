@@ -1,4 +1,4 @@
-package personal.finance.asset.item;
+package personal.finance.summary.asset.item;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

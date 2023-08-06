@@ -1,20 +1,16 @@
-package personal.finance.asset.item;
+package personal.finance.item;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import personal.finance.asset.Asset;
 
 import java.math.BigDecimal;
 import java.util.Objects;

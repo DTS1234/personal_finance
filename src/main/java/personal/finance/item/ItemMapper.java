@@ -1,4 +1,4 @@
-package personal.finance.asset.item;
+package personal.finance.summary.asset.item;
 
 public class ItemMapper {
     public static Item toEntity(ItemDomain item) {

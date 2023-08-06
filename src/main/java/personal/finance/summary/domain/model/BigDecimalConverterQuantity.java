@@ -1,4 +1,4 @@
-package personal.finance.asset.item;
+package personal.finance.item;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
