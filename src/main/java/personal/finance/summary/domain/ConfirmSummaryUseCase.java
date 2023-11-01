@@ -2,7 +2,6 @@ package personal.finance.summary.domain;
 
 import lombok.RequiredArgsConstructor;
 import personal.finance.summary.domain.model.Summary;
-import personal.finance.summary.domain.usecase.UseCase;
 
 @RequiredArgsConstructor
 class ConfirmSummaryUseCase implements UseCase<Summary> {

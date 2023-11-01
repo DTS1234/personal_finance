@@ -1,10 +1,9 @@
-package personal.finance.summary.domain.usecase;
+package personal.finance.summary.domain;
 
 import lombok.RequiredArgsConstructor;
-import personal.finance.summary.SummaryState;
+import personal.finance.summary.domain.model.SummaryState;
 import personal.finance.summary.domain.model.Asset;
 import personal.finance.summary.domain.model.Item;
-import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.model.Summary;
 
 import java.math.BigDecimal;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class CreateNewSummaryUseCase implements UseCase<Summary> {
+class CreateNewSummaryUseCase implements UseCase<Summary> {
 
     private final SummaryRepository summaryRepository;
 

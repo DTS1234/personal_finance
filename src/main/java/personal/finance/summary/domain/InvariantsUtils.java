@@ -1,4 +1,4 @@
-package personal.finance.summary.domain.usecase;
+package personal.finance.summary.domain;
 
 import personal.finance.summary.domain.model.Summary;
 

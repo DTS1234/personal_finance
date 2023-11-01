@@ -3,7 +3,7 @@ package personal.finance.summary.domain;
 import acceptance.GivenAssets;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import personal.finance.summary.SummaryState;
+import personal.finance.summary.domain.model.SummaryState;
 import personal.finance.summary.domain.model.Asset;
 import personal.finance.summary.domain.model.Item;
 import personal.finance.summary.domain.model.Summary;

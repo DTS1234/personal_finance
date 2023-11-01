@@ -1,6 +1,6 @@
 package acceptance;
 
-import personal.finance.summary.SummaryState;
+import personal.finance.summary.domain.model.SummaryState;
 import personal.finance.summary.domain.model.Summary;
 
 import java.math.BigDecimal;

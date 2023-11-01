@@ -1,14 +1,13 @@
-package personal.finance.summary.domain.usecase;
+package personal.finance.summary.domain;
 
 import lombok.RequiredArgsConstructor;
 import personal.finance.summary.domain.model.Summary;
-import personal.finance.summary.domain.SummaryRepository;
 
-import static personal.finance.summary.domain.usecase.InvariantsUtils.moneyValueIsInconsistent;
-import static personal.finance.summary.domain.usecase.InvariantsUtils.summaryHasDifferentCreationDate;
+import static personal.finance.summary.domain.InvariantsUtils.moneyValueIsInconsistent;
+import static personal.finance.summary.domain.InvariantsUtils.summaryHasDifferentCreationDate;
 
 @RequiredArgsConstructor
-public class UpdateSummaryInDraftUseCase implements UseCase<Summary> {
+class UpdateSummaryInDraftUseCase implements UseCase<Summary> {
 
     private final SummaryRepository summaryRepository;
     private final Summary newUpdatedSummary;

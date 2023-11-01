@@ -1,11 +1,10 @@
-package personal.finance.summary.domain.usecase;
+package personal.finance.summary.domain;
 
 import lombok.RequiredArgsConstructor;
-import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.model.Summary;
 
 @RequiredArgsConstructor
-public class CancelSummaryUseCase implements UseCase<Summary> {
+class CancelSummaryUseCase implements UseCase<Summary> {
 
     private final SummaryRepository summaryRepository;
     private final Long summaryId;

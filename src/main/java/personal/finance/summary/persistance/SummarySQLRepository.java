@@ -3,7 +3,7 @@ package personal.finance.summary.persistance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import personal.finance.summary.domain.model.Summary;
-import personal.finance.summary.SummaryState;
+import personal.finance.summary.domain.model.SummaryState;
 import personal.finance.summary.domain.SummaryRepository;
 
 import java.util.List;

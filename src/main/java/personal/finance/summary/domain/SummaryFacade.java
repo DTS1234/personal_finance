@@ -1,9 +1,6 @@
 package personal.finance.summary.domain;
 
 import personal.finance.summary.domain.model.Summary;
-import personal.finance.summary.domain.usecase.CancelSummaryUseCase;
-import personal.finance.summary.domain.usecase.CreateNewSummaryUseCase;
-import personal.finance.summary.domain.usecase.UpdateSummaryInDraftUseCase;
 
 public class SummaryFacade {
 

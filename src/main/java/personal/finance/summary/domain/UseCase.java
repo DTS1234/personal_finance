@@ -1,4 +1,4 @@
-package personal.finance.summary.domain.usecase;
+package personal.finance.summary.domain;
 
 public interface UseCase<T> {
 

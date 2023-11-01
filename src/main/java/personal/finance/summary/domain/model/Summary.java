@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
-import personal.finance.summary.SummaryState;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
