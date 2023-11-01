@@ -1,15 +1,19 @@
-package personal.finance.summary;
+package personal.finance.summary.domain.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.*;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
-import personal.finance.asset.AssetEntity;
-import personal.finance.item.Item;
+import personal.finance.summary.SummaryState;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,7 +30,7 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SummaryEntity {
+public class Summary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,7 +41,7 @@ public class SummaryEntity {
     private SummaryState state;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<AssetEntity> assets;
+    private List<Asset> assets;
 
     public void updateMoneyValue(BigDecimal newValue) {
         this.moneyValue = newValue;
@@ -45,9 +49,13 @@ public class SummaryEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        SummaryEntity that = (SummaryEntity) o;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        Summary that = (Summary) o;
         return id != null && Objects.equals(id, that.id);
     }
 
@@ -56,8 +64,8 @@ public class SummaryEntity {
         return getClass().hashCode();
     }
 
-    public void addAsset(AssetEntity asset) {
-        if (this.assets == null){
+    public void addAsset(Asset asset) {
+        if (this.assets == null) {
             this.assets = new ArrayList<>();
         }
         this.assets.add(asset);
@@ -65,15 +73,30 @@ public class SummaryEntity {
     }
 
     public BigDecimal sumAssetsMoneyValue() {
-        return this.assets.stream().map(AssetEntity::getMoneyValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return this.assets.stream().map(Asset::getMoneyValue).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public boolean isInDraft() {
         return this.state.compareTo(SummaryState.DRAFT) == 0;
     }
+
     public BigDecimal sumOfItemsMoneyValue() {
         return getAssets().stream()
             .map(assetEntity -> assetEntity.getItems().stream().map(Item::getMoneyValue).reduce(BigDecimal.ZERO, BigDecimal::add))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Summary confirm() {
+        this.state = SummaryState.CONFIRMED;
+        return this;
+    }
+
+    public boolean isCancelled() {
+        return this.state.compareTo(SummaryState.CANCELED) == 0;
+    }
+
+    public Summary cancel() {
+        this.state = SummaryState.CANCELED;
+        return this;
     }
 }

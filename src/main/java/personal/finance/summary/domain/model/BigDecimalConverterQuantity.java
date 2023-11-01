@@ -1,4 +1,4 @@
-package personal.finance.item;
+package personal.finance.summary.domain.model;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

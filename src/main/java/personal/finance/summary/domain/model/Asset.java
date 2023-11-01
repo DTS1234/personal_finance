@@ -1,4 +1,4 @@
-package personal.finance.asset;
+package personal.finance.summary.domain.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import personal.finance.item.Item;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,10 +22,10 @@ import java.util.Objects;
 @Builder(buildMethodName = "buildAsset")
 @AllArgsConstructor
 @Getter
-@ToString(exclude = {"summary"})
-public class AssetEntity {
+@ToString()
+public class Asset {
 
-    public AssetEntity() {
+    public Asset() {
     }
 
     @Id
@@ -60,7 +59,7 @@ public class AssetEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AssetEntity asset = (AssetEntity) o;
+        Asset asset = (Asset) o;
         return id != null && Objects.equals(id, asset.id);
     }
 

@@ -1,11 +1,13 @@
 package personal.finance.summary;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import personal.finance.asset.Asset;
-import personal.finance.summary.output.Summary;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import personal.finance.summary.domain.SummaryFacade;
+import personal.finance.summary.domain.model.Summary;
 
 /**
  * @author akazmierczak
@@ -16,47 +18,21 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class SummaryController {
 
-    private final SummaryService summaryService;
-
-    @GetMapping("/summaries/current")
-    public Summary getCurrentSummary() {
-        return SummaryMapper.toSummary(summaryService.getLatestConfirmedSummary());
-    }
-
-    @GetMapping("/summaries")
-    public List<Summary> getConfirmedSummaries() {
-        return summaryService.getAllConfirmedSummaries();
-    }
-
-    @GetMapping("/summaries/{id}/available_assets")
-    public List<Asset> getAvailableSummaries(@PathVariable Long id) {
-        return summaryService.getAvailableAssets(id);
-    }
-
-    @GetMapping("/summaries/{id}")
-    public Summary getSummary(@PathVariable String id) {
-        return summaryService.getSummary(Long.parseLong(id));
-    }
+    private final SummaryFacade facade;
 
     @PostMapping("/summaries/{id}/update")
     public Summary updateSummaryInDraft(@PathVariable String id, @RequestBody Summary summary) {
-        System.out.println(id);
-        return summaryService.updateSummaryInDraft(summary);
-    }
-
-    @PostMapping("/summaries/{id}/updateAsset/{assetId}")
-    public Summary updateSummaryAssetInDraft(@PathVariable String id, @PathVariable String assetId, @RequestBody Asset asset) {
-        return summaryService.updateSummaryAssetInDraft(Long.parseLong(id), Long.parseLong(assetId), asset);
+        return facade.updateSummaryInDraft(summary);
     }
 
     @PostMapping("/summaries/{id}/confirm")
-    public Summary confirmSummary(@PathVariable Long id) {
-        return summaryService.confirmSummary(id);
+    public Summary confirmSummary(@PathVariable String id) {
+        return facade.confirmSummary(Long.valueOf(id));
     }
 
     @PostMapping("/summaries/new")
-    public Summary createNewSummary(@RequestBody Summary summary) {
-        return summaryService.createNewSummary(summary);
+    public Summary createNewSummary() {
+        return facade.createNewSummary();
     }
 
 }

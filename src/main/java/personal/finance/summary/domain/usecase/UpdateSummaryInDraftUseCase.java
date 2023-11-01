@@ -1,20 +1,20 @@
-package personal.finance.summary.usecase;
+package personal.finance.summary.domain.usecase;
 
 import lombok.RequiredArgsConstructor;
-import personal.finance.summary.domain.model.SummaryEntity;
+import personal.finance.summary.domain.model.Summary;
 import personal.finance.summary.domain.SummaryRepository;
 
-import static personal.finance.summary.usecase.CommonCode.moneyValueIsInconsistent;
-import static personal.finance.summary.usecase.CommonCode.summaryHasDifferentCreationDate;
+import static personal.finance.summary.domain.usecase.InvariantsUtils.moneyValueIsInconsistent;
+import static personal.finance.summary.domain.usecase.InvariantsUtils.summaryHasDifferentCreationDate;
 
 @RequiredArgsConstructor
-public class UpdateSummaryInDraftUseCase implements UseCase<SummaryEntity> {
+public class UpdateSummaryInDraftUseCase implements UseCase<Summary> {
 
     private final SummaryRepository summaryRepository;
-    private final SummaryEntity newUpdatedSummary;
+    private final Summary newUpdatedSummary;
 
     @Override
-    public SummaryEntity execute() {
+    public Summary execute() {
 
         if (!newUpdatedSummary.isInDraft()) {
             throw new IllegalStateException("Summary must be in a draft mode to be updated.");
@@ -24,7 +24,7 @@ public class UpdateSummaryInDraftUseCase implements UseCase<SummaryEntity> {
             throw new IllegalStateException("Invalid money value for the updated summary, it should be equal to the sum of all items money value.");
         }
 
-        SummaryEntity originalSummary = findOriginalSummaryOrNull();
+        Summary originalSummary = findOriginalSummaryOrNull();
         if (originalSummary == null) {
             throw new IllegalStateException("No summary with id: " + newUpdatedSummary.getId() + " exists.");
         }
@@ -36,7 +36,7 @@ public class UpdateSummaryInDraftUseCase implements UseCase<SummaryEntity> {
         return summaryRepository.save(newUpdatedSummary);
     }
 
-    private SummaryEntity findOriginalSummaryOrNull() {
+    private Summary findOriginalSummaryOrNull() {
         Long id = newUpdatedSummary.getId();
         return summaryRepository.findById(id).orElse(null);
     }
