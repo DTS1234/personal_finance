@@ -22,6 +22,7 @@ import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.c
 import {ReactiveFormsModule} from '@angular/forms';
 import {EditAssetComponent} from './manage/summary-creation/edit-asset/edit-asset.component';
 import {DatePipe} from '@angular/common';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {DatePipe} from '@angular/common';
     PiechartComponent,
     SummaryCreationComponent,
     AddAssetComponent,
-    EditAssetComponent],
+    EditAssetComponent,
+    LoginComponent],
   imports: [
     BrowserModule, HttpClientModule, RouterModule, AppRoutingModule, MDBBootstrapModule.forRoot(),
     BrowserAnimationsModule, ChartsModule, ReactiveFormsModule

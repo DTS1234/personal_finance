@@ -7,6 +7,7 @@ import {CommonModule} from '@angular/common';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
 import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.component';
 import {EditAssetComponent} from "./manage/summary-creation/edit-asset/edit-asset.component";
+import {LoginComponent} from "./login/login.component";
 
 
 const appRoutes: Routes = [
@@ -30,6 +31,9 @@ const appRoutes: Routes = [
   },
   {
     path: 'summary/:id/edit-asset', component: EditAssetComponent
+  },
+  {
+    path: 'login', component: LoginComponent
   }
 
 ];
