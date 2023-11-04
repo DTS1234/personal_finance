@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {take, tap} from 'rxjs/operators';
 import {Summary} from '../models/summary.model';
 import {Asset} from '../models/asset.model';
+import {AuthService} from "./auth.service";
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class SummaryService {
   private basePath = 'http://localhost:8080';
   private summaries: BehaviorSubject<Summary[]> = new BehaviorSubject<Summary[]>(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   onNewSummaryCreation(): Observable<Summary> {
@@ -31,6 +32,7 @@ export class SummaryService {
   }
 
   fetchSummaries(): Observable<Summary[]> {
+
     return this.http.get<Summary[]>('http://localhost:8080/summaries').pipe(tap(event => {
       console.log(event);
     }));

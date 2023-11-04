@@ -1,0 +1,16 @@
+<div class="alert alert-danger" [hidden]="error == null">
+  {{error}}
+</div>
+<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+  <div class="form-group">
+    <label for="username">Username:</label><input ngModel type="text" class="form-control" id="username" name="username" required/>
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label><input ngModel type="password" class="form-control" id="password" name="password" required/>
+  </div>
+  <div>
+    <button class="btn btn-primary" [disabled]="!authForm.valid">{{ isLoginMode ? 'Login' : 'Sign up' }}</button>
+    |
+    <button class="btn btn-primary" (click)="onSwitchMode()">Switch {{ isLoginMode ? 'Sign Up' : 'Login' }}</button>
+  </div>
+</form>

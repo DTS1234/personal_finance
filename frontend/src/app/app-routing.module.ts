@@ -7,13 +7,16 @@ import {CommonModule} from '@angular/common';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
 import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.component';
 import {EditAssetComponent} from "./manage/summary-creation/edit-asset/edit-asset.component";
-import {LoginComponent} from "./login/login.component";
-
+import {AuthComponent} from "./auth/auth.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
   {
     path: 'homepage', component: HomepageComponent, children: []
+  },
+  {
+    path: 'dashboard', component: DashboardComponent, children: []
   },
   {
     path: 'history', component: HistoryComponent, children: [
@@ -33,9 +36,8 @@ const appRoutes: Routes = [
     path: 'summary/:id/edit-asset', component: EditAssetComponent
   },
   {
-    path: 'login', component: LoginComponent
+    path: 'auth', component: AuthComponent
   }
-
 ];
 
 @NgModule({

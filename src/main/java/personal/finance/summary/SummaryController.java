@@ -2,6 +2,7 @@ package personal.finance.summary;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,13 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import personal.finance.summary.domain.SummaryFacade;
 import personal.finance.summary.domain.model.Summary;
 
+import java.util.List;
+
 /**
  * @author akazmierczak
  * @create 18.06.2022
  */
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin
 public class SummaryController {
 
     private final SummaryFacade facade;
@@ -33,6 +36,11 @@ public class SummaryController {
     @PostMapping("/summaries/new")
     public Summary createNewSummary() {
         return facade.createNewSummary();
+    }
+
+    @GetMapping("/summaries")
+    public List<Summary> getSummaries() {
+        return facade.getSummaries();
     }
 
 }

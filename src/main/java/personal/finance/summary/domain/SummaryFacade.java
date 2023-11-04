@@ -1,6 +1,10 @@
 package personal.finance.summary.domain;
 
 import personal.finance.summary.domain.model.Summary;
+import personal.finance.summary.domain.model.SummaryState;
+
+import java.util.List;
+import java.util.Set;
 
 public class SummaryFacade {
 
@@ -24,5 +28,9 @@ public class SummaryFacade {
 
     public Summary cancelSummary(Long id) {
         return new CancelSummaryUseCase(summaryRepository, id).execute();
+    }
+
+    public List<Summary> getSummaries() {
+        return summaryRepository.findSummaryByStateEqualsOrderById(SummaryState.CONFIRMED);
     }
 }
