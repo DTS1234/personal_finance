@@ -1,0 +1,23 @@
+{
+  "id": 6,
+  "userId": 1,
+  "money": 0.00,
+  "date": [
+    2023,
+    11,
+    12,
+    16,
+    38,
+    17,
+    320632000
+  ],
+  "state": "DRAFT",
+  "assets": [
+    {
+      "id": 4,
+      "money": 0,
+      "name": "new Asset",
+      "items": []
+    }
+  ]
+}

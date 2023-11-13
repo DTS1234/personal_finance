@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AssetService} from './services/asset.service';
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,11 @@ import {AssetService} from './services/asset.service';
 export class AppComponent implements OnInit{
   title = 'frontend';
 
-  constructor(private assetService: AssetService) {
+  constructor(private auth: AuthService) {
   }
 
   ngOnInit(): void {
+    this.auth.autoLogin();
   }
 
 

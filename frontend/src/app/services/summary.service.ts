@@ -32,10 +32,14 @@ export class SummaryService {
   }
 
   fetchSummaries(): Observable<Summary[]> {
-
-    return this.http.get<Summary[]>('http://localhost:8080/summaries').pipe(tap(event => {
-      console.log(event);
-    }));
+    let id = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.get<Summary[]>(`${this.basePath}/${id}/summaries`)
+      .pipe(
+        tap(event => {
+            console.log(event);
+          }
+        )
+      );
   }
 
   setSummaries(summaries: Summary[]): void {
@@ -47,7 +51,8 @@ export class SummaryService {
   }
 
   createNewSummary(summary: Summary): Observable<Summary> {
-    return this.http.post<Summary>('http://localhost:8080/summaries/new', summary);
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/new`, summary);
   }
 
   updateSummary(summary: Summary): Observable<Summary> {

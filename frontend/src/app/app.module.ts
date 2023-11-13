@@ -22,6 +22,8 @@ import {DatePipe} from '@angular/common';
 import {AuthComponent} from './auth/auth.component';
 import {AuthInterceptorService} from "./auth/auth.interceptor.service";
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { PasswordResetComponent } from './password/password-reset/password-reset.component';
+import { PasswordResetRequestComponent } from './password/password-reset-request/password-reset-request.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     AddAssetComponent,
     EditAssetComponent,
     AuthComponent,
-    DashboardComponent
+    DashboardComponent,
+    PasswordResetComponent,
+    PasswordResetRequestComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,

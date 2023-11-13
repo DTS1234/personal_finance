@@ -1,11 +1,6 @@
 package personal.finance.summary.domain;
 
-import personal.finance.summary.domain.model.SummaryState;
-import personal.finance.summary.domain.model.Summary;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public interface SummaryRepository {
 
@@ -13,11 +8,15 @@ public interface SummaryRepository {
 
     List<Summary> saveAll(List<Summary> entityList);
 
-    Optional<Summary> findById(Long id);
+    Summary findById(SummaryId id);
+
+    Summary findByIdAndUserId(Long summaryId, Long userId);
 
     void deleteAll();
 
     List<Summary> findSummaryByStateEqualsOrderById(SummaryState summaryState);
 
     List<Summary> findSummaryByStateEqualsOrderByDateDesc(SummaryState summaryState);
+
+    List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, Long userId);
 }

@@ -1,16 +1,32 @@
-<div class="alert alert-danger" [hidden]="error == null">
-  {{error}}
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="alert alert-danger" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="card p-4">
+        <div class="form-group mb-3">
+          <label for="username">Email:</label>
+          <input ngModel type="text" class="form-control" id="username" name="username" required email autofocus />
+        </div>
+        <div class="form-group mb-3">
+          <label for="password">Password:</label>
+          <input ngModel type="password" class="form-control" id="password" name="password" required />
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">
+            {{ isLoginMode ? 'Login' : 'Sign up' }}
+          </button>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+          <button class="btn btn-secondary btn-sm" type="button" (click)="onSwitchMode()">
+            Switch {{ isLoginMode ? 'to Sign Up' : 'to Login' }}
+          </button>
+          <!-- Forgot Password Link -->
+          <a routerLink="/password_reset/request" class="btn btn-link btn-sm">Forgot Password?</a>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
-  <div class="form-group">
-    <label for="username">Username:</label><input ngModel type="text" class="form-control" id="username" name="username" required/>
-  </div>
-  <div class="form-group">
-    <label for="password">Password:</label><input ngModel type="password" class="form-control" id="password" name="password" required/>
-  </div>
-  <div>
-    <button class="btn btn-primary" [disabled]="!authForm.valid">{{ isLoginMode ? 'Login' : 'Sign up' }}</button>
-    |
-    <button class="btn btn-primary" (click)="onSwitchMode()">Switch {{ isLoginMode ? 'Sign Up' : 'Login' }}</button>
-  </div>
-</form>

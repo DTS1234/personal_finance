@@ -16,10 +16,10 @@
   </div>
 
   <!-- Item fields can be added dynamically using formArray -->
-  <!-- You can add logic to dynamically add/remove item fields -->
-  <!-- Here's an example with a single item field -->
+  <!-- You can add logic to dynamically add/remove itemEntity fields -->
+  <!-- Here's an example with a single itemEntity field -->
   <div formArrayName="items">
-    <div *ngFor="let item of assetForm.get('items')['controls']; let i=index" [formGroupName]="i">
+    <div *ngFor="let itemEntity of assetForm.get('items')['controls']; let i=index" [formGroupName]="i">
       <div class="form-group">
         <label for="itemName{{i}}">Item Name</label>
         <input type="text" class="form-control" id="itemName{{i}}" formControlName="name">

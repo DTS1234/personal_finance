@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  spring-boot-app:
+    image: pf:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:v2.30.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:8.3.0
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+networks:
+  monitoring:
+    driver: bridge

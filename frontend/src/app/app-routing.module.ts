@@ -9,6 +9,9 @@ import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.c
 import {EditAssetComponent} from "./manage/summary-creation/edit-asset/edit-asset.component";
 import {AuthComponent} from "./auth/auth.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import {PasswordResetComponent} from "./password/password-reset/password-reset.component";
+import {PasswordResetRequestComponent} from "./password/password-reset-request/password-reset-request.component";
+import {AuthGuardService} from "./services/auth-guard.service";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -16,27 +19,31 @@ const appRoutes: Routes = [
     path: 'homepage', component: HomepageComponent, children: []
   },
   {
-    path: 'dashboard', component: DashboardComponent, children: []
+    path: 'dashboard', component: DashboardComponent, children: [], canActivate: [AuthGuardService]
   },
   {
-    path: 'history', component: HistoryComponent, children: [
-      // {path: 'edit/:id', component: ShoppingListEditComponent}
-    ]
+    path: 'history', component: HistoryComponent, children: [], canActivate: [AuthGuardService]
   },
   {
-    path: 'manage', component: ManageComponent,
+    path: 'manage', component: ManageComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'summary/:id', component: SummaryCreationComponent
+    path: 'summary/:id', component: SummaryCreationComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'summary/:id/add-asset', component: AddAssetComponent
+    path: 'summary/:id/add-asset', component: AddAssetComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'summary/:id/edit-asset', component: EditAssetComponent
+    path: 'summary/:id/edit-asset', component: EditAssetComponent, canActivate: [AuthGuardService]
   },
   {
     path: 'auth', component: AuthComponent
+  },
+  {
+    path: 'password_reset', component: PasswordResetComponent
+  },
+  {
+    path: 'password_reset/request', component: PasswordResetRequestComponent
   }
 ];
 
