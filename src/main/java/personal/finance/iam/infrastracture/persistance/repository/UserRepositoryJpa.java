@@ -7,7 +7,6 @@ import personal.finance.iam.domain.User;
 import personal.finance.iam.domain.UserId;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface UserRepositoryJpa extends JpaRepository<User, UserId> {

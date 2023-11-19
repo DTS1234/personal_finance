@@ -20,8 +20,6 @@ public class CustomUserDetailsManager implements UserDetailsManager {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
-        .getContextHolderStrategy();
 
     @Override
     public void createUser(UserDetails user) {
