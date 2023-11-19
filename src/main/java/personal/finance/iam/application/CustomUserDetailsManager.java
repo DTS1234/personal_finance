@@ -10,6 +10,8 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import personal.finance.iam.domain.User;
+import personal.finance.iam.domain.UserId;
+import personal.finance.iam.domain.UserInformation;
 import personal.finance.iam.domain.UserRepository;
 
 @RequiredArgsConstructor
@@ -25,20 +27,26 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     public void createUser(UserDetails user) {
         validateUserDetails(user);
         User newUser = new User();
-        newUser.setEnabled(false);
-        newUser.setEmail(user.getUsername());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setUsername(user.getUsername());
+        newUser.setId(UserId.random());
+        newUser.setUserInformation(
+            UserInformation.builder()
+                .email(user.getUsername())
+                .username(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .build()
+        );
+
         userRepository.save(newUser);
     }
 
     @Override
     public void updateUser(UserDetails user) {
         User newUser = new User();
-        newUser.setEnabled(user.isEnabled());
-        newUser.setEmail(user.getUsername());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setUsername(user.getUsername());
+        newUser.setUserInformation(UserInformation.builder()
+            .enabled(user.isEnabled())
+            .password(passwordEncoder.encode(user.getPassword()))
+            .email(user.getUsername())
+            .build());
         userRepository.save(newUser);
     }
 

@@ -9,6 +9,6 @@ import personal.finance.iam.domain.VerificationToken;
 public interface VerificationTokenRepositoryJpa extends JpaRepository<VerificationToken, Long> {
     VerificationToken findByToken(String token);
 
-    @Query("SELECT v FROM VerificationToken v WHERE v.user.email = ?1")
+    @Query("SELECT v FROM VerificationToken v WHERE v.user.userInformation.email = ?1")
     VerificationToken findByUser(String username);
 }

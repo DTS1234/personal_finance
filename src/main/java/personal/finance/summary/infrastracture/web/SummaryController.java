@@ -1,5 +1,6 @@
 package personal.finance.summary.infrastracture.web;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
+@Timed(percentiles = {0.5, 0.75, 0.95, 0.99})
 public class SummaryController {
 
     private final SummaryFacade facade;

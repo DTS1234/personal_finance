@@ -43,7 +43,6 @@ public class SecurityConfiguration {
 
     @Value("${jwt.public.key}")
     private final RSAPublicKey key;
-
     @Value("${jwt.private.key}")
     private final RSAPrivateKey priv;
 

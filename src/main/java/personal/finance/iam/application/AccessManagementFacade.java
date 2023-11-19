@@ -19,6 +19,8 @@ import personal.finance.iam.application.dto.UserRegistrationDTO;
 import personal.finance.iam.domain.PasswordResetToken;
 import personal.finance.iam.domain.PasswordResetTokenRepository;
 import personal.finance.iam.domain.User;
+import personal.finance.iam.domain.UserId;
+import personal.finance.iam.domain.UserInformation;
 import personal.finance.iam.domain.UserRepository;
 import personal.finance.iam.domain.VerificationToken;
 import personal.finance.iam.domain.VerificationTokenRepository;
@@ -39,10 +41,14 @@ public class AccessManagementFacade {
 
     public UserRegistrationConfirmationDTO registerUser(UserRegistrationDTO registrationDto) {
         User newUser = new User();
-        newUser.setEmail(registrationDto.email());
-        newUser.setUsername(registrationDto.email());
-        newUser.setPassword(passwordEncoder.encode(registrationDto.password()));
-        newUser.setEnabled(false); // User is not enabled until they verify their email
+        newUser.setId(UserId.random());
+        UserInformation userInformation = UserInformation.builder()
+            .email(registrationDto.email())
+            .username(registrationDto.email())
+            .password(passwordEncoder.encode(registrationDto.password()))
+            .enabled(false)
+            .build();
+        newUser.setUserInformation(userInformation);
 
         if (userRepository.findByEmail(registrationDto.email()) != null) {
             throw new IllegalStateException("User with this email address already exists");
@@ -54,10 +60,10 @@ public class AccessManagementFacade {
         VerificationToken verificationToken = new VerificationToken(token, userSaved);
         tokenRepository.save(verificationToken);
 
-        emailSenderService.sendEmailConfirmation(newUser.getEmail(), token);
+        emailSenderService.sendEmailConfirmation(newUser.getUserInformation().getEmail(), token);
 
         return new UserRegistrationConfirmationDTO("User email address "
-            + newUser.getEmail() + " confirmation in progress.",
+            + newUser.getUserInformation().getEmail() + " confirmation in progress.",
             RegistrationState.IN_PROGRESS);
     }
 
@@ -65,7 +71,7 @@ public class AccessManagementFacade {
         VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken != null && !verificationToken.isExpired()) {
             User user = verificationToken.getUser();
-            user.setEnabled(true);
+            user.enable();
             userRepository.save(user);
             return new UserRegistrationConfirmationDTO("User confirmed", RegistrationState.SUCCESS);
         } else {
@@ -80,7 +86,7 @@ public class AccessManagementFacade {
             User found = userRepository.findByEmail(username);
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                return new AuthResponseDTO(username, found.getId(),
+                return new AuthResponseDTO(username, found.getId().value.toString(),
                     authTokenService.token(authentication), "3600");
             } else {
                 return null;
@@ -109,7 +115,7 @@ public class AccessManagementFacade {
 
         PasswordResetToken passwordResetToken = new PasswordResetToken(UUID.randomUUID().toString(), userFound);
         PasswordResetToken token = passwordResetTokenRepository.save(passwordResetToken);
-        emailSenderService.sendPasswordReset(userFound.getEmail(), token.getToken());
+        emailSenderService.sendPasswordReset(userFound.getUserInformation().getEmail(), token.getToken());
 
         return new PasswordResetConfirmationDTO("Email with password reset link was sent",
             PasswordResetState.IN_PROGRESS);
@@ -133,7 +139,7 @@ public class AccessManagementFacade {
             throw new IllegalStateException("User email address is not confirmed.");
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.changePassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
         return new PasswordResetConfirmationDTO("Password changed successfully", PasswordResetState.SUCCESS);

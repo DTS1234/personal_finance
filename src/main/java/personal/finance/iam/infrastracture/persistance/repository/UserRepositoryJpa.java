@@ -4,13 +4,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import personal.finance.iam.domain.User;
+import personal.finance.iam.domain.UserId;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserRepositoryJpa extends JpaRepository<User, Long> {
+public interface UserRepositoryJpa extends JpaRepository<User, UserId> {
 
-    void deleteByEmail(@NonNull String email);
+    void deleteByUserInformationEmail(@NonNull String email);
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByUserInformationEmail(String email);
 }

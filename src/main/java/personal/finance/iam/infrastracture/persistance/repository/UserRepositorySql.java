@@ -13,7 +13,7 @@ public class UserRepositorySql implements UserRepository {
 
     @Override
     public User findByEmail(String email) {
-        return repositoryJpa.findByEmail(email).orElse(null);
+        return repositoryJpa.findByUserInformationEmail(email).orElse(null);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class UserRepositorySql implements UserRepository {
 
     @Override
     public void deleteByEmail(String email) {
-        repositoryJpa.deleteByEmail(email);
+        repositoryJpa.deleteByUserInformationEmail(email);
     }
 
 

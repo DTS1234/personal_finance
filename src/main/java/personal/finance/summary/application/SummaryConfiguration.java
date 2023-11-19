@@ -9,16 +9,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.domain.User;
+import personal.finance.iam.domain.UserId;
+import personal.finance.iam.domain.UserInformation;
 import personal.finance.iam.domain.UserRepository;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
-import personal.finance.summary.domain.SummaryRepository;
-import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryId;
+import personal.finance.summary.domain.SummaryRepository;
+import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.infrastracture.persistance.repository.SummaryInMemoryRepository;
 import personal.finance.summary.infrastracture.persistance.repository.SummaryRepositorySql;
 
@@ -112,20 +114,25 @@ class SummaryConfiguration {
         summarySQLRepository.save(summary);
 
         User user = new User();
-        user.setEnabled(true);
-        user.setPassword(encoder.encode("123"));
-        user.setEmail("user@gmail.com");
-        user.setUsername("username");
+        user.setId(UserId.random());
+        user.setUserInformation(UserInformation.builder()
+            .enabled(true)
+            .password(encoder.encode("123"))
+            .username("username")
+            .email("user@gmail.com")
+            .build());
 
         userRepositorySql.save(user);
 
         User user2 = new User();
-        user2.setEnabled(true);
-        user2.setPassword(encoder.encode("123"));
-        user2.setEmail("user@onet.pl");
-        user2.setUsername("username2");
+        user2.setId(UserId.random());
+        user2.setUserInformation(UserInformation.builder()
+            .enabled(true)
+            .password(encoder.encode("123"))
+            .username("user@onet.pl")
+            .email("user@onet.pl")
+            .build());
 
         userRepositorySql.save(user2);
     }
-
 }

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   spring-boot-app:
-    image: pf:latest
+    image: 9909733/pf:latest
     ports:
       - "8080:8080"
     networks:
@@ -11,7 +11,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.30.0
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     networks:
@@ -23,9 +23,10 @@ services:
       - "3000:3000"
     networks:
       - monitoring
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./monitoring/grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./monitoring/grafana/config.monitoring
 
 networks:
   monitoring:

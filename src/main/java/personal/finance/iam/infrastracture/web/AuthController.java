@@ -1,5 +1,6 @@
 package personal.finance.iam.infrastracture.web;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +21,7 @@ import personal.finance.iam.application.dto.UserRegistrationDTO;
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
+@Timed(percentiles = {0.5, 0.75, 0.95, 0.99})
 public class AuthController {
 
     private final AccessManagementFacade accessManagementFacade;
@@ -30,9 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<UserRegistrationConfirmationDTO> register(@RequestBody UserRegistrationDTO signupRequest) {
-        UserRegistrationConfirmationDTO confirmationDTO = accessManagementFacade.registerUser(signupRequest);
-        return ResponseEntity.ok().body(confirmationDTO);
+    public UserRegistrationConfirmationDTO register(@RequestBody UserRegistrationDTO signupRequest) {
+        return accessManagementFacade.registerUser(signupRequest);
     }
 
     @GetMapping("/registration/confirm")
