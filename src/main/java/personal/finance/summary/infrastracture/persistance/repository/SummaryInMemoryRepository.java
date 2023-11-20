@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SummaryInMemoryRepository implements SummaryRepository {
@@ -47,7 +48,7 @@ public class SummaryInMemoryRepository implements SummaryRepository {
     }
 
     @Override
-    public Summary findByIdAndUserId(Long summaryId, Long userId) {
+    public Summary findByIdAndUserId(Long summaryId, UUID userId) {
         if (SUMMARIES.containsKey(summaryId)) {
             if (SUMMARIES.get(summaryId).getUserId().equals(userId)) {
                 return SUMMARIES.get(summaryId);
@@ -59,35 +60,20 @@ public class SummaryInMemoryRepository implements SummaryRepository {
     }
 
     @Override
-    public void deleteAll() {
-        SUMMARIES.clear();
-    }
-
-    @Override
-    public List<Summary> findSummaryByStateEqualsOrderById(SummaryState summaryState) {
-        return SUMMARIES.entrySet().stream()
-            .filter(e -> e.getValue().getState().equals(summaryState))
-            .sorted(Comparator.comparing(e -> e.getValue().getId().getValue()))
-            .map(Entry::getValue)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Summary> findSummaryByStateEqualsOrderByDateDesc(SummaryState summaryState) {
-        return SUMMARIES.entrySet().stream()
-            .filter(e -> e.getValue().getState().equals(summaryState))
-            .sorted(Comparator.comparing(e -> e.getValue().getDate()))
-            .map(Entry::getValue)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, Long userId) {
+    public List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, UUID userId) {
         return SUMMARIES.entrySet().stream()
             .filter(e -> e.getValue().getState().equals(summaryState))
             .filter(e -> e.getValue().getUserId().equals(userId))
             .sorted(Comparator.comparing(e -> e.getValue().getDate()))
             .map(Entry::getValue)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Summary> findSummaryByUserIdAndState(UUID userId, SummaryState summaryState) {
+        return SUMMARIES.values().stream()
+            .filter(summary -> summary.getState().equals(summaryState))
+            .filter(summary -> summary.getUserId().equals(userId))
             .collect(Collectors.toList());
     }
 

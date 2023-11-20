@@ -7,6 +7,7 @@ import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.domain.SummaryId;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SummaryFacade {
 
@@ -16,15 +17,15 @@ public class SummaryFacade {
         this.summaryRepository = summaryRepository;
     }
 
-    public Summary confirmSummary(Long summaryId, Long userId) {
+    public Summary confirmSummary(Long summaryId, UUID userId) {
         return new ConfirmSummaryUseCase(summaryRepository, summaryId, userId).execute();
     }
 
-    public Summary createNewSummary(Long userId) {
+    public Summary createNewSummary(UUID userId) {
         return new CreateNewSummaryUseCase(userId, summaryRepository).execute();
     }
 
-    public Summary updateSummaryInDraft(SummaryDTO updatedSummary, Long userId) {
+    public Summary updateSummaryInDraft(SummaryDTO updatedSummary, UUID userId) {
         return new UpdateSummaryInDraftUseCase(summaryRepository, updatedSummary, userId).execute();
     }
 
@@ -32,7 +33,11 @@ public class SummaryFacade {
         return new CancelSummaryUseCase(summaryRepository, new SummaryId(id)).execute();
     }
 
-    public List<Summary> getSummaries(Long userId) {
+    public List<Summary> getSummaries(UUID userId) {
         return summaryRepository.findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState.CONFIRMED, userId);
+    }
+
+    public Summary getCurrentDraft(UUID userId) {
+        return new GetCurrentDraftUseCase(summaryRepository, userId).execute();
     }
 }

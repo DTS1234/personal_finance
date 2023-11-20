@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -35,7 +36,7 @@ public class SummaryEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private UUID userId;
     private BigDecimal moneyValue;
     private LocalDateTime date;
     private SummaryState state;

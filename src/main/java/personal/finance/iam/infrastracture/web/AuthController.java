@@ -1,6 +1,9 @@
 package personal.finance.iam.infrastracture.web;
 
+import io.micrometer.common.util.StringUtils;
 import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,9 +28,16 @@ import personal.finance.iam.application.dto.UserRegistrationDTO;
 public class AuthController {
 
     private final AccessManagementFacade accessManagementFacade;
+    private final MeterRegistry meterRegistry;
+
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        Counter counter = Counter.builder("api_books_get")
+            .tag("user", loginRequestDTO.username())
+            .description("a number of requests to /login endpoint")
+            .register(meterRegistry);
+        counter.increment();
         return authenticate(loginRequestDTO.username(), loginRequestDTO.password());
     }
 

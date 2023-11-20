@@ -8,9 +8,9 @@
   </div>
 
   <div class="form-group">
-    <label for="moneyValue">Money Value</label>
-    <input type="number" class="form-control" id="moneyValue" formControlName="moneyValue">
-    <div *ngIf="assetForm.controls.moneyValue.touched && assetForm.controls.moneyValue.errors?.required" class="text-danger">
+    <label for="money">Money Value</label>
+    <input type="number" class="form-control" id="money" formControlName="money">
+    <div *ngIf="assetForm.controls.money.touched && assetForm.controls.money.errors?.required" class="text-danger">
       Money Value is required.
     </div>
   </div>
@@ -27,7 +27,7 @@
 
       <div class="form-group">
         <label for="itemMoneyValue{{i}}">Item Money Value</label>
-        <input type="number" class="form-control" id="itemMoneyValue{{i}}" formControlName="moneyValue">
+        <input type="number" class="form-control" id="itemMoneyValue{{i}}" formControlName="money">
       </div>
 
       <div class="form-group">

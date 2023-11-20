@@ -2,9 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {Asset} from '../../../models/asset.model';
-import {AssetSharedService} from "../../../services/add-asset.service";
-import {AssetService} from "../../../services/asset.service";
-import {logger} from "codelyzer/util/logger";
 import {SummaryService} from "../../../services/summary.service";
 
 @Component({
@@ -40,12 +37,12 @@ export class EditAssetComponent implements OnInit {
   initializeForm(): void {
     this.assetForm = this.formBuilder.group({
       name: [this.asset.name, Validators.required],
-      moneyValue: [this.asset.moneyValue, Validators.required],
+      money: [this.asset.money, Validators.required],
       items: this.formBuilder.array(
         this.asset.items.map(item =>
           this.formBuilder.group({
             name: [item.name, Validators.required],
-            moneyValue: [item.moneyValue, Validators.required],
+            money: [item.money, Validators.required],
             quantity: [item.quantity, Validators.required]
           })
         )
@@ -59,7 +56,7 @@ export class EditAssetComponent implements OnInit {
     const assetData = this.assetForm.value;
 
     this.asset.name = assetData.name;
-    this.asset.moneyValue = assetData.moneyValue;
+    this.asset.money = assetData.money;
     this.asset.items = assetData.items;
 
     console.log(this.asset);
@@ -93,7 +90,7 @@ export class EditAssetComponent implements OnInit {
     const items = this.assetForm.get('items') as FormArray;
     const newItem = this.formBuilder.group({
       name: ['', Validators.required],
-      moneyValue: ['', Validators.required],
+      money: ['', Validators.required],
       quantity: ['', Validators.required]
     });
 

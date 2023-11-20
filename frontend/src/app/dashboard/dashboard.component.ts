@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {AssetService} from "../services/asset.service";
+import {Component, OnInit} from '@angular/core';
 import {SummaryService} from "../services/summary.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Asset} from "../models/asset.model";
@@ -12,7 +11,7 @@ import {Summary} from "../models/summary.model";
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private assetService: AssetService, private summaryService: SummaryService, private router: Router,
+  constructor(private summaryService: SummaryService, private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
 
@@ -34,18 +33,9 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData(): void {
-
-    this.summaryService.getSummaries().subscribe(summaries => {
-      if (summaries == null) {
-        this.summaryService.fetchSummaries().subscribe(data => {
-          this.summaries = data.slice(data.length - 3);
-          this.assets = this.summaries[this.summaries.length - 1].assets;
-        });
-      } else {
-        this.summaries = summaries.slice(summaries.length - 3);
-        this.assets = this.summaries[this.summaries.length - 1].assets;
-      }
-    });
+    this.summaryService.fetchSummaries().subscribe(data => {
+      this.summaries = data
+    })
   }
 
 }

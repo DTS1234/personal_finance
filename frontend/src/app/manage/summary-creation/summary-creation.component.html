@@ -15,7 +15,7 @@
     <tr *ngFor="let assetEntityEntity of availableAssets; let i = index">
       <th scope="row">{{ assetEntityEntity.id }}</th>
       <td>{{ assetEntityEntity.name}}</td>
-      <td>{{ assetEntityEntity.moneyValue }}</td>
+      <td>{{ assetEntityEntity.money }}</td>
       <td>{{ assetEntityEntity.items.length }}</td>
       <td>
         <button (click)="edit(assetEntityEntity)">Edit</button>
@@ -28,7 +28,7 @@
     <tr *ngFor="let assetEntityEntity of newAssets; let i = index" style="background: green">
       <th scope="row">{{ assetEntityEntity.id }}</th>
       <td>{{ assetEntityEntity.name}}</td>
-      <td>{{ assetEntityEntity.moneyValue }}</td>
+      <td>{{ assetEntityEntity.money }}</td>
       <td>{{ assetEntityEntity.items.length }}</td>
       <td>
         <button>Edit</button>
@@ -60,7 +60,7 @@
     <tr *ngFor="let itemEntity of activeAsset.items; let i = index">
       <th scope="row">{{ itemEntity.id }}</th>
       <td>{{ itemEntity.name }}</td>
-      <td>{{ itemEntity.moneyValue }}</td>
+      <td>{{ itemEntity.money }}</td>
       <td>{{ itemEntity.quantity }}</td>
     </tr>
     </tbody>

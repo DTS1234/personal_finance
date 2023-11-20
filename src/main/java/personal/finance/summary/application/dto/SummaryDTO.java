@@ -5,17 +5,17 @@ import lombok.NoArgsConstructor;
 import personal.finance.summary.domain.SummaryState;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 public class SummaryDTO {
     public Long id;
-    public Long userId;
+    public UUID userId;
     public BigDecimal money;
     public SummaryState state;
-    public LocalDateTime date;
+    public String date;
     public List<AssetDTO> assets;
 }
 

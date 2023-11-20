@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {AssetService} from './services/asset.service';
 import {AuthService} from "./services/auth.service";
 
 @Component({
@@ -7,7 +6,7 @@ import {AuthService} from "./services/auth.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'frontend';
 
   constructor(private auth: AuthService) {
@@ -16,6 +15,4 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.auth.autoLogin();
   }
-
-
 }

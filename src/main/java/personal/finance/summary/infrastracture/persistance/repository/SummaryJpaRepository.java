@@ -1,11 +1,14 @@
 package personal.finance.summary.infrastracture.persistance.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, Long> {
 
@@ -13,7 +16,9 @@ public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, Long>
 
     List<SummaryEntity> findSummaryByStateEqualsOrderByDateDesc(SummaryState summaryState);
 
-    List<SummaryEntity> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, Long userId);
+    List<SummaryEntity> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, UUID userId);
 
-    Optional<SummaryEntity> findByIdAndUserId(Long summaryId, Long userId);
+    Optional<SummaryEntity> findByIdAndUserId(Long summaryId, UUID userId);
+
+    Set<SummaryEntity> findSummaryByUserIdAndStateEquals(UUID userId, SummaryState summaryState);
 }

@@ -18,7 +18,7 @@ export class SummaryBoxComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return this.datePipe.transform(date, 'yyyy-MM-dd HH:mm:ss');
+    return this.datePipe.transform(date, 'dd.MM.yyyy HH:mm:ss');
   }
 
 }

@@ -8,10 +8,14 @@ import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryId;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DTOMapper {
+
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     public static SummaryDTO dto(Summary summary) {
         return new SummaryDTO(
@@ -19,7 +23,7 @@ public class DTOMapper {
             summary.getUserId(),
             summary.getMoney().getMoneyValue(),
             summary.getState(),
-            summary.getDate(),
+            dateFormatter.format(summary.getDate()),
             assetsDto(summary)
         );
     }
@@ -60,11 +64,13 @@ public class DTOMapper {
             new SummaryId(summaryDTO.id),
             summaryDTO.userId,
             new Money(summaryDTO.money),
-            summaryDTO.date,
+            LocalDateTime.parse(summaryDTO.date, dateFormatter),
             summaryDTO.state,
             mapAssets(summaryDTO)
         );
     }
+
+
 
     private static List<Asset> mapAssets(SummaryDTO summaryDTO) {
         return summaryDTO.assets.stream()

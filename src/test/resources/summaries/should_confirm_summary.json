@@ -1,16 +1,8 @@
 {
-  "id": 5,
-  "userId": 1,
+  "id": "IGNORED",
+  "userId": "66ea2da5-841c-4d16-9838-25cd2634af09",
   "money": 0.00,
-  "date": [
-    2023,
-    11,
-    12,
-    16,
-    38,
-    17,
-    320632000
-  ],
+  "date": "IGNORED",
   "state": "CONFIRMED",
   "assets": []
 }

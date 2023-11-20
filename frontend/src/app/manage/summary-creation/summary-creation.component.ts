@@ -1,10 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Asset} from '../../models/asset.model';
-import {AssetService} from '../../services/asset.service';
 import {SummaryService} from '../../services/summary.service';
 import {Summary} from '../../models/summary.model';
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {AssetSharedService} from '../../services/add-asset.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-summary-creation',
@@ -17,88 +15,37 @@ export class SummaryCreationComponent implements OnInit {
   activeAsset: Asset = new Asset(null, 'No assets yet', 0, []);
   summary: Summary;
 
-  constructor(private assetService: AssetService,
-              private summaryService: SummaryService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private addAssetService: AssetSharedService) {
+  constructor(private summaryService: SummaryService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
 
-    // this.router.events.subscribe(event => {
-    //   this.activatedRoute.queryParams.subscribe(params => {
-    //     if (params.reload) {// Perform data reloading or any other actions here
-    //       console.log('dupa');
-    //     }
-    //   });
-    // })};
-
-    this.router.events.subscribe(event => {
-      this.activatedRoute.queryParams.subscribe(params => {
-        if (params.reload) {
-          this.loadData();
-        }
-      });
-    });
-
-    this.summaryService.onNewSummaryCreation().subscribe(
+    this.summaryService.newSummary$.subscribe(
       newSum => {
         this.summary = newSum;
         this.availableAssets = this.summary?.assets;
+        console.log("NEW summary loaded: " + this.summary.money)
       }
     );
 
-    this.loadData();
-
-  }
-
-  private loadData(): void {
-    console.log(this.activatedRoute.params.subscribe(p => {
-
-      this.summaryService.getSummary(Number(p.id)).subscribe(s => {
-        this.summary = s;
-        this.availableAssets = s.assets;
-      });
-
-    }));
-
-    this.addAssetService.newAssets$.subscribe((assets) => {
-      this.newAssets = assets;
-    });
   }
 
   addAssetPage(): void {
-    const id = this.summary?.id == null ? this.router.url.substring(this.router.url.length - 2) : this.summary.id;
+    const id = this.summary?.id == null ? this.router.url.substring(this.router.url.length - 2)
+      : this.summary.id;
     this.router.navigate([`/summary/${id}/add-asset`]).then(r => console.log(r));
   }
 
   confirmSummary(): void {
-
-    if (this.newAssets != null && this.newAssets.length > 0) {
-      this.summary.assets = this.availableAssets.concat(this.newAssets);
-    } else {
-      this.summary.assets = this.availableAssets;
-    }
-
-    this.summaryService.updateSummary(this.summary).subscribe(s => {
-        console.log(s);
-        this.summaryService.confirmSummary(s).subscribe(confirmedSummary => {
-            this.summaryService.getSummaries().subscribe(summaries => {
-              summaries.push(confirmedSummary);
-              this.summaryService.setSummaries(summaries);
-            });
-          }
-        );
+    console.log("confirming summary: " + JSON.stringify(this.summary))
+    this.summaryService.confirmSummary(this.summary).subscribe(
+      data => {
+        console.log("summary confirmed: " + JSON.stringify(data))
+        this.summaryService.setNewSummary(null)
+        this.router.navigate([`/dashboard`]).then(r => console.log(r));
       }
-    );
-
-    this.addAssetService.clearNewAssets();
-
-    const navigationExtras: NavigationExtras = {queryParams: {reload: true}};
-    // Add a query parameter to force reload};
-
-    this.router.navigate(['homepage'], navigationExtras).then(r => console.log(r));
+    )
   }
 
   remove(asset: Asset): void {
@@ -107,7 +54,7 @@ export class SummaryCreationComponent implements OnInit {
   }
 
   edit(asset: Asset): void {
-    // tslint:disable-next-line:max-line-length
-    this.router.navigate([`/summary/${this.summary.id}/edit-asset`], {queryParams: {asset: JSON.stringify(asset)}}).then(r => console.log(r));
+    this.router.navigate([`/summary/${this.summary.id}/edit-asset`],
+      {queryParams: {asset: JSON.stringify(asset)}}).then(r => console.log(r));
   }
 }

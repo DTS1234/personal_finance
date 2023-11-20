@@ -1,6 +1,7 @@
 package personal.finance.summary.domain;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SummaryRepository {
 
@@ -10,13 +11,9 @@ public interface SummaryRepository {
 
     Summary findById(SummaryId id);
 
-    Summary findByIdAndUserId(Long summaryId, Long userId);
+    Summary findByIdAndUserId(Long summaryId, UUID userId);
 
-    void deleteAll();
+    List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, UUID userId);
 
-    List<Summary> findSummaryByStateEqualsOrderById(SummaryState summaryState);
-
-    List<Summary> findSummaryByStateEqualsOrderByDateDesc(SummaryState summaryState);
-
-    List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, Long userId);
+    List<Summary> findSummaryByUserIdAndState(UUID userId, SummaryState summaryState);
 }

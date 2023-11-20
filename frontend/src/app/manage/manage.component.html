@@ -16,9 +16,8 @@
       <tr *ngFor="let assetEntity of assets; let i = index">
         <th scope="row">{{ i + 1}}</th>
         <td>{{ assetEntity.name}}</td>
-        <td>{{ assetEntity.moneyValue }}</td>
+        <td>{{ assetEntity.money }}</td>
         <td>{{ assetEntity.items.length }}</td>
-        <td>{{ percentages[assetEntity.id]}} %</td>
       </tr>
 
       <tr>
@@ -35,5 +34,15 @@
   </div>
 </div>
 
-<a class="btn btn-secondary btn-lg btn-block mb-4" role="button" (click)="createNewSummary()">CREATE NEW SUMMARY</a>
+<button class="btn btn-secondary btn-lg btn-block mb-4" role="button"
+        [disabled]="inSummaryCreation"
+        (click)="createNewSummary()">
+  CREATE NEW SUMMARY
+</button>
+<button class="btn btn-secondary btn-lg btn-block mb-4" role="button"
+        *ngIf="inSummaryCreation == true"
+        (click)="continueCreation()">
+  CONTINUE CREATING SUMMARY
+</button>
+
 

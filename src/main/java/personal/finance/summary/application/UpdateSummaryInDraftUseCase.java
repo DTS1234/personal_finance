@@ -7,6 +7,8 @@ import personal.finance.summary.application.dto.SummaryDTO;
 import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.Summary;
 
+import java.util.UUID;
+
 import static personal.finance.summary.application.InvariantsUtils.moneyValueIsInconsistent;
 import static personal.finance.summary.application.InvariantsUtils.summaryHasDifferentCreationDate;
 
@@ -16,7 +18,7 @@ class UpdateSummaryInDraftUseCase implements UseCase<Summary> {
     private final SummaryRepository summaryRepository;
     private final SummaryDTO summaryDTO;
 
-    private final Long userId;
+    private final UUID userId;
 
     @Override
     public Summary execute() {

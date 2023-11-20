@@ -79,8 +79,16 @@ class DomainModelMapper {
     }
 
     ItemEntity map(Item item) {
-        return new ItemEntity(item.getId().getValue(), item.getMoney().getMoneyValue(), item.getName(),
+        return new ItemEntity(getIdValue(item), item.getMoney().getMoneyValue(), item.getName(),
             item.getQuantity());
+    }
+
+    private static Long getIdValue(Item item) {
+        ItemId id = item.getId();
+        if (id == null) {
+            return null;
+        }
+        return id.getValue();
     }
 
 }

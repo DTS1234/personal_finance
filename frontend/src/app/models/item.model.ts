@@ -2,7 +2,7 @@ export class Item {
   constructor(
     public id: number,
     public name: string,
-    public moneyValue: number,
+    public money: number,
     public quantity: number
   ) {
   }

@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Asset} from '../../../models/asset.model';
-import {AssetSharedService} from '../../../services/add-asset.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {SummaryService} from "../../../services/summary.service";
+import {Summary} from "../../../models/summary.model";
 
 @Component({
   selector: 'app-add-asset',
@@ -13,12 +14,22 @@ export class AddAssetComponent implements OnInit {
   assetForm: FormGroup;
   asset: Asset;
   mode = 'add';
+  summary: Summary;
+  private updatingSummary = false;
 
-  constructor(private formBuilder: FormBuilder, private addAssetService: AssetSharedService, private router: Router,
+  constructor(private formBuilder: FormBuilder,
+              private summaryService: SummaryService,
+              private router: Router,
               private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+
+    this.summaryService.newSummary$.subscribe(
+      data => {
+        this.summary = data
+      }
+    )
 
     this.route.queryParams.subscribe(params => {
       const assetString = params.asset;
@@ -29,7 +40,7 @@ export class AddAssetComponent implements OnInit {
       } else {
         this.assetForm = this.formBuilder.group({
           name: ['', Validators.required],
-          moneyValue: ['', Validators.required],
+          money: ['', Validators.required],
           items: this.formBuilder.array([]) // You can add item fields dynamically
         });
       }
@@ -40,12 +51,12 @@ export class AddAssetComponent implements OnInit {
   initializeForm(): void {
     this.assetForm = this.formBuilder.group({
       name: [this.asset.name, Validators.required],
-      moneyValue: [this.asset.moneyValue, Validators.required],
+      money: [this.asset.money, Validators.required],
       items: this.formBuilder.array(
         this.asset.items.map(item =>
           this.formBuilder.group({
             name: [item.name, Validators.required],
-            moneyValue: [item.moneyValue, Validators.required],
+            money: [item.money, Validators.required],
             quantity: [item.quantity, Validators.required]
           })
         )
@@ -63,11 +74,27 @@ export class AddAssetComponent implements OnInit {
     const asset = new Asset(
       null,
       assetData.name,
-      assetData.moneyValue,
+      assetData.money,
       assetData.items
     );
 
-    this.addAssetService.addToNewAssets(asset);
+    this.summaryService.newSummary$.subscribe(data => {
+
+      if (this.updatingSummary) {
+        return;
+      }
+
+      this.updatingSummary = true;
+      data.money = data.money + asset.money
+      data.assets.push(asset)
+
+      this.summaryService.updateSummary(data).subscribe(
+        updatedData => {
+          this.summaryService.setNewSummary(updatedData)
+          this.updatingSummary = false;
+        }
+      )
+    })
 
     // Reset the form
     this.assetForm.reset();
@@ -82,11 +109,11 @@ export class AddAssetComponent implements OnInit {
     const items = this.assetForm.get('items') as FormArray;
     const newItem = this.formBuilder.group({
       name: ['', Validators.required],
-      moneyValue: ['', Validators.required],
+      money: ['', Validators.required],
       quantity: ['', Validators.required]
     });
-
     items.push(newItem);
   }
+
 
 }

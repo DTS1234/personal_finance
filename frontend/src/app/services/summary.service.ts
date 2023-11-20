@@ -13,14 +13,12 @@ import {AuthService} from "./auth.service";
 export class SummaryService {
 
   private newSummary: BehaviorSubject<Summary> = new BehaviorSubject<Summary>(null);
+  newSummary$ = this.newSummary.asObservable();
+
   private basePath = 'http://localhost:8080';
   private summaries: BehaviorSubject<Summary[]> = new BehaviorSubject<Summary[]>(null);
 
   constructor(private http: HttpClient, private authService: AuthService) {
-  }
-
-  onNewSummaryCreation(): Observable<Summary> {
-    return this.newSummary.asObservable();
   }
 
   setNewSummary(newSummary: Summary): void {
@@ -56,7 +54,8 @@ export class SummaryService {
   }
 
   updateSummary(summary: Summary): Observable<Summary> {
-    return this.http.post<Summary>(`${this.basePath}/summaries/${summary.id}/update`, summary);
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summary.id}/update`, summary);
   }
 
   updateAsset(summaryId: number, assetId: number, asset: Asset): Observable<Summary> {
@@ -64,15 +63,11 @@ export class SummaryService {
   }
 
   confirmSummary(summary: Summary): Observable<Summary> {
-    return this.http.post<Summary>(`${this.basePath}/summaries/${summary.id}/confirm`, summary);
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summary.id}/confirm`, summary);
   }
 
   getSummary(id: number): Observable<Summary> {
     return this.http.get<Summary>(`${this.basePath}/summaries/${id}`);
   }
-
-  getCurrentSummary(): Observable<Summary> {
-    return this.http.get<Summary>(`${this.basePath}/summaries/current`);
-  }
-
 }

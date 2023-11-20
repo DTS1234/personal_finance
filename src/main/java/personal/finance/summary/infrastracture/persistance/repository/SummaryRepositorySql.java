@@ -8,6 +8,7 @@ import personal.finance.summary.domain.SummaryId;
 import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,7 +46,7 @@ public class SummaryRepositorySql implements SummaryRepository {
     }
 
     @Override
-    public Summary findByIdAndUserId(Long summaryId, Long userId) {
+    public Summary findByIdAndUserId(Long summaryId, UUID userId) {
         SummaryEntity entityFound = jpaRepository.findByIdAndUserId(summaryId, userId).orElse(null);
         if (entityFound == null) {
             return null;
@@ -54,31 +55,16 @@ public class SummaryRepositorySql implements SummaryRepository {
     }
 
     @Override
-    public void deleteAll() {
-        jpaRepository.deleteAll();
-    }
-
-    @Override
-    public List<Summary> findSummaryByStateEqualsOrderById(SummaryState summaryState) {
-        List<SummaryEntity> summaryByStateEqualsOrderById = jpaRepository.findSummaryByStateEqualsOrderById(
-            summaryState);
-        return summaryByStateEqualsOrderById.stream().map(mapper::map).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Summary> findSummaryByStateEqualsOrderByDateDesc(SummaryState summaryState) {
-        List<SummaryEntity> summaryByStateEqualsOrderByDateDesc = jpaRepository.findSummaryByStateEqualsOrderByDateDesc(
-            summaryState);
-        return summaryByStateEqualsOrderByDateDesc
-            .stream()
-            .map(mapper::map)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, Long userId) {
+    public List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, UUID userId) {
         List<SummaryEntity> summaryByStateEqualsAndUserIdOrderByDateDesc = jpaRepository
             .findSummaryByStateEqualsAndUserIdOrderByDateDesc(summaryState, userId);
         return summaryByStateEqualsAndUserIdOrderByDateDesc.stream().map(mapper::map).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Summary> findSummaryByUserIdAndState(UUID userId, SummaryState summaryState) {
+        return jpaRepository.findSummaryByUserIdAndStateEquals(userId, summaryState).stream()
+            .map(mapper::map)
+            .toList();
     }
 }

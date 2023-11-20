@@ -37,7 +37,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 public class SecurityConfiguration {
 
@@ -67,6 +67,8 @@ public class SecurityConfiguration {
             .headers(configurer -> configurer.frameOptions(FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests((authorize) -> authorize.requestMatchers(
                     AntPathRequestMatcher.antMatcher("/login"),
+                    AntPathRequestMatcher.antMatcher("/actuator/**"),
+                    AntPathRequestMatcher.antMatcher("/actuator/prometheus"),
                     AntPathRequestMatcher.antMatcher("/registration"),
                     AntPathRequestMatcher.antMatcher("index.html"),
                     AntPathRequestMatcher.antMatcher("**/swagger-ui/index.html**"),

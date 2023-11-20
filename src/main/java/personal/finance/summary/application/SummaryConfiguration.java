@@ -59,6 +59,31 @@ class SummaryConfiguration {
     @Bean
     @Transactional
     public void init() throws Exception {
+
+        User user = new User();
+        UserId u1 = UserId.random();
+        user.setId(u1);
+        user.setUserInformation(UserInformation.builder()
+            .enabled(true)
+            .password(encoder.encode("123"))
+            .username("username")
+            .email("user@gmail.com")
+            .build());
+
+        userRepositorySql.save(user);
+
+        User user2 = new User();
+        UserId u2 = UserId.random();
+        user2.setId(u2);
+        user2.setUserInformation(UserInformation.builder()
+            .enabled(true)
+            .password(encoder.encode("123"))
+            .username("user@onet.pl")
+            .email("user@onet.pl")
+            .build());
+
+        userRepositorySql.save(user2);
+
         List<Asset> assets = Arrays.asList(
             Asset.builder()
                 .id(new AssetId(1L))
@@ -92,47 +117,29 @@ class SummaryConfiguration {
 
         List<Summary> summaryEntities = summarySQLRepository.saveAll(
             Arrays.asList(
-                Summary.builder().id(new SummaryId(1L)).userId(1L).state(SummaryState.CONFIRMED)
+                Summary.builder().id(new SummaryId(1L)).userId(u1.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(500.31)))
                     .date(LocalDateTime.of(2022, 1, 1, 0, 0)).build(),
-                Summary.builder().id(new SummaryId(2L)).userId(1L).state(SummaryState.CONFIRMED)
+                Summary.builder().id(new SummaryId(2L)).userId(u1.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(1500.12)))
                     .date(LocalDateTime.of(2022, 2, 1, 0, 0)).build(),
-                Summary.builder().id(new SummaryId(3L)).userId(2L).state(SummaryState.CONFIRMED)
+                Summary.builder().id(new SummaryId(3L)).userId(u2.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(2201.24)))
                     .date(LocalDateTime.of(2022, 3, 1, 0, 0)).build(),
-                Summary.builder().id(new SummaryId(4L)).userId(2L).state(SummaryState.CONFIRMED)
+                Summary.builder().id(new SummaryId(4L)).userId(u2.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(3127.59)))
                     .date(LocalDateTime.of(2022, 4, 1, 0, 0)).build())
         );
 
-        Summary summary = summaryEntities.get(3);
+
+        Summary summary = summaryEntities.get(1);
         summary.addAsset(assets.get(0));
         summary.addAsset(assets.get(1));
-        summary.addAsset(assets.get(2));
-
         summarySQLRepository.save(summary);
 
-        User user = new User();
-        user.setId(UserId.random());
-        user.setUserInformation(UserInformation.builder()
-            .enabled(true)
-            .password(encoder.encode("123"))
-            .username("username")
-            .email("user@gmail.com")
-            .build());
+        Summary summary1 = summaryEntities.get(2);
+        summary1.addAsset(assets.get(2));
 
-        userRepositorySql.save(user);
-
-        User user2 = new User();
-        user2.setId(UserId.random());
-        user2.setUserInformation(UserInformation.builder()
-            .enabled(true)
-            .password(encoder.encode("123"))
-            .username("user@onet.pl")
-            .email("user@onet.pl")
-            .build());
-
-        userRepositorySql.save(user2);
+        summarySQLRepository.save(summary1);
     }
 }

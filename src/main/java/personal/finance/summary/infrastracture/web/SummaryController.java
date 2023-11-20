@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import personal.finance.summary.application.SummaryFacade;
 import personal.finance.summary.application.dto.DTOMapper;
 import personal.finance.summary.application.dto.SummaryDTO;
-import personal.finance.summary.domain.Summary;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author akazmierczak
@@ -30,22 +31,28 @@ public class SummaryController {
     @PostMapping("/{userId}/summaries/{id}/update")
     public SummaryDTO updateSummaryInDraft(@PathVariable String id, @PathVariable String userId,
         @RequestBody SummaryDTO summaryDTO) {
-        return DTOMapper.dto(facade.updateSummaryInDraft(summaryDTO, Long.valueOf(userId)));
+        return DTOMapper.dto(facade.updateSummaryInDraft(summaryDTO, UUID.fromString(userId)));
     }
-
+    
     @PostMapping("/{userId}/summaries/{summaryId}/confirm")
     public SummaryDTO confirmSummary(@PathVariable String summaryId, @PathVariable String userId) {
-        return DTOMapper.dto(facade.confirmSummary(Long.valueOf(summaryId), Long.valueOf(userId)));
+        return DTOMapper.dto(facade.confirmSummary(Long.valueOf(summaryId), UUID.fromString(userId)));
     }
 
     @PostMapping("/{userId}/summaries/new")
     public SummaryDTO createNewSummary(@PathVariable String userId) {
-        return DTOMapper.dto(facade.createNewSummary(Long.valueOf(userId)));
+        return DTOMapper.dto(facade.createNewSummary(UUID.fromString(userId)));
     }
 
     @GetMapping("/{userId}/summaries")
-    public List<Summary> getSummaries(@PathVariable String userId) {
-        return facade.getSummaries(Long.valueOf(userId));
+    public List<SummaryDTO> getSummaries(@PathVariable UUID userId) {
+        return facade.getSummaries(userId).stream()
+            .map(DTOMapper::dto)
+            .collect(Collectors.toList());
     }
 
+    @GetMapping("/{userId}/summaries/current")
+    public SummaryDTO getCurrentDraft(@PathVariable UUID userId) {
+        return DTOMapper.dto(facade.getCurrentDraft(userId));
+    }
 }

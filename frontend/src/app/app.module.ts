@@ -8,12 +8,11 @@ import {ManageComponent} from './manage/manage.component';
 import {HistoryComponent} from './history/history.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
-import {AssetService} from './services/asset.service';
 import {AppRoutingModule} from './app-routing.module';
 import {FooterComponent} from './footer/footer.component';
-import {AssetBoxComponent} from './homepage/asset-box/asset-box.component';
+import {AssetBoxComponent} from './dashboard/asset-box/asset-box.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SummaryBoxComponent} from './homepage/summary-box/summary-box.component';
+import {SummaryBoxComponent} from './dashboard/summary-box/summary-box.component';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
 import {AddAssetComponent} from './manage/summary-creation/add-asset/add-asset.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -21,9 +20,9 @@ import {EditAssetComponent} from './manage/summary-creation/edit-asset/edit-asse
 import {DatePipe} from '@angular/common';
 import {AuthComponent} from './auth/auth.component';
 import {AuthInterceptorService} from "./auth/auth.interceptor.service";
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { PasswordResetComponent } from './password/password-reset/password-reset.component';
-import { PasswordResetRequestComponent } from './password/password-reset-request/password-reset-request.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {PasswordResetComponent} from './password/password-reset/password-reset.component';
+import {PasswordResetRequestComponent} from './password/password-reset-request/password-reset-request.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +46,7 @@ import { PasswordResetRequestComponent } from './password/password-reset-request
     BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
     BrowserAnimationsModule, ReactiveFormsModule, FormsModule
   ],
-  providers: [AssetService, DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi:true }],
+  providers: [DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi:true }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -11,6 +11,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -20,7 +21,7 @@ import java.util.List;
 public class Summary {
 
     private SummaryId id;
-    private Long userId;
+    private UUID userId;
     private Money money;
     private LocalDateTime date;
     private SummaryState state;
