@@ -80,4 +80,10 @@ export class SummaryService {
     let userId = JSON.parse(localStorage.getItem("userData")).id;
     return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summaryId}/cancel`, "")
   }
+
+  querySummaries(param: {}, page: number, size: number) {
+    const criteria = {}
+    let params = new HttpParams({fromObject: {...criteria, page, size}});
+    return this.http.get<any>(`${this.basePath}/summaries`, {params});
+  }
 }
