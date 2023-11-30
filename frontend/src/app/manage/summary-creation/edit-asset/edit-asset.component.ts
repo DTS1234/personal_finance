@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {Asset} from '../../../models/asset.model';
 import {SummaryService} from "../../../services/summary.service";
@@ -12,13 +12,13 @@ import {Summary} from "../../../models/summary.model";
 })
 export class EditAssetComponent implements OnInit {
 
-  assetForm: FormGroup;
+  assetForm: UntypedFormGroup;
   asset: Asset;
   summary: Summary;
   index: number;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private summaryService: SummaryService
@@ -83,7 +83,7 @@ export class EditAssetComponent implements OnInit {
   }
 
   addItem(): void {
-    const items = this.assetForm.get('items') as FormArray;
+    const items = this.assetForm.get('items') as UntypedFormArray;
     const newItem = this.formBuilder.group({
       name: ['', Validators.required],
       money: ['', Validators.required],

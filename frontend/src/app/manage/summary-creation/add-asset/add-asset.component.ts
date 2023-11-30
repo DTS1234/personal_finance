@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Asset} from '../../../models/asset.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SummaryService} from "../../../services/summary.service";
@@ -11,13 +11,13 @@ import {Summary} from "../../../models/summary.model";
   styleUrls: ['./add-asset.component.css']
 })
 export class AddAssetComponent implements OnInit {
-  assetForm: FormGroup;
+  assetForm: UntypedFormGroup;
   asset: Asset;
   mode = 'add';
   summary: Summary;
   private updatingSummary = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private summaryService: SummaryService,
               private router: Router,
               private route: ActivatedRoute) {
@@ -98,7 +98,7 @@ export class AddAssetComponent implements OnInit {
   }
 
   addItem(): void {
-    const items = this.assetForm.get('items') as FormArray;
+    const items = this.assetForm.get('items') as UntypedFormArray;
     const newItem = this.formBuilder.group({
       name: ['', Validators.required],
       money: ['', Validators.required],
@@ -109,7 +109,7 @@ export class AddAssetComponent implements OnInit {
 
   updateAssetMoneyValue() {
     let totalValue = 0;
-    const items = this.assetForm.get('items') as FormArray;
+    const items = this.assetForm.get('items') as UntypedFormArray;
     items.controls.forEach(control => {
       totalValue += control.value.money || 0;
     });
