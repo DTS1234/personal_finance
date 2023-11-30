@@ -3,6 +3,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {Asset} from '../../../models/asset.model';
 import {SummaryService} from "../../../services/summary.service";
+import {Summary} from "../../../models/summary.model";
 
 @Component({
   selector: 'app-edit-asset',
@@ -13,6 +14,8 @@ export class EditAssetComponent implements OnInit {
 
   assetForm: FormGroup;
   asset: Asset;
+  summary: Summary;
+  index: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -23,15 +26,16 @@ export class EditAssetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const assetString = params.asset;
-      if (assetString) {
-        this.asset = JSON.parse(assetString);
-        this.initializeForm();
-      } else {
-        // Handle case when asset parameter is not provided
-      }
-    });
+
+    this.summaryService.getCurrentDraft().subscribe(data => {
+      this.summary = data
+      this.route.queryParams.subscribe(params => {
+        console.log(params)
+        this.index = params.index as number;
+        this.asset = this.summary.assets[this.index]
+        this.initializeForm()
+      });
+    })
   }
 
   initializeForm(): void {
@@ -50,40 +54,32 @@ export class EditAssetComponent implements OnInit {
     });
   }
 
-  // Implement updateAsset() and other necessary methods
-
   onSubmit(): void {
     const assetData = this.assetForm.value;
-
+    const oldMoneyValue = this.asset.money
     this.asset.name = assetData.name;
     this.asset.money = assetData.money;
     this.asset.items = assetData.items;
 
     console.log(this.asset);
 
-    this.route.paramMap.subscribe(params => {
-      console.log(params);
-      const summaryIdParam = params.get('id');
-      const summaryID = Number(summaryIdParam);
-      console.log(summaryID);
-      this.summaryService.updateAsset(summaryID, this.asset.id, this.asset).subscribe(
-        s => this.summaryService.setNewSummary(s)
-      );
-    });
-
-
-    // Reset the form
-    this.assetForm.reset();
-
-    const navigationExtras: NavigationExtras = {
-      queryParams: {reload: true} // Add a query parameter to force reload
-    };
-
-    const currentUrl = this.router.url;
-    const index = currentUrl.indexOf('/edit-asset');
-    const newUrl = currentUrl.substring(0, index);
-    this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
-
+    const newSummary = JSON.parse(JSON.stringify(this.summary));
+    newSummary.money -= oldMoneyValue
+    newSummary.assets[this.index] = this.asset
+    newSummary.money += this.asset.money
+    this.summaryService.updateSummary(newSummary).subscribe(
+      s => {
+        this.summaryService.setNewSummary(s)
+        this.assetForm.reset();
+        const navigationExtras: NavigationExtras = {
+          queryParams: {reload: true} // Add a query parameter to force reload
+        };
+        const currentUrl = this.router.url;
+        const index = currentUrl.indexOf('/edit-asset');
+        const newUrl = currentUrl.substring(0, index);
+        this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
+      }
+    );
   }
 
   addItem(): void {
@@ -96,5 +92,4 @@ export class EditAssetComponent implements OnInit {
 
     items.push(newItem);
   }
-
 }

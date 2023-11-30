@@ -12,17 +12,39 @@ import {Router} from "@angular/router";
 export class ManageComponent implements OnInit {
 
   assets: Asset[] = [];
-  sum: number;
+  sum: number = 0;
   numberOfItems: number;
+  percentages = []
   inSummaryCreation: boolean = false;
 
   constructor(private summaryService: SummaryService, private router: Router) {
   }
 
   ngOnInit(): void {
+
+    this.summaryService.fetchSummaries().subscribe(data => {
+      if (data[0] != null) {
+        this.assets =  data[0].assets
+        this.numberOfItems = this.assets.map(a => a.items.length).reduce((a, b) => a + b, 0)
+        this.sum = this.assets.map(a => a.money).reduce((a, b) => a + b, 0) as number;
+        this.percentages = this.assets.map(a => a.money / this.sum)
+      }
+    })
+
     this.summaryService.newSummary$.subscribe(data => {
       if (data != null) {
         this.inSummaryCreation = true;
+      } else {
+        this.summaryService.getCurrentDraft().subscribe(
+          data => {
+            if (data != null) {
+              this.summaryService.setNewSummary(data)
+              this.inSummaryCreation = true;
+            } else {
+              this.inSummaryCreation = false;
+            }
+          }
+        )
       }
     })
   }
@@ -43,15 +65,10 @@ export class ManageComponent implements OnInit {
   }
 
   continueCreation(): void {
-    this.summaryService.newSummary$
-      .subscribe(
-        data => {
-          console.log(data)
-          if(data != null) {
-            this.router.navigate([`/summary/${data.id}/`]).then(r => console.log(r));
-          }
-        }
-      );
+    this.summaryService.getCurrentDraft().subscribe(
+      data => {
+        this.router.navigate([`/summary/${data.id}/`]).then(r => console.log(r));
+      }
+    )
   }
-
 }

@@ -12,16 +12,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let assetEntityEntity of availableAssets; let i = index">
-      <th scope="row">{{ assetEntityEntity.id }}</th>
-      <td>{{ assetEntityEntity.name}}</td>
-      <td>{{ assetEntityEntity.money }}</td>
-      <td>{{ assetEntityEntity.items.length }}</td>
+    <tr *ngFor="let asset of availableAssets; let i = index">
+      <th scope="row">{{ asset.id }}</th>
+      <td>{{ asset.name}}</td>
+      <td>{{ asset.money }}</td>
+      <td>{{ asset.items.length }}</td>
       <td>
-        <button (click)="edit(assetEntityEntity)">Edit</button>
+        <button (click)="edit(i)">Edit</button>
       </td>
       <td>
-        <button (click)="remove(assetEntityEntity)">Remove</button>
+        <button (click)="removeAsset(i)">Remove</button>
       </td>
     </tr>
 
@@ -34,37 +34,15 @@
         <button>Edit</button>
       </td>
       <td>
-        <button>Remove</button>
+        <button (click)="removeAsset(i)">Remove</button>
       </td>
     </tr>
-
-    </tbody>
-  </table>
-
-  <button (click)="addAssetPage()" class="btn btn-secondary ml-4 mt-3">ADD ASSET</button>
-
-
-</div>
-<div class="row">
-  <h4 class="m-4">Active assetEntityEntity: {{activeAsset.name}}</h4>
-  <table class="table table-bordered ml-4 mr-4">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Item</th>
-      <th scope="col">Value</th>
-      <th scope="col">Quantity</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let itemEntity of activeAsset.items; let i = index">
-      <th scope="row">{{ itemEntity.id }}</th>
-      <td>{{ itemEntity.name }}</td>
-      <td>{{ itemEntity.money }}</td>
-      <td>{{ itemEntity.quantity }}</td>
-    </tr>
     </tbody>
   </table>
 </div>
 
-<button (click)="confirmSummary()" class="btn btn-primary">SUBMIT SUMMARY</button>
+<div class="m-2">
+  <button (click)="confirmSummary()" class="btn btn-primary mx-1">SUBMIT SUMMARY</button>
+  <button (click)="addAssetPage()" class="btn btn-secondary mx-1">ADD ASSET</button>
+  <button (click)="cancelSummary()" class="btn btn-danger mx-1">CANCEL</button>
+</div>

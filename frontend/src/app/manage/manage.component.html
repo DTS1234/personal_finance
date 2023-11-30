@@ -18,31 +18,31 @@
         <td>{{ assetEntity.name}}</td>
         <td>{{ assetEntity.money }}</td>
         <td>{{ assetEntity.items.length }}</td>
+        <td>{{ percentages[i] | percent }}</td>
       </tr>
-
       <tr>
         <th scope="row">{{assets.length + 1}}</th>
         <td><strong>SUM</strong></td>
         <td><strong>{{sum}}</strong></td>
         <td><strong>{{numberOfItems}}</strong></td>
-        <td><strong>100.00 %</strong></td>
+        <td><strong>100.00%</strong></td>
       </tr>
-
       </tbody>
     </table>
 
   </div>
 </div>
 
-<button class="btn btn-secondary btn-lg btn-block mb-4" role="button"
-        [disabled]="inSummaryCreation"
-        (click)="createNewSummary()">
-  CREATE NEW SUMMARY
-</button>
-<button class="btn btn-secondary btn-lg btn-block mb-4" role="button"
-        *ngIf="inSummaryCreation == true"
-        (click)="continueCreation()">
-  CONTINUE CREATING SUMMARY
-</button>
-
+<div class="my-2">
+  <button class="btn btn-secondary btn-lg btn-block mb-2" role="button"
+          [disabled]="inSummaryCreation"
+          (click)="createNewSummary()">
+    CREATE NEW SUMMARY
+  </button>
+  <button class="btn btn-secondary btn-lg btn-block mb-2" role="button"
+          *ngIf="inSummaryCreation == true"
+          (click)="continueCreation()">
+    CONTINUE CREATING SUMMARY
+  </button>
+</div>
 

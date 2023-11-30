@@ -21,13 +21,10 @@ export class SummaryCreationComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.summaryService.newSummary$.subscribe(
-      newSum => {
-        this.summary = newSum;
-        this.availableAssets = this.summary?.assets;
-        console.log("NEW summary loaded: " + this.summary.money)
-      }
-    );
+    this.summaryService.getCurrentDraft().subscribe(data => {
+      this.summary = data
+      this.availableAssets = this.summary?.assets;
+    })
 
   }
 
@@ -48,13 +45,31 @@ export class SummaryCreationComponent implements OnInit {
     )
   }
 
-  remove(asset: Asset): void {
-    const indexToRemove = this.availableAssets.indexOf(asset);
-    this.availableAssets.splice(indexToRemove, 1);
+  edit(index: number): void {
+    this.router.navigate([`/summary/${this.summary.id}/edit-asset`],
+      {queryParams: {index: JSON.stringify(index)}}).then(r => console.log(r));
   }
 
-  edit(asset: Asset): void {
-    this.router.navigate([`/summary/${this.summary.id}/edit-asset`],
-      {queryParams: {asset: JSON.stringify(asset)}}).then(r => console.log(r));
+  cancelSummary() {
+    this.summaryService.cancelSummary(this.summary.id).subscribe(
+      data => {
+        console.log("summary cancelled: " + data.id)
+        this.summaryService.setNewSummary(null)
+        this.router.navigate(["/dashboard"])
+      }
+    )
+  }
+
+  removeAsset(index: number) {
+    const newSummary = JSON.parse(JSON.stringify(this.summary));
+    newSummary.assets.splice(index, 1)
+    newSummary.money -= this.summary.assets[index].money
+
+    this.summaryService.updateSummary(newSummary)
+      .subscribe(data => {
+        this.summary = data;
+        this.summaryService.setNewSummary(data);
+        this.availableAssets.splice(index, 1);
+      })
   }
 }

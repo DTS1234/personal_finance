@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Asset} from '../../../models/asset.model';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -25,11 +25,9 @@ export class AddAssetComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.summaryService.newSummary$.subscribe(
-      data => {
-        this.summary = data
-      }
-    )
+    this.summaryService.getCurrentDraft().subscribe(data => {
+      this.summary = data
+    })
 
     this.route.queryParams.subscribe(params => {
       const assetString = params.asset;
@@ -78,31 +76,25 @@ export class AddAssetComponent implements OnInit {
       assetData.items
     );
 
-    this.summaryService.newSummary$.subscribe(data => {
+    const newSummary = JSON.parse(JSON.stringify(this.summary));
 
-      if (this.updatingSummary) {
-        return;
+    newSummary.assets.push(asset)
+    newSummary.money += assetData.money
+
+    this.summaryService.updateSummary(newSummary).subscribe(
+      updatedData => {
+        this.summaryService.setNewSummary(updatedData)
+        this.summary = updatedData
+        this.updatingSummary = false;
+
+        this.assetForm.reset();
+
+        const currentUrl = this.router.url;
+        const index = currentUrl.indexOf('/add-asset');
+        const newUrl = currentUrl.substring(0, index);
+        this.router.navigate([newUrl]).then(r => console.log(r));
       }
-
-      this.updatingSummary = true;
-      data.money = data.money + asset.money
-      data.assets.push(asset)
-
-      this.summaryService.updateSummary(data).subscribe(
-        updatedData => {
-          this.summaryService.setNewSummary(updatedData)
-          this.updatingSummary = false;
-        }
-      )
-    })
-
-    // Reset the form
-    this.assetForm.reset();
-
-    const currentUrl = this.router.url;
-    const index = currentUrl.indexOf('/add-asset');
-    const newUrl = currentUrl.substring(0, index);
-    this.router.navigate([newUrl]).then(r => console.log(r));
+    )
   }
 
   addItem(): void {
@@ -115,5 +107,12 @@ export class AddAssetComponent implements OnInit {
     items.push(newItem);
   }
 
-
+  updateAssetMoneyValue() {
+    let totalValue = 0;
+    const items = this.assetForm.get('items') as FormArray;
+    items.controls.forEach(control => {
+      totalValue += control.value.money || 0;
+    });
+    this.assetForm.get('money').setValue(totalValue);
+  }
 }

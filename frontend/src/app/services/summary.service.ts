@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {take, tap} from 'rxjs/operators';
+import {share, take, tap} from 'rxjs/operators';
 import {Summary} from '../models/summary.model';
 import {Asset} from '../models/asset.model';
 import {AuthService} from "./auth.service";
@@ -69,5 +69,15 @@ export class SummaryService {
 
   getSummary(id: number): Observable<Summary> {
     return this.http.get<Summary>(`${this.basePath}/summaries/${id}`);
+  }
+
+  getCurrentDraft() {
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.get<Summary>(`${this.basePath}/${userId}/summaries/current`)
+  }
+
+  cancelSummary(summaryId: number) {
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summaryId}/cancel`, "")
   }
 }
