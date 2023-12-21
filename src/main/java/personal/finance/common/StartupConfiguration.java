@@ -1,4 +1,4 @@
-package personal.finance.summary.infrastracture;
+package personal.finance.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
