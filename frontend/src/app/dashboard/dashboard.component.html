@@ -1,13 +1,8 @@
 <div class="row d-flex justify-content-center align-items-center mt-4 mb-3">
   <app-summary-box *ngFor="let summary of summaries" [summary]="summary"></app-summary-box>
 </div>
-<hr>
-<div class="row d-flex justify-content-center align-items-center" style="background: #D9D9D9">
-</div>
-<hr>
+<hr/>
 <h4>Current assets:</h4>
 <div class="row d-flex justify-content-center align-items-center mt-5 mb-3">
-  <app-assetEntityEntity-box *ngFor="let assetEntityEntity of assets" [assetEntityEntity]="assetEntityEntity"></app-assetEntityEntity-box>
+  <app-asset-box *ngFor="let assetEntity of assets" [asset]="assetEntity"></app-asset-box>
 </div>
-
-

@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {share, take, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 import {Summary} from '../models/summary.model';
 import {Asset} from '../models/asset.model';
 import {AuthService} from "./auth.service";
+import {SearchCriteria} from "../models/search-criteria.model";
 
 
 @Injectable({
@@ -81,9 +82,12 @@ export class SummaryService {
     return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summaryId}/cancel`, "")
   }
 
-  querySummaries(param: {}, page: number, size: number) {
-    const criteria = {}
-    let params = new HttpParams({fromObject: {...criteria, page, size}});
-    return this.http.get<any>(`${this.basePath}/summaries`, {params});
+  querySummaries(criteria: SearchCriteria, page: number, size: number) {
+    return this.http.post<any>(`${this.basePath}/summaries`, criteria, {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      }
+    });
   }
 }

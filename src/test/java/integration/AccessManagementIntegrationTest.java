@@ -18,12 +18,10 @@ public class AccessManagementIntegrationTest extends IntegrationTest {
     @Autowired
     private AccessManagementFacade accessManagementFacade;
 
-
     @Test
     public void shouldRegisterNewUser() throws Exception {
         // when
         String result = mockMvc.perform(MockMvcRequestBuilders.post("/registration")
-                .contentType("application/json")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new UserRegistrationDTO("new@gmail.com", "pass"))))
             .andExpect(status().isOk())

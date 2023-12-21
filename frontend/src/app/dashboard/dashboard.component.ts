@@ -35,6 +35,8 @@ export class DashboardComponent implements OnInit {
   loadData(): void {
     this.summaryService.fetchSummaries().subscribe(data => {
       this.summaries = data
+      this.assets = this.summaries[0].assets
+      console.log(this.assets)
     })
   }
 

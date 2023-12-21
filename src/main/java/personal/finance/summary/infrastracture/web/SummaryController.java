@@ -33,7 +33,7 @@ public class SummaryController {
         @RequestBody SummaryDTO summaryDTO) {
         return DTOMapper.dto(facade.updateSummaryInDraft(summaryDTO, UUID.fromString(userId)));
     }
-    
+
     @PostMapping("/{userId}/summaries/{summaryId}/confirm")
     public SummaryDTO confirmSummary(@PathVariable String summaryId, @PathVariable String userId) {
         return DTOMapper.dto(facade.confirmSummary(Long.valueOf(summaryId), UUID.fromString(userId)));
@@ -46,7 +46,7 @@ public class SummaryController {
 
     @GetMapping("/{userId}/summaries")
     public List<SummaryDTO> getSummaries(@PathVariable UUID userId) {
-        return facade.getSummaries(userId).stream()
+        return facade.getConfirmedSummaries(userId).stream()
             .map(DTOMapper::dto)
             .collect(Collectors.toList());
     }
@@ -54,5 +54,10 @@ public class SummaryController {
     @GetMapping("/{userId}/summaries/current")
     public SummaryDTO getCurrentDraft(@PathVariable UUID userId) {
         return DTOMapper.dto(facade.getCurrentDraft(userId));
+    }
+
+    @PostMapping("/{userId}/summaries/{summaryId}/cancel")
+    public SummaryDTO cancelSummary(@PathVariable UUID userId, @PathVariable String summaryId) {
+        return DTOMapper.dto(facade.cancelSummary(Long.valueOf(summaryId), userId));
     }
 }

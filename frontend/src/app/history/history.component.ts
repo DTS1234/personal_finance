@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {SummaryService} from "../services/summary.service";
 import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
 import * as Chart from "chart.js";
+import {FormControl, FormGroup} from "@angular/forms";
+import {SearchCriteria} from "../models/search-criteria.model";
 
 @Component({
   selector: 'app-history',
@@ -23,16 +25,21 @@ export class HistoryComponent implements OnInit {
   lineChartType: ChartType = 'line';
   chart: any = [];
 
+  startDate: Date = new Date(2019, 12)
+  endDate: Date = new Date()
+
   constructor(private summaryService: SummaryService) {
   }
 
   ngOnInit(): void {
-    this.fetchData(0, 10);
+    this.fetchData(0, 10, null);
   }
 
-
-  fetchData(page: number, size: number) {
-    this.summaryService.querySummaries({/* criteria */}, page, size)
+  fetchData(page: number, size: number, criteria: SearchCriteria) {
+    if (criteria == null) {
+      criteria = new SearchCriteria(null, null, JSON.parse(localStorage.getItem("userData")).id)
+    }
+    this.summaryService.querySummaries(criteria, page, size)
       .subscribe(data => {
         console.log(data)
         let x = data.content.map(i => i.date);
@@ -53,5 +60,18 @@ export class HistoryComponent implements OnInit {
           }
         });
       });
+  }
+
+  applyDateFilter() {
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    if (this.startDate == null) {
+      this.startDate = new Date(2019, 12)
+    }
+
+    if (this.endDate == null) {
+      this.endDate = new Date();
+    }
+
+    this.fetchData(0, 10, new SearchCriteria(this.startDate, this.endDate, userId))
   }
 }

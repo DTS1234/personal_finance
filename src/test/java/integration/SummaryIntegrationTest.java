@@ -34,8 +34,8 @@ public class SummaryIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        summaryFacade.getSummaries(UUID.fromString(USER_ID)).forEach(
-            summary -> summaryFacade.cancelSummary(summary.getId().getValue())
+        summaryFacade.getConfirmedSummaries(UUID.fromString(USER_ID)).forEach(
+            summary -> summaryFacade.cancelSummary(summary.getId().getValue(), UUID.fromString(USER_ID))
         );
     }
 

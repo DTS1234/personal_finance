@@ -1,7 +1,7 @@
 package personal.finance.summary.infrastracture.persistance.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import personal.finance.summary.domain.Summary;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 
@@ -10,7 +10,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, Long> {
+public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, Long>,
+    JpaSpecificationExecutor<SummaryEntity> {
 
     List<SummaryEntity> findSummaryByStateEqualsOrderById(SummaryState summaryState);
 

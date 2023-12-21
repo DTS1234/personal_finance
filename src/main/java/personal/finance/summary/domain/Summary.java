@@ -36,7 +36,7 @@ public class Summary {
             this.assets = new ArrayList<>();
         }
         this.assets.add(asset);
-        this.money = new Money(sumAssetsMoneyValue());
+        this.money = new Money(sumAssetsMoneyValue(), this.money.getCurrency());
     }
 
     public BigDecimal sumAssetsMoneyValue() {
@@ -54,7 +54,8 @@ public class Summary {
         return getAssets().stream()
             .map(assetEntity -> assetEntity.getItems()
                 .stream()
-                .map(item -> item.getMoney().getMoneyValue()).reduce(BigDecimal.ZERO, BigDecimal::add))
+                .map(item -> item.getMoney().getMoneyValue())
+                .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP))
             .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
     }
 

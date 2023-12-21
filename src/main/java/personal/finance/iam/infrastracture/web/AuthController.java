@@ -1,6 +1,5 @@
 package personal.finance.iam.infrastracture.web;
 
-import io.micrometer.common.util.StringUtils;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

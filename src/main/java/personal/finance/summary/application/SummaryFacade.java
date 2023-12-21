@@ -29,11 +29,11 @@ public class SummaryFacade {
         return new UpdateSummaryInDraftUseCase(summaryRepository, updatedSummary, userId).execute();
     }
 
-    public Summary cancelSummary(Long id) {
-        return new CancelSummaryUseCase(summaryRepository, new SummaryId(id)).execute();
+    public Summary cancelSummary(Long id, UUID userId) {
+        return new CancelSummaryUseCase(summaryRepository, new SummaryId(id), userId).execute();
     }
 
-    public List<Summary> getSummaries(UUID userId) {
+    public List<Summary> getConfirmedSummaries(UUID userId) {
         return summaryRepository.findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState.CONFIRMED, userId);
     }
 

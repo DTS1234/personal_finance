@@ -1,0 +1,49 @@
+<div><h2 mat-dialog-title>Asset details</h2>
+
+  <mat-dialog-content>
+    <p>Asset:</p>
+
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">Asset</th>
+        <th scope="col">Value</th>
+        <th scope="col">No. of Items</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>{{ asset.name}}</td>
+        <td>{{ asset.money }}</td>
+        <td>{{ asset.items.length }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <p>Items:</p>
+
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Value</th>
+        <th scope="col">Quantity</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of asset.items">
+        <td>{{ item.name}}</td>
+        <td>{{ item.money }}</td>
+        <td>{{ item.quantity }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button (click)="onClose()">Close</button>
+  </mat-dialog-actions>
+</div>

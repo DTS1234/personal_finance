@@ -55,7 +55,7 @@ public class SummarySpecTest {
         // given
         UUID userId = UUID.randomUUID();
         facade.createNewSummary(userId);
-        facade.cancelSummary(1L);
+        facade.cancelSummary(1L, userId);
 
         // then - exception is thrown
         assertThatThrownBy(() -> facade.confirmSummary(1L, userId))
@@ -73,7 +73,6 @@ public class SummarySpecTest {
         assertThatThrownBy(() -> facade.confirmSummary(summaryFirstUser.getId().getValue(), u2))
             .hasMessage("Summary with id of 1 does not exist for this user.");
     }
-
 
     @Test
     void shouldCreateNewSummaryWithAllTheAssetsFromTheLastConfirmedSummary() {
@@ -232,7 +231,7 @@ public class SummarySpecTest {
         // given
         UUID userId = UUID.randomUUID();
         facade.createNewSummary(userId);
-        Summary cancelledSummary = facade.cancelSummary(1L);
+        Summary cancelledSummary = facade.cancelSummary(1L, userId);
         facade.createNewSummary(userId);
         Summary confirmedSummary = facade.confirmSummary(2L, userId);
 
@@ -307,10 +306,10 @@ public class SummarySpecTest {
         //given
         UUID userId = UUID.randomUUID();
         Summary newSummary = facade.createNewSummary(userId);
-        facade.cancelSummary(newSummary.getId().getValue());
+        facade.cancelSummary(newSummary.getId().getValue(), userId);
 
         // when
-        assertThatThrownBy( () -> facade.getCurrentDraft(userId))
+        assertThatThrownBy(() -> facade.getCurrentDraft(userId))
             .hasMessage("No summary is being created for this user.")
             .isInstanceOf(NoSummaryInDraftException.class);
     }
@@ -323,7 +322,30 @@ public class SummarySpecTest {
         facade.createNewSummary(userId);
 
         // when
-        assertThatThrownBy( () -> facade.createNewSummary(userId))
+        assertThatThrownBy(() -> facade.createNewSummary(userId))
             .hasMessage("User can have only one summary in creation.");
+    }
+
+    @Test
+    void shouldCancelSummary() {
+        // given
+        UUID userId = UUID.randomUUID();
+        Summary newSummary = facade.createNewSummary(userId);
+        // when
+        facade.cancelSummary(newSummary.getId().getValue(), userId);
+        // then
+        assertThatThrownBy(() -> facade.getCurrentDraft(userId));
+    }
+
+    @Test
+    void shouldThrowWhenTryingToCancelOtherUserSummary() {
+        // given
+        UUID userId = UUID.randomUUID();
+        UUID secondUserId = UUID.randomUUID();
+        Summary firstSummary = facade.createNewSummary(userId);
+        Summary secondSummary = facade.createNewSummary(secondUserId);
+        // expect
+        assertThatThrownBy(() -> facade.cancelSummary(firstSummary.getId().getValue(), secondUserId))
+            .hasMessage("This user does not have a summary with id of " + firstSummary.getId());
     }
 }

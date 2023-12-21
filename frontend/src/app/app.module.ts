@@ -23,6 +23,10 @@ import {AuthInterceptorService} from "./auth/auth.interceptor.service";
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {PasswordResetComponent} from './password/password-reset/password-reset.component';
 import {PasswordResetRequestComponent} from './password/password-reset-request/password-reset-request.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -42,10 +46,11 @@ import {PasswordResetRequestComponent} from './password/password-reset-request/p
     PasswordResetComponent,
     PasswordResetRequestComponent
   ],
-  imports: [
-    BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
-    BrowserAnimationsModule, ReactiveFormsModule, FormsModule
-  ],
+    imports: [
+        BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
+        BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
+        MatNativeDateModule, MatInputModule
+    ],
   providers: [DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi:true }],
   bootstrap: [AppComponent]
 })

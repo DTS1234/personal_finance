@@ -1,16 +1,11 @@
-package personal.finance.iam.domain;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+package personal.finance.summary.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-@Embeddable
 public class UserId implements Serializable {
 
-    @Column(name = "user_id")
     public UUID value;
 
     public UserId(UUID value) {
@@ -31,8 +26,8 @@ public class UserId implements Serializable {
 
     @Override
     public boolean equals(Object that) {
-        return this == that || that instanceof UserId
-            && Objects.equals(this.value, ((UserId) that).value);
+        return this == that || that instanceof personal.finance.iam.domain.UserId
+            && Objects.equals(this.value, ((personal.finance.iam.domain.UserId) that).value);
     }
 
     @Override

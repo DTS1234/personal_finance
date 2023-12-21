@@ -7,6 +7,8 @@ import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryId;
+import personal.finance.summary.infrastracture.persistance.entity.AssetEntity;
+import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class DTOMapper {
 
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     public static SummaryDTO dto(Summary summary) {
         return new SummaryDTO(
@@ -23,7 +25,18 @@ public class DTOMapper {
             summary.getUserId(),
             summary.getMoney().getMoneyValue(),
             summary.getState(),
-            dateFormatter.format(summary.getDate()),
+            DATE_FORMATTER.format(summary.getDate()),
+            assetsDto(summary)
+        );
+    }
+
+    public static SummaryDTO dto(SummaryEntity summary) {
+        return new SummaryDTO(
+            summary.getId(),
+            summary.getUserId(),
+            summary.getMoneyValue(),
+            summary.getState(),
+            DATE_FORMATTER.format(summary.getDate()),
             assetsDto(summary)
         );
     }
@@ -32,6 +45,14 @@ public class DTOMapper {
         return summary.getAssets().stream().map(a -> new AssetDTO(
             getId(a),
             a.getMoney().getMoneyValue(),
+            itemsDto(a),
+            a.getName())).collect(Collectors.toList());
+    }
+
+    private static List<AssetDTO> assetsDto(SummaryEntity summary) {
+        return summary.getAssetEntities().stream().map(a -> new AssetDTO(
+            a.getId(),
+            a.getMoneyValue(),
             itemsDto(a),
             a.getName())).collect(Collectors.toList());
     }
@@ -51,6 +72,13 @@ public class DTOMapper {
             .collect(Collectors.toList());
     }
 
+    private static List<ItemDTO> itemsDto(AssetEntity asset) {
+        return asset.getItemEntities()
+            .stream()
+            .map(i -> new ItemDTO(i.getId(), i.getMoneyValue(), i.getName(), i.getQuantity()))
+            .collect(Collectors.toList());
+    }
+
     private static Long getId(Item i) {
         if (i.getId() == null) {
             return null;
@@ -64,7 +92,7 @@ public class DTOMapper {
             new SummaryId(summaryDTO.id),
             summaryDTO.userId,
             new Money(summaryDTO.money),
-            LocalDateTime.parse(summaryDTO.date, dateFormatter),
+            LocalDateTime.parse(summaryDTO.date, DATE_FORMATTER),
             summaryDTO.state,
             mapAssets(summaryDTO)
         );

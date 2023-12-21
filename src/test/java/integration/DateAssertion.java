@@ -9,7 +9,6 @@ public class DateAssertion {
         formatter.setLenient(false);
         try {
             formatter.parse(actualDate);
-            // The date is in the expected format
         } catch (ParseException e) {
             throw new AssertionError("Date " + actualDate + " is not in the expected format " + expectedFormat);
         }
