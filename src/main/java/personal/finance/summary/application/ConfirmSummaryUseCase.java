@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import personal.finance.common.UseCase;
 import personal.finance.summary.domain.SummaryRepository;
-import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 
 import java.util.UUID;
@@ -30,12 +29,12 @@ class ConfirmSummaryUseCase implements UseCase<Summary> {
             throw new IllegalStateException("Summary can be confirmed only if it is in DRAFT state.");
         }
 
-        if (!new Money(summaryFound.sumAssetsMoneyValue()).equals(summaryFound.getMoney())
-            || !new Money(summaryFound.sumOfItemsMoneyValue()).equals(summaryFound.getMoney())) {
+        if (!summaryFound.sumAssetsMoney().equals(summaryFound.getMoney())
+            || !summaryFound.sumItemsMoney().equals(summaryFound.getMoney())) {
             log.error("Money value are not inline: summary :{} \nassets: {} \nitems:{} ",
                 summaryFound.getMoney(),
-                summaryFound.sumAssetsMoneyValue(),
-                summaryFound.sumOfItemsMoneyValue());
+                summaryFound.sumAssetsMoney(),
+                summaryFound.sumItemsMoney());
 
             throw new IllegalStateException("Invalid money value for the summary, "
                 + "it should be equal to the sum of all items money value.");

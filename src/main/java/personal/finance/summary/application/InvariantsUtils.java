@@ -1,7 +1,6 @@
 package personal.finance.summary.application;
 
 import lombok.extern.slf4j.Slf4j;
-import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 
 import java.time.temporal.ChronoUnit;
@@ -18,10 +17,10 @@ public class InvariantsUtils {
 
         log.debug("CHECKING MONEY VALUES:");
         log.debug("Summary money value: " + summary.getMoney());
-        log.debug("Items money value: " + summary.sumOfItemsMoneyValue());
-        log.debug("Assets money value: " + summary.sumAssetsMoneyValue());
+        log.debug("Items money value: " + summary.sumItemsMoney());
+        log.debug("Assets money value: " + summary.sumAssetsMoney());
 
-        return !summary.getMoney().equals(new Money(summary.sumOfItemsMoneyValue()))
-            || !summary.getMoney().equals(new Money(summary.sumAssetsMoneyValue()));
+        return !summary.getMoney().equals(summary.sumItemsMoney())
+            || !summary.getMoney().equals(summary.sumAssetsMoney());
     }
 }

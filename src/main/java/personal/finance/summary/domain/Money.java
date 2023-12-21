@@ -14,7 +14,7 @@ public class Money {
     Currency currency;
 
     public Money(BigDecimal moneyValue) {
-        this.moneyValue = moneyValue;
+        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_EVEN);
         this.currency = Currency.EUR;
     }
 

@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,27 +34,26 @@ public class Summary {
             this.assets = new ArrayList<>();
         }
         this.assets.add(asset);
-        this.money = new Money(sumAssetsMoneyValue(), this.money.getCurrency());
+        this.money = sumAssetsMoney();
     }
 
-    public BigDecimal sumAssetsMoneyValue() {
+    public Money sumAssetsMoney() {
         return this.assets.stream()
-            .map(asset -> asset.getMoney().getMoneyValue())
-            .reduce(BigDecimal.ZERO, BigDecimal::add)
-            .setScale(2, RoundingMode.HALF_UP);
+            .map(Asset::getMoney)
+            .reduce(new Money(0), Money::add);
     }
 
     public boolean isInDraft() {
         return this.state.compareTo(SummaryState.DRAFT) != 0;
     }
 
-    public BigDecimal sumOfItemsMoneyValue() {
+    public Money sumItemsMoney() {
         return getAssets().stream()
             .map(assetEntity -> assetEntity.getItems()
                 .stream()
-                .map(item -> item.getMoney().getMoneyValue())
-                .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP))
-            .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
+                .map(Item::getMoney)
+                .reduce(new Money(0), Money::add))
+            .reduce(new Money(0), Money::add);
     }
 
     public Summary confirm() {

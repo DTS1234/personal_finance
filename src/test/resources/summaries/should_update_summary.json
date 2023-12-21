@@ -7,7 +7,7 @@
   "assets": [
     {
       "id": 4,
-      "money": 0,
+      "money": 0.00,
       "name": "new Asset",
       "items": []
     }
