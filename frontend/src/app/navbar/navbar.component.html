@@ -20,5 +20,12 @@
         <div class="nav-itemEntity" (click)="onLogout()"><h4>Logout</h4></div>
       </div>
     </div>
+    <div class="col d-flex justify-content-end align-items-center">
+      <select class="form-select form-select-sm" (change)="onCurrencyChange($event)">
+        <option value="PLN">PLN zł</option>
+        <option value="USD">USD $</option>
+        <option value="EUR">EUR €</option>
+      </select>
+    </div>
   </div>
 </nav>

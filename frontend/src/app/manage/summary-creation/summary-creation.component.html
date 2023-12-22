@@ -15,7 +15,7 @@
     <tr *ngFor="let asset of availableAssets; let i = index">
       <th scope="row">{{ asset.id }}</th>
       <td>{{ asset.name}}</td>
-      <td>{{ asset.money }}</td>
+      <td>{{ asset.money + " " + this.currency }}</td>
       <td>{{ asset.items.length }}</td>
       <td>
         <button (click)="edit(i)">Edit</button>

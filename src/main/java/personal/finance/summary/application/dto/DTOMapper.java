@@ -2,6 +2,7 @@ package personal.finance.summary.application.dto;
 
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
+import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
@@ -24,6 +25,7 @@ public class DTOMapper {
             summary.getId().getValue(),
             summary.getUserId(),
             summary.getMoney().getMoneyValue(),
+            summary.getMoney().getCurrency(),
             summary.getState(),
             DATE_FORMATTER.format(summary.getDate()),
             assetsDto(summary)
@@ -35,6 +37,7 @@ public class DTOMapper {
             summary.getId(),
             summary.getUserId(),
             summary.getMoneyValue(),
+            Currency.EUR,
             summary.getState(),
             DATE_FORMATTER.format(summary.getDate()),
             assetsDto(summary)
@@ -91,7 +94,7 @@ public class DTOMapper {
         return new Summary(
             new SummaryId(summaryDTO.id),
             summaryDTO.userId,
-            new Money(summaryDTO.money),
+            new Money(summaryDTO.money, summaryDTO.currency),
             LocalDateTime.parse(summaryDTO.date, DATE_FORMATTER),
             summaryDTO.state,
             mapAssets(summaryDTO)
@@ -102,13 +105,13 @@ public class DTOMapper {
 
     private static List<Asset> mapAssets(SummaryDTO summaryDTO) {
         return summaryDTO.assets.stream()
-            .map(a -> new Asset(new AssetId(a.id), new Money(a.money), a.name, mapItems(a)))
+            .map(a -> new Asset(new AssetId(a.id), new Money(a.money, summaryDTO.currency), a.name, mapItems(a, summaryDTO.currency)))
             .collect(Collectors.toList());
     }
 
-    private static List<Item> mapItems(AssetDTO assetDTO) {
+    private static List<Item> mapItems(AssetDTO assetDTO, Currency currency) {
         return assetDTO.items.stream()
-            .map(i -> new Item(new ItemId(i.id), new Money(i.money), i.name, i.quantity))
+            .map(i -> new Item(new ItemId(i.id), new Money(i.money, currency), i.name, i.quantity))
             .collect(Collectors.toList());
     }
 }

@@ -1,7 +1,11 @@
 package personal.finance.summary.infrastracture.persistance.repository;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
+import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
@@ -14,37 +18,50 @@ import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
+@RequiredArgsConstructor
 class DomainModelMapper {
 
+    private final UserRepository userRepository;
+
     Summary map(SummaryEntity summaryEntity) {
-        return new Summary(new SummaryId(summaryEntity.getId()), summaryEntity.getUserId(),
-            new Money(summaryEntity.getMoneyValue()),
+        Currency currency = userRepository.getCurrency(summaryEntity.getUserId());
+        Money money = new Money(summaryEntity.getMoneyValue()).convertFromTo(Currency.EUR, currency);
+        return new Summary(
+            new SummaryId(summaryEntity.getId()),
+            summaryEntity.getUserId(),
+            money,
             summaryEntity.getDate(),
             summaryEntity.getState(),
-            mapAssets(summaryEntity));
+            mapAssets(summaryEntity, currency)
+        );
     }
 
-    private List<Asset> mapAssets(SummaryEntity summaryEntity) {
-        return summaryEntity.getAssetEntities().stream().map(this::map).collect(Collectors.toList());
+    private List<Asset> mapAssets(SummaryEntity summaryEntity, Currency currency) {
+        return summaryEntity.getAssetEntities().stream().map(a -> map(a, currency)).collect(Collectors.toList());
     }
 
-    Asset map(AssetEntity assetEntity) {
-        return new Asset(new AssetId(assetEntity.getId()), new Money(assetEntity.getMoneyValue()),
-            assetEntity.getName(), mapItems(assetEntity));
+    Asset map(AssetEntity assetEntity, Currency currency) {
+        Money money = new Money(assetEntity.getMoneyValue()).convertFromTo(Currency.EUR, currency);
+        return new Asset(new AssetId(assetEntity.getId()), money,
+            assetEntity.getName(), mapItems(assetEntity, currency));
     }
 
-    private List<Item> mapItems(AssetEntity assetEntity) {
-        return assetEntity.getItemEntities().stream().map(this::map).collect(
+    private List<Item> mapItems(AssetEntity assetEntity, Currency currency) {
+        return assetEntity.getItemEntities().stream().map(i -> map(i, currency)).collect(
             Collectors.toList());
     }
 
-    Item map(ItemEntity itemEntity) {
-        return new Item(new ItemId(itemEntity.getId()), new Money(itemEntity.getMoneyValue()), itemEntity.getName(),
+    Item map(ItemEntity itemEntity, Currency currency) {
+        Money money = new Money(itemEntity.getMoneyValue()).convertFromTo(Currency.EUR, currency);
+        return new Item(new ItemId(itemEntity.getId()), money, itemEntity.getName(),
             itemEntity.getQuantity());
     }
 
     SummaryEntity map(Summary summary) {
-        return new SummaryEntity(getIdValue(summary), summary.getUserId(), summary.getMoney().getMoneyValue(),
+        Currency currency = summary.getMoney().getCurrency();
+        Money moneyInEuro = summary.getMoney().convertFromTo(currency, Currency.EUR);
+        return new SummaryEntity(getIdValue(summary), summary.getUserId(), moneyInEuro.getMoneyValue(),
             summary.getDate(), summary.getState(),
             mapAssets(summary));
     }
@@ -71,7 +88,9 @@ class DomainModelMapper {
     }
 
     AssetEntity map(Asset asset) {
-        return new AssetEntity(getIdValue(asset), asset.getMoney().getMoneyValue(), asset.getName(), mapItems(asset));
+        Currency currency = asset.getMoney().getCurrency();
+        Money moneyInEuro = asset.getMoney().convertFromTo(currency, Currency.EUR);
+        return new AssetEntity(getIdValue(asset), moneyInEuro.getMoneyValue(), asset.getName(), mapItems(asset));
     }
 
     private List<ItemEntity> mapItems(Asset asset) {
@@ -79,7 +98,9 @@ class DomainModelMapper {
     }
 
     ItemEntity map(Item item) {
-        return new ItemEntity(getIdValue(item), item.getMoney().getMoneyValue(), item.getName(),
+        Currency currency = item.getMoney().getCurrency();
+        Money moneyInEuro = item.getMoney().convertFromTo(currency, Currency.EUR);
+        return new ItemEntity(getIdValue(item), moneyInEuro.getMoneyValue(), item.getName(),
             item.getQuantity());
     }
 

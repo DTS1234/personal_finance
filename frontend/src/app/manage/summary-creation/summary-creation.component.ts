@@ -3,6 +3,7 @@ import {Asset} from '../../models/asset.model';
 import {SummaryService} from '../../services/summary.service';
 import {Summary} from '../../models/summary.model';
 import {Router} from '@angular/router';
+import {CurrencyService} from "../../services/currency.service";
 
 @Component({
   selector: 'app-summary-creation',
@@ -14,18 +15,30 @@ export class SummaryCreationComponent implements OnInit {
   newAssets: Asset[] = [];
   activeAsset: Asset = new Asset(null, 'No assets yet', 0, []);
   summary: Summary;
+  currency = "EUR"
 
   constructor(private summaryService: SummaryService,
-              private router: Router) {
+              private router: Router,
+              private currencyService: CurrencyService) {
   }
 
   ngOnInit(): void {
 
+    this.currencyService.getCurrency().subscribe(
+      data => {
+        this.currency = data
+        this.fetchCurrentDraftSummary();
+      }
+    )
+
+    this.fetchCurrentDraftSummary();
+  }
+
+  private fetchCurrentDraftSummary() {
     this.summaryService.getCurrentDraft().subscribe(data => {
       this.summary = data
       this.availableAssets = this.summary?.assets;
     })
-
   }
 
   addAssetPage(): void {

@@ -3,6 +3,7 @@ import {SummaryService} from "../services/summary.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Asset} from "../models/asset.model";
 import {Summary} from "../models/summary.model";
+import {CurrencyService} from "../services/currency.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,13 +13,19 @@ import {Summary} from "../models/summary.model";
 export class DashboardComponent implements OnInit {
 
   constructor(private summaryService: SummaryService, private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute, private currencyService: CurrencyService) {
   }
 
   assets: Asset[] = [];
   summaries: Summary[] = [];
+  currency = "EUR"
 
   ngOnInit(): void {
+
+    this.currencyService.getCurrency().subscribe(data => {
+      this.currency = data
+      this.loadData()
+    })
 
     this.router.events.subscribe(event => {
       this.activatedRoute.queryParams.subscribe(params => {

@@ -7,22 +7,25 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import personal.finance.summary.domain.SummaryRepository;
+import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.infrastracture.persistance.repository.SummaryInMemoryRepository;
+import personal.finance.summary.infrastracture.persistance.repository.UserInMemoryRepository;
 
 @Configuration
 @EnableAutoConfiguration
 class SummaryConfiguration {
 
     @Autowired
-    private personal.finance.summary.application.UserRepository userRepository;
+    private UserRepository userRepository;
 
     SummaryFacade summaryFacadeTest() {
-        return new SummaryFacade(new SummaryInMemoryRepository().clear());
+        UserInMemoryRepository userRepository1 = new UserInMemoryRepository();
+        return new SummaryFacade(new SummaryInMemoryRepository(userRepository1).clear(), userRepository1);
     }
 
     @Bean
     SummaryFacade summaryFacade(SummaryRepository summaryRepository) {
-        return new SummaryFacade(summaryRepository);
+        return new SummaryFacade(summaryRepository, userRepository);
     }
 
     @Bean

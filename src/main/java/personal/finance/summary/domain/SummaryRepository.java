@@ -9,8 +9,6 @@ public interface SummaryRepository {
 
     List<Summary> saveAll(List<Summary> entityList);
 
-    Summary findById(SummaryId id);
-
     Summary findByIdAndUserId(Long summaryId, UUID userId);
 
     List<Summary> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, UUID userId);

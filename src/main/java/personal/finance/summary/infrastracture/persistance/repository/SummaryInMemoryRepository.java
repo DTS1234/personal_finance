@@ -1,5 +1,7 @@
 package personal.finance.summary.infrastracture.persistance.repository;
 
+import personal.finance.summary.domain.UserRepository;
+import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.SummaryState;
@@ -15,9 +17,15 @@ import java.util.stream.Collectors;
 public class SummaryInMemoryRepository implements SummaryRepository {
 
     private static final HashMap<Long, Summary> SUMMARIES = new HashMap<>();
+    private final UserRepository userRepository;
+
+    public SummaryInMemoryRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public Summary save(Summary summary) {
+        summary.convertCurrencyTo(Currency.EUR);
         if (summary.getId() == null) {
             List<Long> ids = SUMMARIES.keySet().stream().sorted().toList();
             if (ids.isEmpty()) {
@@ -36,22 +44,19 @@ public class SummaryInMemoryRepository implements SummaryRepository {
 
     @Override
     public List<Summary> saveAll(List<Summary> entityList) {
-        return entityList.stream().map(this::save).toList();
-    }
-
-    @Override
-    public Summary findById(SummaryId id) {
-        if (SUMMARIES.containsKey(id.getValue())) {
-            return SUMMARIES.get(id.getValue());
-        }
-        return null;
+        return entityList.stream()
+            .map(this::convertCurrencyForSummaryToEur)
+            .map(this::save).toList();
     }
 
     @Override
     public Summary findByIdAndUserId(Long summaryId, UUID userId) {
         if (SUMMARIES.containsKey(summaryId)) {
             if (SUMMARIES.get(summaryId).getUserId().equals(userId)) {
-                return SUMMARIES.get(summaryId);
+                Summary summary = SUMMARIES.get(summaryId);
+                Currency currency = userRepository.getCurrency(userId);
+                summary.convertCurrencyTo(currency);
+                return summary;
             } else {
                 return null;
             }
@@ -66,7 +71,19 @@ public class SummaryInMemoryRepository implements SummaryRepository {
             .filter(e -> e.getValue().getUserId().equals(userId))
             .sorted(Comparator.comparing(e -> e.getValue().getDate()))
             .map(Entry::getValue)
+            .map(this::convertCurrencyForSummary)
             .collect(Collectors.toList());
+    }
+
+    private Summary convertCurrencyForSummary(Summary s) {
+        Currency currency = userRepository.getCurrency(s.getUserId());
+        s.convertCurrencyTo(currency);
+        return s;
+    }
+
+    private Summary convertCurrencyForSummaryToEur(Summary s) {
+        s.convertCurrencyTo(Currency.EUR);
+        return s;
     }
 
     @Override
@@ -74,6 +91,7 @@ public class SummaryInMemoryRepository implements SummaryRepository {
         return SUMMARIES.values().stream()
             .filter(summary -> summary.getState().equals(summaryState))
             .filter(summary -> summary.getUserId().equals(userId))
+            .map(this::convertCurrencyForSummary)
             .collect(Collectors.toList());
     }
 

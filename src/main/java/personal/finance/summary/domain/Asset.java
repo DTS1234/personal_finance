@@ -51,4 +51,8 @@ public class Asset {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public void setMoney(Money newMoney) {
+        this.money = newMoney;
+    }
 }

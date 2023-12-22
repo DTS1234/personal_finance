@@ -8,15 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.domain.User;
 import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserInformation;
+import personal.finance.summary.application.CurrencyManager;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
-import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryId;
 import personal.finance.summary.domain.SummaryState;
+import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.infrastracture.persistance.repository.SummaryRepositorySql;
 
 import java.math.BigDecimal;
@@ -33,13 +34,16 @@ class StartupConfiguration {
     private PasswordEncoder encoder;
     @Autowired
     private personal.finance.iam.domain.UserRepository userRepositorySql;
+    @Autowired
+    private CurrencyManager currencyManager;
 
     @Autowired
-    private personal.finance.summary.application.UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Bean
     @Transactional
     public void init() throws Exception {
+        currencyManager.updateExchangeRates();
 
         User user = new User();
         UserId u1 = UserId.random();
@@ -65,8 +69,8 @@ class StartupConfiguration {
 
         userRepositorySql.save(user2);
 
-        userRepository.updateCurrency(u1.value.toString(), Currency.USD);
-        userRepository.updateCurrency(u2.value.toString(), Currency.PLN);
+        // userRepository.updateCurrency(u1.value.toString(), Currency.USD);
+        // userRepository.updateCurrency(u2.value.toString(), Currency.PLN);
 
         List<Asset> assets = Arrays.asList(
             Asset.builder()

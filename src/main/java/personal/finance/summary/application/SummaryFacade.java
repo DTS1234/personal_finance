@@ -1,10 +1,12 @@
 package personal.finance.summary.application;
 
 import personal.finance.summary.application.dto.SummaryDTO;
+import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.domain.SummaryId;
+import personal.finance.summary.domain.UserRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,9 +14,11 @@ import java.util.UUID;
 public class SummaryFacade {
 
     private final SummaryRepository summaryRepository;
+    private final UserRepository userRepository;
 
-    public SummaryFacade(SummaryRepository summaryRepository) {
+    public SummaryFacade(SummaryRepository summaryRepository, UserRepository userRepository) {
         this.summaryRepository = summaryRepository;
+        this.userRepository = userRepository;
     }
 
     public Summary confirmSummary(Long summaryId, UUID userId) {
@@ -38,6 +42,11 @@ public class SummaryFacade {
     }
 
     public Summary getCurrentDraft(UUID userId) {
-        return new GetCurrentDraftUseCase(summaryRepository, userId).execute();
+        return new GetCurrentDraftUseCase(summaryRepository, userId, userRepository).execute();
     }
+
+    public Currency updateCurrency(UUID userId, Currency currency) {
+        return userRepository.updateCurrency(userId.toString(), currency);
+    }
+
 }

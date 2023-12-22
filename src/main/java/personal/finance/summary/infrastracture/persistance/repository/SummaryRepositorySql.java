@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.SummaryState;
-import personal.finance.summary.domain.SummaryId;
 import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 
 import java.util.List;
@@ -17,9 +16,9 @@ public class SummaryRepositorySql implements SummaryRepository {
     private final SummaryJpaRepository jpaRepository;
     private final DomainModelMapper mapper;
 
-    public SummaryRepositorySql(SummaryJpaRepository jpaRepository) {
+    public SummaryRepositorySql(SummaryJpaRepository jpaRepository, DomainModelMapper domainModelMapper) {
         this.jpaRepository = jpaRepository;
-        this.mapper = new DomainModelMapper();
+        this.mapper = domainModelMapper;
     }
 
     @Override
@@ -34,15 +33,6 @@ public class SummaryRepositorySql implements SummaryRepository {
 
     private List<SummaryEntity> mapToEntites(List<Summary> entityList) {
         return entityList.stream().map(mapper::map).collect(Collectors.toList());
-    }
-
-    @Override
-    public Summary findById(SummaryId id) {
-        SummaryEntity summaryEntityFound = jpaRepository.findById(id.getValue()).orElse(null);
-        if (summaryEntityFound == null) {
-            return null;
-        }
-        return mapper.map(summaryEntityFound);
     }
 
     @Override

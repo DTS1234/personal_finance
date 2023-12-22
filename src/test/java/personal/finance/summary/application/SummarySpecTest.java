@@ -1,6 +1,7 @@
 package personal.finance.summary.application;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import personal.finance.GivenAssets;
@@ -8,12 +9,14 @@ import personal.finance.summary.application.dto.DTOMapper;
 import personal.finance.summary.application.exceptions.NoSummaryInDraftException;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
+import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryId;
 import personal.finance.summary.domain.SummaryState;
+import personal.finance.summary.infrastracture.external.CurrencyFakeProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,6 +32,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class SummarySpecTest {
 
     private final SummaryFacade facade = new SummaryConfiguration().summaryFacadeTest();
+
+    @BeforeAll
+    static void setUp() {
+        CurrencyManager.currencies = new CurrencyFakeProvider().getRates();
+    }
 
     @Test
     void shouldMoveSummaryFromDraftToConfirmed() {
@@ -348,4 +356,95 @@ public class SummarySpecTest {
         assertThatThrownBy(() -> facade.cancelSummary(firstSummary.getId().getValue(), secondUserId))
             .hasMessage("This user does not have a summary with id of " + firstSummary.getId());
     }
+
+    @Test
+    void should_return_data_with_correct_currency() {
+        // given new summary
+        UUID userId = UUID.randomUUID();
+        Summary newSummary = facade.createNewSummary(userId);
+
+        // and currency rate available
+        CurrencyManager.currencies = new CurrencyFakeProvider().getRates();
+
+        // and new asset added
+        Item build = Item.builder().quantity(BigDecimal.ONE).money(new Money(10)).build();
+        newSummary.addAsset(Asset.builder().money(new Money(10)).items(List.of(build)).buildAsset());
+        facade.updateSummaryInDraft(DTOMapper.dto(newSummary), userId);
+
+        Money money = newSummary.getMoney();
+        System.out.println("before: " + money);
+
+        // when currency updated
+        facade.updateCurrency(userId, Currency.PLN);
+
+        // then next fetched summary
+        Summary currentDraft = facade.getCurrentDraft(userId);
+        Money expected = money.multiplyBy(4.5, Currency.PLN);
+
+        // should have correct currency value and money
+        assertThat(currentDraft.getMoney())
+            .isEqualTo(expected);
+    }
+
+
+    @Test
+    void should_return_data_with_correct_currency_PLN_USD() {
+        // given new summary
+        CurrencyManager.currencies = new CurrencyFakeProvider().getRates();
+        UUID userId = UUID.randomUUID();
+        Summary newSummary = facade.createNewSummary(userId);
+
+        // and new asset added in PLN
+        facade.updateCurrency(userId, Currency.PLN);
+        Item build = Item.builder().quantity(BigDecimal.ONE).money(new Money(10, Currency.PLN)).build();
+        newSummary.addAsset(Asset.builder().money(new Money(10, Currency.PLN)).items(List.of(build)).buildAsset());
+        newSummary.setMoney(new Money(10.00, Currency.PLN));
+        facade.updateSummaryInDraft(DTOMapper.dto(newSummary), userId);
+
+        // when currency updated
+        facade.updateCurrency(userId, Currency.USD);
+
+        // then next fetched summary
+        Summary currentDraft = facade.getCurrentDraft(userId);
+        Money expected = new Money(2.53, Currency.USD);
+
+        // should have correct currency value and money
+        assertThat(currentDraft.getMoney())
+            .isEqualTo(expected);
+    }
+
+    @Test
+    void should_return_data_with_correct_currency_USD_EUR() {
+        // given new summary
+        UUID userId = UUID.randomUUID();
+        Summary newSummary = facade.createNewSummary(userId);
+
+        // and new asset added in EUR
+        Item item1 = Item.builder().quantity(BigDecimal.ONE).money(new Money(10, Currency.EUR)).build();
+        Item item2 = Item.builder().quantity(BigDecimal.ONE).money(new Money(15, Currency.EUR)).build();
+        newSummary.addAsset(
+            Asset.builder().money(new Money(25, Currency.EUR)).items(List.of(item1, item2)).buildAsset());
+        newSummary.setMoney(new Money(25.00, Currency.EUR));
+        facade.updateSummaryInDraft(DTOMapper.dto(newSummary), userId);
+
+        // when currency updated
+        facade.updateCurrency(userId, Currency.USD);
+
+        // then next fetched summary
+        Summary currentDraft = facade.getCurrentDraft(userId);
+        Money expected = new Money(27.50, Currency.USD);
+
+        // should have correct currency value and money
+        assertThat(currentDraft.getMoney())
+            .isEqualTo(expected);
+
+        facade.updateCurrency(userId, Currency.PLN);
+        currentDraft = facade.getCurrentDraft(userId);
+        expected = new Money(108.63, Currency.PLN);
+
+        // should have correct currency value and money
+        assertThat(currentDraft.getMoney())
+            .isEqualTo(expected);
+    }
+
 }

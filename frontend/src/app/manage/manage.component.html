@@ -16,14 +16,14 @@
       <tr *ngFor="let assetEntity of assets; let i = index">
         <th scope="row">{{ i + 1}}</th>
         <td>{{ assetEntity.name}}</td>
-        <td>{{ assetEntity.money }}</td>
+        <td>{{ assetEntity.money + " " + this.currency}}</td>
         <td>{{ assetEntity.items.length }}</td>
         <td>{{ percentages[i] | percent }}</td>
       </tr>
       <tr>
         <th scope="row">{{assets.length + 1}}</th>
         <td><strong>SUM</strong></td>
-        <td><strong>{{sum | number}}</strong></td>
+        <td><strong>{{(sum | number) + " " + this.currency}}</strong></td>
         <td><strong>{{numberOfItems}}</strong></td>
         <td><strong>100.00%</strong></td>
       </tr>

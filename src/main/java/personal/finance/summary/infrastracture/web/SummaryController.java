@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import personal.finance.summary.application.SummaryFacade;
 import personal.finance.summary.application.dto.DTOMapper;
 import personal.finance.summary.application.dto.SummaryDTO;
+import personal.finance.summary.application.dto.UpdateCurrencyDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -59,5 +60,10 @@ public class SummaryController {
     @PostMapping("/{userId}/summaries/{summaryId}/cancel")
     public SummaryDTO cancelSummary(@PathVariable UUID userId, @PathVariable String summaryId) {
         return DTOMapper.dto(facade.cancelSummary(Long.valueOf(summaryId), userId));
+    }
+
+    @PostMapping("/{userId}/currency")
+    public String updateCurrency(@RequestBody UpdateCurrencyDTO updateDTO) {
+        return facade.updateCurrency(UUID.fromString(updateDTO.userId()), updateDTO.currency()).name();
     }
 }

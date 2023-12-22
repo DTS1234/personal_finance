@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import personal.finance.summary.application.UserRepository;
+import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.application.dto.SummaryDTO;
 import personal.finance.summary.application.query.SearchCriteria;
 import personal.finance.summary.application.query.SummaryProjection;
+
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -32,6 +34,6 @@ public class SummaryQueryController {
 
     @GetMapping("/{userId}/currency")
     public String getCurrency(@PathVariable String userId) {
-        return userRepository.getCurrency(userId).name();
+        return userRepository.getCurrency(UUID.fromString(userId)).name();
     }
 }

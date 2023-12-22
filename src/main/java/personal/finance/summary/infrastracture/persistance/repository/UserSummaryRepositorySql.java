@@ -2,9 +2,11 @@ package personal.finance.summary.infrastracture.persistance.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import personal.finance.summary.application.UserRepository;
+import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.domain.Currency;
 import personal.finance.summary.infrastracture.persistance.entity.UserEntity;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -13,8 +15,8 @@ public class UserSummaryRepositorySql implements UserRepository {
     private final UserSummaryRepositoryJpa repositoryJpa;
 
     @Override
-    public Currency getCurrency(String userId) {
-        UserEntity userEntity = repositoryJpa.findById(userId).orElse(null);
+    public Currency getCurrency(UUID userId) {
+        UserEntity userEntity = repositoryJpa.findById(userId.toString()).orElse(null);
         return userEntity == null ? null : userEntity.getCurrency();
     }
 
@@ -26,6 +28,7 @@ public class UserSummaryRepositorySql implements UserRepository {
             return currency;
         }
         userEntity.setCurrency(currency);
+        repositoryJpa.save(userEntity);
         return currency;
     }
 }

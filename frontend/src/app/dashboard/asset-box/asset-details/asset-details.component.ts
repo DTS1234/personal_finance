@@ -1,4 +1,4 @@
-import {Component, Inject, Input} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -8,6 +8,7 @@ import {
 } from "@angular/material/dialog";
 import {Asset} from "../../../models/asset.model";
 import {NgForOf} from "@angular/common";
+import {CurrencyService} from "../../../services/currency.service";
 
 @Component({
   selector: 'app-asset-details',
@@ -21,16 +22,21 @@ import {NgForOf} from "@angular/common";
   templateUrl: './asset-details.component.html',
   styleUrl: './asset-details.component.css'
 })
-export class AssetDetailsComponent {
+export class AssetDetailsComponent implements OnInit {
 
+  currency = "EUR"
 
-  constructor(@Inject(MAT_DIALOG_DATA) public asset: Asset, public dialogRef: MatDialogRef<AssetDetailsComponent>) {
-    console.log("asset details: " + JSON.stringify(asset))
+  constructor(@Inject(MAT_DIALOG_DATA) public asset: Asset,
+              public dialogRef: MatDialogRef<AssetDetailsComponent>,
+              public currencyService: CurrencyService) {
   }
 
   public onClose() {
     this.dialogRef.close()
   }
 
+  ngOnInit(): void {
+    this.currencyService.getCurrency().subscribe(data => this.currency = data)
+  }
 
 }

@@ -38,7 +38,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
             Summary summary = new Summary(
                 null,
                 userId,
-                new Money(calculateMoneyValue(lastConfirmedAssets)),
+                new Money(calculateMoneyValue(lastConfirmedAssets), lastConfirmed.getMoney().getCurrency()),
                 LocalDateTime.now(),
                 SummaryState.DRAFT,
                 newAssets
