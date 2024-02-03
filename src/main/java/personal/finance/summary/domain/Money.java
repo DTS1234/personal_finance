@@ -1,8 +1,6 @@
 package personal.finance.summary.domain;
 
 import lombok.Value;
-import org.apache.commons.lang3.tuple.Pair;
-import personal.finance.summary.application.CurrencyManager;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -48,7 +46,8 @@ public class Money {
                 String.format("Currency mismatch: %s and %s", this.getCurrency(), other.getCurrency()));
         }
 
-        return new Money(moneyValue.add(other.moneyValue).setScale(2, RoundingMode.HALF_UP), determineCurrencyCode(other));
+        return new Money(moneyValue.add(other.moneyValue).setScale(2, RoundingMode.HALF_UP),
+            determineCurrencyCode(other));
     }
 
     public Money subtract(Money other) {
@@ -60,21 +59,14 @@ public class Money {
         return new Money(moneyValue.subtract(other.moneyValue), determineCurrencyCode(other));
     }
 
-    public Money multiplyBy(double multiplier, Currency currency) {
-        return multiplyBy(new BigDecimal(multiplier).setScale(2, RoundingMode.HALF_UP), currency);
-    }
-
     public Money multiplyBy(double multiplier) {
-        return multiplyBy(new BigDecimal(multiplier).setScale(2, RoundingMode.HALF_UP));
+        return multiplyBy(new BigDecimal(multiplier));
     }
 
     public Money multiplyBy(BigDecimal multiplier) {
         return new Money(moneyValue.multiply(multiplier), currency);
     }
-
-    public Money multiplyBy(BigDecimal multiplier, Currency currency) {
-        return new Money(moneyValue.multiply(multiplier).setScale(2, RoundingMode.HALF_UP), currency);
-    }
+    
 
     public boolean greaterThan(Money other) {
         return moneyValue.compareTo(other.moneyValue) > 0;
@@ -98,20 +90,6 @@ public class Money {
 
     private boolean isZero(BigDecimal testedValue) {
         return BigDecimal.ZERO.compareTo(testedValue) == 0;
-    }
-
-    public Money convertFromTo(Currency from, Currency to) {
-        if (from == null) {
-            from = Currency.EUR;
-        }
-        if (to == null) {
-            to = Currency.EUR;
-        }
-        if (from == to) {
-            return this;
-        }
-        Double rate = CurrencyManager.currencies.get(Pair.of(to, from));
-        return this.multiplyBy(rate, to);
     }
 
     @Override

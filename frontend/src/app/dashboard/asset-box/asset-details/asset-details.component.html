@@ -14,7 +14,7 @@
       <tbody>
       <tr>
         <td>{{ asset.name}}</td>
-        <td>{{ asset.money + " " + this.currency}}</td>
+        <td>{{ (asset.money / this.rate).toFixed(2) + " " + this.currency}}</td>
         <td>{{ asset.items.length }}</td>
       </tr>
       </tbody>
@@ -35,7 +35,7 @@
       <tbody>
       <tr *ngFor="let item of asset.items">
         <td>{{ item.name}}</td>
-        <td>{{ item.money + " " + this.currency}}</td>
+        <td>{{ (item.money/this.rate).toFixed(2) + " " + this.currency}}</td>
         <td>{{ item.quantity }}</td>
       </tr>
       </tbody>

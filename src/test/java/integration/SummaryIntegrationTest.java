@@ -12,11 +12,13 @@ import personal.finance.iam.application.AccessManagementFacade;
 import personal.finance.summary.application.SummaryFacade;
 import personal.finance.summary.application.dto.DTOMapper;
 import personal.finance.summary.domain.Asset;
+import personal.finance.summary.domain.AssetId;
 import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -61,7 +63,7 @@ public class SummaryIntegrationTest extends IntegrationTest {
 
         assertThatJson(result)
             .inPath("id")
-            .isNumber();
+            .isString();
 
         String actualDate = JsonPath.read(result, "$.date");
         DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
@@ -72,7 +74,8 @@ public class SummaryIntegrationTest extends IntegrationTest {
         // given
         String token = accessManagementFacade.login("user@gmail.com", "123").token();
         Summary newSummary = summaryFacade.createNewSummary(UUID.fromString(USER_ID));
-        newSummary.addAsset(Asset.builder().name("new Asset").money(new Money(BigDecimal.ZERO)).buildAsset());
+        AssetId assetID = AssetId.random();
+        newSummary.addAsset(Asset.builder().id(assetID).name("new Asset").money(new Money(BigDecimal.ZERO)).buildAsset());
 
         // when
         String result = mockMvc.perform(
@@ -89,12 +92,16 @@ public class SummaryIntegrationTest extends IntegrationTest {
         String expected = getFile("summaries/should_update_summary.json");
 
         assertThatJson(result)
-            .whenIgnoringPaths("date", "id")
+            .whenIgnoringPaths("date", "id", "assets[0].id")
             .isEqualTo(expected);
 
         assertThatJson(result)
             .inPath("id")
-            .isNumber();
+            .isString();
+
+        assertThatJson(result)
+            .inPath("assets[0].id")
+            .isEqualTo(assetID.getValue());
 
         String actualDate = JsonPath.read(result, "$.date");
         DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
@@ -125,7 +132,7 @@ public class SummaryIntegrationTest extends IntegrationTest {
 
         assertThatJson(result)
             .inPath("id")
-            .isNumber();
+            .isString();
 
         String actualDate = JsonPath.read(result, "$.date");
         DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
@@ -156,5 +163,4 @@ public class SummaryIntegrationTest extends IntegrationTest {
         String actualDate = JsonPath.read(result, "$.date");
         DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
     }
-
 }

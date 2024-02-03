@@ -1,4 +1,3 @@
-<div class="col" style="height: 115px;width: 277px;margin-bottom: 37px">
   <div class="card shadow-sm">
     <div class="card-body">
       <div class="row">
@@ -9,7 +8,7 @@
       </div>
       <div class="row">
         <div class="col">
-          <p><b>{{asset.money + ' ' + this.currency}}</b></p>
+          <p><b>{{(asset.money / this.rate).toFixed(2) + ' ' + this.currency}}</b></p>
         </div>
         <div class="col">
           <button class="btn-primary btn-block" (click)="onClick()">Details</button>
@@ -17,4 +16,3 @@
       </div>
     </div>
   </div>
-</div>

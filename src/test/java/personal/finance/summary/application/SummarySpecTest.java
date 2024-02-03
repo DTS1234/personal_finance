@@ -9,7 +9,6 @@ import personal.finance.summary.application.dto.DTOMapper;
 import personal.finance.summary.application.exceptions.NoSummaryInDraftException;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
-import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
@@ -20,6 +19,7 @@ import personal.finance.summary.infrastracture.external.CurrencyFakeProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -54,19 +54,20 @@ public class SummarySpecTest {
 
     @Test
     void shouldThrowIfNoSummaryFoundForGivenId() {
-        assertThatThrownBy(() -> facade.confirmSummary(-1L, UUID.randomUUID()))
-            .hasMessage("Summary with id of -1 does not exist for this user.");
+        UUID summaryId = UUID.randomUUID();
+        assertThatThrownBy(() -> facade.confirmSummary(summaryId, UUID.randomUUID()))
+            .hasMessage("Summary with id of " + summaryId + " does not exist for this user.");
     }
 
     @Test
     void should_throw_when_summary_is_not_in_draft() {
         // given
         UUID userId = UUID.randomUUID();
-        facade.createNewSummary(userId);
-        facade.cancelSummary(1L, userId);
+        Summary newSummary = facade.createNewSummary(userId);
+        facade.cancelSummary(newSummary.getIdValue(), userId);
 
         // then - exception is thrown
-        assertThatThrownBy(() -> facade.confirmSummary(1L, userId))
+        assertThatThrownBy(() -> facade.confirmSummary(newSummary.getIdValue(), userId))
             .hasMessage("Summary can be confirmed only if it is in DRAFT state.");
     }
 
@@ -79,7 +80,7 @@ public class SummarySpecTest {
         facade.createNewSummary(u2);
 
         assertThatThrownBy(() -> facade.confirmSummary(summaryFirstUser.getId().getValue(), u2))
-            .hasMessage("Summary with id of 1 does not exist for this user.");
+            .hasMessage("Summary with id of " + summaryFirstUser.getIdValue() + " does not exist for this user.");
     }
 
     @Test
@@ -93,13 +94,13 @@ public class SummarySpecTest {
         // second updated and confirmed summary
         Summary s2 = facade.createNewSummary(userId);
         s2.updateMoneyValue(new Money(ten));
-        s2.addAsset(Asset.builder().id(new AssetId(1L))
+        s2.addAsset(Asset.builder().id(AssetId.random())
             .name("Stock GPW")
             .money(new Money(ten))
             .items(List.of(Item.builder().money(new Money(ten))
                 .quantity(BigDecimal.ONE)
                 .name("Allegro")
-                .id(new ItemId(1L))
+                .id(ItemId.random())
                 .build()))
             .buildAsset());
 
@@ -122,14 +123,14 @@ public class SummarySpecTest {
                     )
                     .assets(
                         List.of(Asset.builder()
-                            .id(new AssetId(2L))
+                            .id(AssetId.random())
                             .name("Stock GPW")
                             .money(new Money(ten))
                             .items(List.of(
                                 Item.builder().money(new Money(ten))
                                     .quantity(BigDecimal.ONE)
                                     .name("Allegro")
-                                    .id(new ItemId(1L))
+                                    .id(ItemId.random())
                                     .build()
                             ))
                             .buildAsset())
@@ -149,7 +150,7 @@ public class SummarySpecTest {
             .usingRecursiveComparison()
             .ignoringFields("date")
             .isEqualTo(Summary.builder()
-                .id(new SummaryId(1L))
+                .id(summary.getId())
                 .userId(userId)
                 .money(new Money(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP)))
                 .assets(List.of())
@@ -238,10 +239,10 @@ public class SummarySpecTest {
     void should_throw_when_summary_is_not_in_a_draft_mode() {
         // given
         UUID userId = UUID.randomUUID();
-        facade.createNewSummary(userId);
-        Summary cancelledSummary = facade.cancelSummary(1L, userId);
-        facade.createNewSummary(userId);
-        Summary confirmedSummary = facade.confirmSummary(2L, userId);
+        Summary newSummary = facade.createNewSummary(userId);
+        Summary cancelledSummary = facade.cancelSummary(newSummary.getIdValue(), userId);
+        Summary secondSummary = facade.createNewSummary(userId);
+        Summary confirmedSummary = facade.confirmSummary(secondSummary.getIdValue(), userId);
 
         // when
         cancelledSummary.addAsset(GivenAssets.newAssetOfTenWithOneItem());
@@ -259,8 +260,9 @@ public class SummarySpecTest {
         // when - id given is not correct
         List<Asset> updatedAssets = new ArrayList<>(GivenAssets.assets());
         updatedAssets.add(GivenAssets.newAssetOfTenWithOneItem());
+        SummaryId summaryId = SummaryId.random();
         Summary updatedSummaryInDraft = Summary.builder()
-            .id(new SummaryId(-1L))
+            .id(summaryId)
             .assets(new ArrayList<>(updatedAssets))
             .date(LocalDateTime.now())
             .state(SummaryState.DRAFT)
@@ -269,7 +271,7 @@ public class SummarySpecTest {
 
         // then - exception is thrown
         assertThatThrownBy(() -> facade.updateSummaryInDraft(DTOMapper.dto(updatedSummaryInDraft), UUID.randomUUID()))
-            .hasMessage("Summary with id -1 does not exist for this user.");
+            .hasMessage("Summary with id " + summaryId.getValue() + " does not exist for this user.");
     }
 
     @Test
@@ -282,7 +284,7 @@ public class SummarySpecTest {
         List<Asset> updatedAssets = new ArrayList<>(GivenAssets.assets());
         updatedAssets.add(GivenAssets.newAssetOfTenWithOneItem());
         Summary updatedSummaryInDraft = Summary.builder()
-            .id(new SummaryId(1L))
+            .id(new SummaryId(newSummary.getIdValue()))
             .assets(new ArrayList<>(updatedAssets))
             .date(newSummary.getDate().minusDays(1))
             .state(SummaryState.DRAFT)
@@ -356,95 +358,4 @@ public class SummarySpecTest {
         assertThatThrownBy(() -> facade.cancelSummary(firstSummary.getId().getValue(), secondUserId))
             .hasMessage("This user does not have a summary with id of " + firstSummary.getId());
     }
-
-    @Test
-    void should_return_data_with_correct_currency() {
-        // given new summary
-        UUID userId = UUID.randomUUID();
-        Summary newSummary = facade.createNewSummary(userId);
-
-        // and currency rate available
-        CurrencyManager.currencies = new CurrencyFakeProvider().getRates();
-
-        // and new asset added
-        Item build = Item.builder().quantity(BigDecimal.ONE).money(new Money(10)).build();
-        newSummary.addAsset(Asset.builder().money(new Money(10)).items(List.of(build)).buildAsset());
-        facade.updateSummaryInDraft(DTOMapper.dto(newSummary), userId);
-
-        Money money = newSummary.getMoney();
-        System.out.println("before: " + money);
-
-        // when currency updated
-        facade.updateCurrency(userId, Currency.PLN);
-
-        // then next fetched summary
-        Summary currentDraft = facade.getCurrentDraft(userId);
-        Money expected = money.multiplyBy(4.5, Currency.PLN);
-
-        // should have correct currency value and money
-        assertThat(currentDraft.getMoney())
-            .isEqualTo(expected);
-    }
-
-
-    @Test
-    void should_return_data_with_correct_currency_PLN_USD() {
-        // given new summary
-        CurrencyManager.currencies = new CurrencyFakeProvider().getRates();
-        UUID userId = UUID.randomUUID();
-        Summary newSummary = facade.createNewSummary(userId);
-
-        // and new asset added in PLN
-        facade.updateCurrency(userId, Currency.PLN);
-        Item build = Item.builder().quantity(BigDecimal.ONE).money(new Money(10, Currency.PLN)).build();
-        newSummary.addAsset(Asset.builder().money(new Money(10, Currency.PLN)).items(List.of(build)).buildAsset());
-        newSummary.setMoney(new Money(10.00, Currency.PLN));
-        facade.updateSummaryInDraft(DTOMapper.dto(newSummary), userId);
-
-        // when currency updated
-        facade.updateCurrency(userId, Currency.USD);
-
-        // then next fetched summary
-        Summary currentDraft = facade.getCurrentDraft(userId);
-        Money expected = new Money(2.53, Currency.USD);
-
-        // should have correct currency value and money
-        assertThat(currentDraft.getMoney())
-            .isEqualTo(expected);
-    }
-
-    @Test
-    void should_return_data_with_correct_currency_USD_EUR() {
-        // given new summary
-        UUID userId = UUID.randomUUID();
-        Summary newSummary = facade.createNewSummary(userId);
-
-        // and new asset added in EUR
-        Item item1 = Item.builder().quantity(BigDecimal.ONE).money(new Money(10, Currency.EUR)).build();
-        Item item2 = Item.builder().quantity(BigDecimal.ONE).money(new Money(15, Currency.EUR)).build();
-        newSummary.addAsset(
-            Asset.builder().money(new Money(25, Currency.EUR)).items(List.of(item1, item2)).buildAsset());
-        newSummary.setMoney(new Money(25.00, Currency.EUR));
-        facade.updateSummaryInDraft(DTOMapper.dto(newSummary), userId);
-
-        // when currency updated
-        facade.updateCurrency(userId, Currency.USD);
-
-        // then next fetched summary
-        Summary currentDraft = facade.getCurrentDraft(userId);
-        Money expected = new Money(27.50, Currency.USD);
-
-        // should have correct currency value and money
-        assertThat(currentDraft.getMoney())
-            .isEqualTo(expected);
-
-        facade.updateCurrency(userId, Currency.PLN);
-        currentDraft = facade.getCurrentDraft(userId);
-        expected = new Money(108.63, Currency.PLN);
-
-        // should have correct currency value and money
-        assertThat(currentDraft.getMoney())
-            .isEqualTo(expected);
-    }
-
 }

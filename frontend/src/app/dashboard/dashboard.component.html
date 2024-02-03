@@ -1,8 +1,13 @@
-<div class="row d-flex justify-content-center align-items-center mt-4 mb-3">
-  <app-summary-box *ngFor="let summary of summaries" [summary]="summary"></app-summary-box>
+<div class="row m-3">
+  <div *ngFor="let summary of summaries" class="col">
+    <app-summary-box [summary]="summary" [rate]="rate"></app-summary-box>
+  </div>
 </div>
 <hr/>
 <h4>Current assets:</h4>
-<div class="row d-flex justify-content-center align-items-center mt-5 mb-3">
-  <app-asset-box *ngFor="let assetEntity of assets" [asset]="assetEntity"></app-asset-box>
+<div class="row m-3">
+  <div *ngFor="let assetEntity of assets" class="col">
+    <app-asset-box [asset]="assetEntity" [rate]="rate"></app-asset-box>
+  </div>
+
 </div>

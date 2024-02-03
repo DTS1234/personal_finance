@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 public class AssetDTO {
-    public Long id;
+    public UUID id;
     public BigDecimal money;
     public List<ItemDTO> items;
     public String name;

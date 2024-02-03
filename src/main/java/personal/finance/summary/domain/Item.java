@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author akazmierczak
@@ -28,6 +29,10 @@ public class Item {
 
     public Item() {
 
+    }
+
+    public UUID getIdValue() {
+        return id.getValue();
     }
 
     @Override

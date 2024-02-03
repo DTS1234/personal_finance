@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   assets: Asset[] = [];
   summaries: Summary[] = [];
   currency = "EUR"
+  rate: number = 1.0
 
   ngOnInit(): void {
 
@@ -35,16 +36,13 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    this.loadData();
-
   }
 
   loadData(): void {
     this.summaryService.fetchSummaries().subscribe(data => {
       this.summaries = data
       this.assets = this.summaries[0].assets
-      console.log(this.assets)
-    })
+      this.currencyService.getRate(this.summaries[0]).subscribe(data => this.rate = data)
+    });
   }
-
 }

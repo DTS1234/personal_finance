@@ -25,10 +25,14 @@ import {CurrencyService} from "../../../services/currency.service";
 export class AssetDetailsComponent implements OnInit {
 
   currency = "EUR"
+  asset:Asset
+  rate: number
 
-  constructor(@Inject(MAT_DIALOG_DATA) public asset: Asset,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Object,
               public dialogRef: MatDialogRef<AssetDetailsComponent>,
               public currencyService: CurrencyService) {
+    this.asset = data["asset"]
+    this.rate = data["rate"]
   }
 
   public onClose() {

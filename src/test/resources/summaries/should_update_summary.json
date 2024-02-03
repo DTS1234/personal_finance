@@ -4,9 +4,10 @@
   "money": 0.00,
   "date": "IGNORED",
   "state": "DRAFT",
+  "currency": "EUR",
   "assets": [
     {
-      "id": 4,
+      "id": "IGNOE",
       "money": 0.00,
       "name": "new Asset",
       "items": []

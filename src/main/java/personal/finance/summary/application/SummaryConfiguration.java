@@ -20,7 +20,7 @@ class SummaryConfiguration {
 
     SummaryFacade summaryFacadeTest() {
         UserInMemoryRepository userRepository1 = new UserInMemoryRepository();
-        return new SummaryFacade(new SummaryInMemoryRepository(userRepository1).clear(), userRepository1);
+        return new SummaryFacade(new SummaryInMemoryRepository().clear(), userRepository1);
     }
 
     @Bean

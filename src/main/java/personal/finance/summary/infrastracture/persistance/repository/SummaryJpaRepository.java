@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, Long>,
+public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, UUID>,
     JpaSpecificationExecutor<SummaryEntity> {
 
     List<SummaryEntity> findSummaryByStateEqualsOrderById(SummaryState summaryState);
@@ -19,7 +19,7 @@ public interface SummaryJpaRepository extends JpaRepository<SummaryEntity, Long>
 
     List<SummaryEntity> findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState summaryState, UUID userId);
 
-    Optional<SummaryEntity> findByIdAndUserId(Long summaryId, UUID userId);
+    Optional<SummaryEntity> findByIdAndUserId(UUID summaryId, UUID userId);
 
     Set<SummaryEntity> findSummaryByUserIdAndStateEquals(UUID userId, SummaryState summaryState);
 }

@@ -13,9 +13,10 @@ import {CurrencyService} from "../../services/currency.service";
 export class SummaryCreationComponent implements OnInit {
   availableAssets: Asset[] = [];
   newAssets: Asset[] = [];
-  activeAsset: Asset = new Asset(null, 'No assets yet', 0, []);
   summary: Summary;
+
   currency = "EUR"
+  rate: number = 1.00 // rate applied on the ui values
 
   constructor(private summaryService: SummaryService,
               private router: Router,
@@ -23,21 +24,19 @@ export class SummaryCreationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.currencyService.getCurrency().subscribe(
-      data => {
-        this.currency = data
-        this.fetchCurrentDraftSummary();
-      }
-    )
-
-    this.fetchCurrentDraftSummary();
+    this.currencyService.getCurrency().subscribe(currentCurrency => {
+      this.currency = currentCurrency
+      this.fetchCurrentDraftSummary();
+    })
   }
 
   private fetchCurrentDraftSummary() {
     this.summaryService.getCurrentDraft().subscribe(data => {
       this.summary = data
       this.availableAssets = this.summary?.assets;
+      this.currencyService.getRate(data).subscribe(
+        data => this.rate = data
+      )
     })
   }
 

@@ -3,8 +3,6 @@ package personal.finance.summary.infrastracture.persistance.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -16,6 +14,7 @@ import org.hibernate.Hibernate;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author akazmierczak
@@ -32,8 +31,7 @@ public class AssetEntity {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     private BigDecimal moneyValue;
     private String name;
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)

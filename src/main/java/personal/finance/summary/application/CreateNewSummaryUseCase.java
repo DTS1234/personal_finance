@@ -3,9 +3,12 @@ package personal.finance.summary.application;
 import lombok.RequiredArgsConstructor;
 import personal.finance.common.UseCase;
 import personal.finance.summary.domain.Asset;
+import personal.finance.summary.domain.AssetId;
 import personal.finance.summary.domain.Item;
+import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
+import personal.finance.summary.domain.SummaryId;
 import personal.finance.summary.domain.SummaryRepository;
 import personal.finance.summary.domain.SummaryState;
 
@@ -29,6 +32,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
 
         List<Summary> confirmedSummaries =
             summaryRepository.findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState.CONFIRMED, userId);
+        SummaryId summaryId = SummaryId.random();
 
         if (!confirmedSummaries.isEmpty()) {
             Summary lastConfirmed = confirmedSummaries.get(0);
@@ -36,7 +40,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
             List<Asset> newAssets = getNewAssets(lastConfirmedAssets);
 
             Summary summary = new Summary(
-                null,
+                summaryId,
                 userId,
                 new Money(calculateMoneyValue(lastConfirmedAssets), lastConfirmed.getMoney().getCurrency()),
                 LocalDateTime.now(),
@@ -48,6 +52,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
         }
 
         return summaryRepository.save(Summary.builder()
+            .id(summaryId)
             .userId(userId)
             .date(LocalDateTime.now())
             .state(SummaryState.DRAFT)
@@ -73,7 +78,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
 
     private static List<Asset> getNewAssets(List<Asset> lastConfirmedAssets) {
         return lastConfirmedAssets.stream().map(a ->
-            new Asset(null,
+            new Asset(AssetId.random(),
                 a.getMoney(),
                 a.getName(),
                 getNewItemsForAsset(a)
@@ -87,7 +92,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
         }
         return a.getItems()
             .stream()
-            .map(i -> new Item(null, i.getMoney(), i.getName(), i.getQuantity()))
+            .map(i -> new Item(ItemId.random(), i.getMoney(), i.getName(), i.getQuantity()))
             .collect(Collectors.toList());
     }
 }

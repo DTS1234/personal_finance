@@ -37,7 +37,7 @@ public class SummaryController {
 
     @PostMapping("/{userId}/summaries/{summaryId}/confirm")
     public SummaryDTO confirmSummary(@PathVariable String summaryId, @PathVariable String userId) {
-        return DTOMapper.dto(facade.confirmSummary(Long.valueOf(summaryId), UUID.fromString(userId)));
+        return DTOMapper.dto(facade.confirmSummary(UUID.fromString(summaryId), UUID.fromString(userId)));
     }
 
     @PostMapping("/{userId}/summaries/new")
@@ -59,7 +59,7 @@ public class SummaryController {
 
     @PostMapping("/{userId}/summaries/{summaryId}/cancel")
     public SummaryDTO cancelSummary(@PathVariable UUID userId, @PathVariable String summaryId) {
-        return DTOMapper.dto(facade.cancelSummary(Long.valueOf(summaryId), userId));
+        return DTOMapper.dto(facade.cancelSummary(UUID.fromString(summaryId), userId));
     }
 
     @PostMapping("/{userId}/currency")

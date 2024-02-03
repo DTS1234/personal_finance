@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author akazmierczak
@@ -54,5 +55,9 @@ public class Asset {
 
     public void setMoney(Money newMoney) {
         this.money = newMoney;
+    }
+
+    public UUID getIdValue() {
+        return this.id.getValue();
     }
 }

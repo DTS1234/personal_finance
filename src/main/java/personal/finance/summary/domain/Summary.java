@@ -77,10 +77,7 @@ public class Summary {
         return this.assets;
     }
 
-    public void convertCurrencyTo(Currency currency) {
-        Currency from = this.getMoney().getCurrency();
-        this.money = this.money.convertFromTo(from, currency);
-        this.assets.forEach(a -> a.setMoney(a.getMoney().convertFromTo(from, currency)));
-        this.assets.forEach(a -> a.getItems().forEach(i -> i.setMoney(i.getMoney().convertFromTo(from, currency))));
+    public UUID getIdValue() {
+        return this.id.getValue();
     }
 }

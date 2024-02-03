@@ -21,7 +21,7 @@ public class SummaryFacade {
         this.userRepository = userRepository;
     }
 
-    public Summary confirmSummary(Long summaryId, UUID userId) {
+    public Summary confirmSummary(UUID summaryId, UUID userId) {
         return new ConfirmSummaryUseCase(summaryRepository, summaryId, userId).execute();
     }
 
@@ -33,7 +33,7 @@ public class SummaryFacade {
         return new UpdateSummaryInDraftUseCase(summaryRepository, updatedSummary, userId).execute();
     }
 
-    public Summary cancelSummary(Long id, UUID userId) {
+    public Summary cancelSummary(UUID id, UUID userId) {
         return new CancelSummaryUseCase(summaryRepository, new SummaryId(id), userId).execute();
     }
 
@@ -42,7 +42,7 @@ public class SummaryFacade {
     }
 
     public Summary getCurrentDraft(UUID userId) {
-        return new GetCurrentDraftUseCase(summaryRepository, userId, userRepository).execute();
+        return new GetCurrentDraftUseCase(summaryRepository, userId).execute();
     }
 
     public Currency updateCurrency(UUID userId, Currency currency) {

@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SummaryDTO {
-    public Long id;
+    public UUID id;
     public UUID userId;
     public BigDecimal money;
     public Currency currency;

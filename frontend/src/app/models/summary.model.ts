@@ -6,6 +6,7 @@ export class Summary {
     public id: number,
     public date: string,
     public money: number,
+    public currency: string,
     public assets: Asset[]
   ) {
   }

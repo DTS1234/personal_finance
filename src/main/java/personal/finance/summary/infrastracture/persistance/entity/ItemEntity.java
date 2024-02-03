@@ -3,8 +3,6 @@ package personal.finance.summary.infrastracture.persistance.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +13,7 @@ import personal.finance.common.BigDecimalConverterQuantity;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author akazmierczak
@@ -28,8 +27,7 @@ import java.util.Objects;
 public class ItemEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     private BigDecimal moneyValue;
     private String name;
     @Column(precision = 20, scale = 7)

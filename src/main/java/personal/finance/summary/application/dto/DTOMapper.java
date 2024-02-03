@@ -14,6 +14,7 @@ import personal.finance.summary.infrastracture.persistance.entity.SummaryEntity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DTOMapper {
@@ -60,7 +61,7 @@ public class DTOMapper {
             a.getName())).collect(Collectors.toList());
     }
 
-    private static Long getId(Asset a) {
+    private static UUID getId(Asset a) {
         AssetId id = a.getId();
         if (id == null) {
             return null;
@@ -82,9 +83,9 @@ public class DTOMapper {
             .collect(Collectors.toList());
     }
 
-    private static Long getId(Item i) {
+    private static UUID getId(Item i) {
         if (i.getId() == null) {
-            return null;
+            return UUID.randomUUID();
         }
         return i.getId().getValue();
     }
@@ -101,17 +102,30 @@ public class DTOMapper {
         );
     }
 
-
-
     private static List<Asset> mapAssets(SummaryDTO summaryDTO) {
         return summaryDTO.assets.stream()
-            .map(a -> new Asset(new AssetId(a.id), new Money(a.money, summaryDTO.currency), a.name, mapItems(a, summaryDTO.currency)))
+            .map(a -> new Asset(
+                getOrCreateId(a), new Money(a.money, summaryDTO.currency), a.name, mapItems(a, summaryDTO.currency)))
             .collect(Collectors.toList());
+    }
+
+    private static AssetId getOrCreateId(AssetDTO a) {
+        if (a.id == null) {
+            return AssetId.random();
+        }
+        return new AssetId(a.id);
     }
 
     private static List<Item> mapItems(AssetDTO assetDTO, Currency currency) {
         return assetDTO.items.stream()
-            .map(i -> new Item(new ItemId(i.id), new Money(i.money, currency), i.name, i.quantity))
+            .map(i -> new Item(getOrCreateId(i), new Money(i.money, currency), i.name, i.quantity))
             .collect(Collectors.toList());
+    }
+
+    private static ItemId getOrCreateId(ItemDTO i) {
+        if (i.id == null) {
+            return ItemId.random();
+        }
+        return new ItemId(i.id);
     }
 }

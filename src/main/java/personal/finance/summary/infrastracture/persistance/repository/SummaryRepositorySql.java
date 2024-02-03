@@ -16,9 +16,9 @@ public class SummaryRepositorySql implements SummaryRepository {
     private final SummaryJpaRepository jpaRepository;
     private final DomainModelMapper mapper;
 
-    public SummaryRepositorySql(SummaryJpaRepository jpaRepository, DomainModelMapper domainModelMapper) {
+    public SummaryRepositorySql(SummaryJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
-        this.mapper = domainModelMapper;
+        this.mapper = new DomainModelMapper();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SummaryRepositorySql implements SummaryRepository {
     }
 
     @Override
-    public Summary findByIdAndUserId(Long summaryId, UUID userId) {
+    public Summary findByIdAndUserId(UUID summaryId, UUID userId) {
         SummaryEntity entityFound = jpaRepository.findByIdAndUserId(summaryId, userId).orElse(null);
         if (entityFound == null) {
             return null;

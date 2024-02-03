@@ -12,6 +12,7 @@ import {CurrencyService} from "../../services/currency.service";
 export class AssetBoxComponent implements OnInit {
 
   @Input() asset: Asset;
+  @Input() rate: number = 1.0
   currency = "EUR"
 
   constructor(public dialog: MatDialog, public currencyService: CurrencyService) {
@@ -22,6 +23,6 @@ export class AssetBoxComponent implements OnInit {
   }
 
   onClick() {
-    this.dialog.open(AssetDetailsComponent, {data: this.asset})
+    this.dialog.open(AssetDetailsComponent, {data: {"asset" : this.asset, "rate": this.rate }})
   }
 }

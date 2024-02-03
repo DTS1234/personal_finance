@@ -18,33 +18,37 @@ import java.util.List;
 public class GivenAssets {
 
     public static List<Asset> assets() {
+        AssetId assetIdOne = AssetId.random();
+        AssetId assetIdTwo = AssetId.random();
+        AssetId assetIdThree = AssetId.random();
+
         return Arrays.asList(
             Asset.builder()
-                .id(new AssetId(1L))
+                .id(assetIdOne)
                 .name("Crypto")
                 .money(new Money(BigDecimal.valueOf(500.31)))
                 .items(List.of(
-                    Item.builder().money(new Money(BigDecimal.valueOf(200.00))).build(),
-                    Item.builder().money(new Money(BigDecimal.valueOf(300.31))).build()
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00))).build(),
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.31))).build()
                 ))
                 .buildAsset(),
             Asset.builder()
-                .id(new AssetId(2L))
+                .id(assetIdTwo)
                 .name("Account 1")
                 .money(new Money(BigDecimal.valueOf(1500.12)))
                 .items(List.of(
-                    Item.builder().money(new Money(BigDecimal.valueOf(200.00))).build(),
-                    Item.builder().money(new Money(BigDecimal.valueOf(300.01))).build(),
-                    Item.builder().money(new Money(BigDecimal.valueOf(1000.11))).build()
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00))).build(),
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.01))).build(),
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(1000.11))).build()
                 ))
                 .buildAsset(),
             Asset.builder()
-                .id(new AssetId(3L))
+                .id(assetIdThree)
                 .name("Stocks 1")
                 .money(new Money(BigDecimal.valueOf(2201.24)))
                 .items(List.of(
-                    Item.builder().money(new Money(BigDecimal.valueOf(201.20))).build(),
-                    Item.builder().money(new Money(BigDecimal.valueOf(2000.04))).build()
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20))).build(),
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04))).build()
                 ))
                 .buildAsset());
         // sum of values : 2000.43 + 2201.24 = 4201.67
@@ -55,12 +59,12 @@ public class GivenAssets {
         Item testItemOne = Item.builder()
             .money(new Money(BigDecimal.valueOf(10, 0)))
             .name("testItemOne")
-            .id(new ItemId(1L))
+            .id(ItemId.random())
             .quantity(BigDecimal.valueOf(1L))
             .build();
 
         return Asset.builder()
-            .id(new AssetId(1L))
+            .id(AssetId.random())
             .money(new Money(BigDecimal.valueOf(10, 0)))
             .items(new ArrayList<>(
                 List.of(testItemOne)

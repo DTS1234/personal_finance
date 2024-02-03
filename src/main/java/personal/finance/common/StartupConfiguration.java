@@ -72,37 +72,41 @@ class StartupConfiguration {
         // userRepository.updateCurrency(u1.value.toString(), Currency.USD);
         // userRepository.updateCurrency(u2.value.toString(), Currency.PLN);
 
+        AssetId assetIdOne = AssetId.random();
+        AssetId assetIdTwo = AssetId.random();
+        AssetId assetIdThree= AssetId.random();
+
         List<Asset> assets = Arrays.asList(
             Asset.builder()
-                .id(new AssetId(1L))
+                .id(assetIdOne)
                 .name("Crypto")
                 .money(new Money(BigDecimal.valueOf(500.31)))
                 .items(List.of(
-                    Item.builder().id(new ItemId(1L))
+                    Item.builder().id(ItemId.random())
                         .name("Bitcoin")
                         .quantity(BigDecimal.ONE)
                         .money(new Money(BigDecimal.valueOf(200.00))).build(),
-                    Item.builder().id(new ItemId(2L))
+                    Item.builder().id(ItemId.random())
                         .name("Ethereum")
                         .quantity(BigDecimal.TEN)
                         .money(new Money(BigDecimal.valueOf(300.31))).build()
                 ))
                 .buildAsset(),
             Asset.builder()
-                .id(new AssetId(2L))
+                .id(assetIdTwo)
                 .name("Account 1")
                 .money(new Money(BigDecimal.valueOf(1500.12)))
                 .items(List.of(
-                    Item.builder().id(new ItemId(3L))
+                    Item.builder().id(ItemId.random())
                         .name("EUR account")
                         .quantity(BigDecimal.ONE)
                         .money(new Money(BigDecimal.valueOf(200.00))).build(),
-                    Item.builder().id(new ItemId(4L))
+                    Item.builder().id(ItemId.random())
                         .money(new Money(BigDecimal.valueOf(300.01)))
                         .name("USD account")
                         .quantity(BigDecimal.ONE)
                         .build(),
-                    Item.builder().id(new ItemId(5L))
+                    Item.builder().id(ItemId.random())
                         .money(new Money(BigDecimal.valueOf(1000.11)))
                         .name("PLN account")
                         .quantity(BigDecimal.ONE)
@@ -110,15 +114,15 @@ class StartupConfiguration {
                 ))
                 .buildAsset(),
             Asset.builder()
-                .id(new AssetId(3L))
+                .id(assetIdThree)
                 .name("Stocks 1")
                 .money(new Money(BigDecimal.valueOf(2201.24)))
                 .items(List.of(
-                    Item.builder().id(new ItemId(6L)).money(new Money(BigDecimal.valueOf(201.20)))
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20)))
                         .name("Tesla")
                         .quantity(BigDecimal.valueOf(2))
                         .build(),
-                    Item.builder().id(new ItemId(7L)).money(new Money(BigDecimal.valueOf(2000.04)))
+                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04)))
                         .name("Facebook")
                         .quantity(BigDecimal.valueOf(3))
                         .build()
@@ -126,18 +130,23 @@ class StartupConfiguration {
                 .buildAsset()
         );
 
+        SummaryId firstId = SummaryId.random();
+        SummaryId secondId = SummaryId.random();
+        SummaryId thirdId = SummaryId.random();
+        SummaryId fourthId = SummaryId.random();
+
         List<Summary> summaryEntities = summarySQLRepository.saveAll(
             Arrays.asList(
-                Summary.builder().id(new SummaryId(1L)).userId(u1.value).state(SummaryState.CONFIRMED)
+                Summary.builder().id(firstId).userId(u1.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(500.31)))
                     .date(LocalDateTime.of(2022, 1, 1, 0, 0)).build(),
-                Summary.builder().id(new SummaryId(2L)).userId(u1.value).state(SummaryState.CONFIRMED)
+                Summary.builder().id(secondId).userId(u1.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(1500.12)))
                     .date(LocalDateTime.of(2022, 2, 1, 0, 0)).build(),
-                Summary.builder().id(new SummaryId(3L)).userId(u2.value).state(SummaryState.CONFIRMED)
+                Summary.builder().id(thirdId).userId(u2.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(2201.24)))
                     .date(LocalDateTime.of(2022, 3, 1, 0, 0)).build(),
-                Summary.builder().id(new SummaryId(4L)).userId(u2.value).state(SummaryState.CONFIRMED)
+                Summary.builder().id(fourthId).userId(u2.value).state(SummaryState.CONFIRMED)
                     .money(new Money(BigDecimal.valueOf(3127.59)))
                     .date(LocalDateTime.of(2022, 4, 1, 0, 0)).build())
         );

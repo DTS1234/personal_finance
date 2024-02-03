@@ -2,6 +2,7 @@ package personal.finance.summary.infrastracture.external;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.stereotype.Component;
 import personal.finance.summary.application.CurrencyProvider;
 import personal.finance.summary.domain.Currency;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@Component
 public class CurrencyFakeProvider implements CurrencyProvider {
 
     @Override

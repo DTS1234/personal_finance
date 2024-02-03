@@ -12,6 +12,7 @@ export class SummaryBoxComponent implements OnInit {
 
   @Input() summary: Summary;
   currency = "EUR"
+  @Input() rate = 1.0
 
   constructor(private datePipe: DatePipe, private currencyService: CurrencyService) {
   }
@@ -21,7 +22,6 @@ export class SummaryBoxComponent implements OnInit {
   }
 
   formatDate(date: string): string {
-    return this.datePipe.transform(date, 'dd.MM.yyyy HH:mm:ss');
+    return this.datePipe.transform(date, 'dd.MM.yyyy');
   }
-
 }

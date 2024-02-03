@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDTO {
-    public Long id;
+    public UUID id;
     public BigDecimal money;
     public String name;
     public BigDecimal quantity;

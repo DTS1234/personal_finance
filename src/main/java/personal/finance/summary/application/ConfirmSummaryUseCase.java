@@ -13,7 +13,7 @@ import java.util.UUID;
 class ConfirmSummaryUseCase implements UseCase<Summary> {
 
     private final SummaryRepository summaryRepository;
-    private final Long summaryId;
+    private final UUID summaryId;
 
     private final UUID userId;
 
