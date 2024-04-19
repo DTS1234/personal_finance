@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.domain.User;
 import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserInformation;
+import personal.finance.payment.domain.Customer;
+import personal.finance.payment.domain.CustomerId;
+import personal.finance.payment.domain.CustomerRepository;
 import personal.finance.summary.application.CurrencyManager;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
@@ -17,7 +20,6 @@ import personal.finance.summary.domain.Money;
 import personal.finance.summary.domain.Summary;
 import personal.finance.summary.domain.SummaryId;
 import personal.finance.summary.domain.SummaryState;
-import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.infrastracture.persistance.repository.SummaryRepositorySql;
 
 import java.math.BigDecimal;
@@ -38,11 +40,12 @@ class StartupConfiguration {
     private CurrencyManager currencyManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
+
 
     @Bean
     @Transactional
-    public void init() throws Exception {
+    public Object init() throws Exception {
         currencyManager.updateExchangeRates();
 
         User user = new User();
@@ -69,12 +72,15 @@ class StartupConfiguration {
 
         userRepositorySql.save(user2);
 
-        // userRepository.updateCurrency(u1.value.toString(), Currency.USD);
-        // userRepository.updateCurrency(u2.value.toString(), Currency.PLN);
+        customerRepository.save(
+            new Customer(new CustomerId(user.getId().value), user.getUserInformation().getEmail(), "cus_Phz6xa4OHy10mB",
+                null));
+        customerRepository.save(new Customer(new CustomerId(user2.getId().value), user2.getUserInformation().getEmail(),
+            "cus_Phz60VNLojAeut", null));
 
         AssetId assetIdOne = AssetId.random();
         AssetId assetIdTwo = AssetId.random();
-        AssetId assetIdThree= AssetId.random();
+        AssetId assetIdThree = AssetId.random();
 
         List<Asset> assets = Arrays.asList(
             Asset.builder()
@@ -160,6 +166,7 @@ class StartupConfiguration {
         summary1.addAsset(assets.get(2));
 
         summarySQLRepository.save(summary1);
+        return null;
     }
 
 }

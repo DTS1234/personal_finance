@@ -5,28 +5,21 @@
         {{ error }}
       </div>
 
-      <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="card p-4">
-        <div class="form-group mb-3">
-          <label for="username">Email:</label>
-          <input ngModel type="text" class="form-control" id="username" name="username" required email autofocus />
-        </div>
-        <div class="form-group mb-3">
-          <label for="password">Password:</label>
-          <input ngModel type="password" class="form-control" id="password" name="password" required />
-        </div>
-        <div class="d-grid gap-2">
-          <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">
-            {{ isLoginMode ? 'Login' : 'Sign up' }}
-          </button>
-        </div>
-        <div class="d-flex justify-content-between mt-3">
-          <button class="btn btn-secondary btn-sm" type="button" (click)="onSwitchMode()">
-            Switch {{ isLoginMode ? 'to Sign Up' : 'to Login' }}
-          </button>
-          <!-- Forgot Password Link -->
-          <a routerLink="/password_reset/request" class="btn btn-link btn-sm">Forgot Password?</a>
-        </div>
-      </form>
+      <div *ngIf="!isLoginMode">
+        <app-sign-up></app-sign-up>
+      </div>
+
+      <div *ngIf="isLoginMode">
+        <app-login-component></app-login-component>
+      </div>
+
+      <div class="d-flex justify-content-between mt-3">
+        <button class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" type="button" (click)="onSwitchMode()">
+          Switch {{ isLoginMode ? 'to Sign Up' : 'to Login' }}
+        </button>
+        <a routerLink="/password_reset/request" class="btn btn-link btn-sm">Forgot Password?</a>
+      </div>
+
     </div>
   </div>
 </div>

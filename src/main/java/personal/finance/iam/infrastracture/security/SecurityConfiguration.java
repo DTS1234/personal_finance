@@ -82,6 +82,7 @@ public class SecurityConfiguration {
                     AntPathRequestMatcher.antMatcher("/registration/confirm**"),
                     AntPathRequestMatcher.antMatcher("/password_reset/request"),
                     AntPathRequestMatcher.antMatcher("/password_reset"),
+                    AntPathRequestMatcher.antMatcher("/create_subscription"),
                     AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS)
                 )
                 .permitAll()

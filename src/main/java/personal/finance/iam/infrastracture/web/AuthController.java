@@ -29,14 +29,8 @@ public class AuthController {
     private final AccessManagementFacade accessManagementFacade;
     private final MeterRegistry meterRegistry;
 
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        Counter counter = Counter.builder("api_books_get")
-            .tag("user", loginRequestDTO.username())
-            .description("a number of requests to /login endpoint")
-            .register(meterRegistry);
-        counter.increment();
         return authenticate(loginRequestDTO.username(), loginRequestDTO.password());
     }
 

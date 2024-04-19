@@ -12,6 +12,9 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {PasswordResetComponent} from "./password/password-reset/password-reset.component";
 import {PasswordResetRequestComponent} from "./password/password-reset-request/password-reset-request.component";
 import {AuthGuardService} from "./services/auth-guard.service";
+import {PaymentComponent} from "./payment/payment.component";
+import {SubscriptionRequest} from "./models/subscription-request.model";
+import {SubscriptionComponent} from "./subscription/subscription.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -44,6 +47,12 @@ const appRoutes: Routes = [
   },
   {
     path: 'password_reset/request', component: PasswordResetRequestComponent
+  },
+  {
+    path: 'payment', component: PaymentComponent
+  },
+  {
+    path: 'subscription', component: SubscriptionComponent
   }
 ];
 

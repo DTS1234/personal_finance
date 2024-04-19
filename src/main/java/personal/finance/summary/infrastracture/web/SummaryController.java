@@ -30,35 +30,35 @@ public class SummaryController {
     private final SummaryFacade facade;
 
     @PostMapping("/{userId}/summaries/{id}/update")
-    public SummaryDTO updateSummaryInDraft(@PathVariable String id, @PathVariable String userId,
+    public SummaryDTO updateSummaryInDraft(@PathVariable("id") String id, @PathVariable("userId") String userId,
         @RequestBody SummaryDTO summaryDTO) {
         return DTOMapper.dto(facade.updateSummaryInDraft(summaryDTO, UUID.fromString(userId)));
     }
 
     @PostMapping("/{userId}/summaries/{summaryId}/confirm")
-    public SummaryDTO confirmSummary(@PathVariable String summaryId, @PathVariable String userId) {
+    public SummaryDTO confirmSummary(@PathVariable("summaryId") String summaryId, @PathVariable("userId") String userId) {
         return DTOMapper.dto(facade.confirmSummary(UUID.fromString(summaryId), UUID.fromString(userId)));
     }
 
     @PostMapping("/{userId}/summaries/new")
-    public SummaryDTO createNewSummary(@PathVariable String userId) {
+    public SummaryDTO createNewSummary(@PathVariable("userId") String userId) {
         return DTOMapper.dto(facade.createNewSummary(UUID.fromString(userId)));
     }
 
     @GetMapping("/{userId}/summaries")
-    public List<SummaryDTO> getSummaries(@PathVariable UUID userId) {
+    public List<SummaryDTO> getSummaries(@PathVariable("userId") UUID userId) {
         return facade.getConfirmedSummaries(userId).stream()
             .map(DTOMapper::dto)
             .collect(Collectors.toList());
     }
 
     @GetMapping("/{userId}/summaries/current")
-    public SummaryDTO getCurrentDraft(@PathVariable UUID userId) {
+    public SummaryDTO getCurrentDraft(@PathVariable("userId") UUID userId) {
         return DTOMapper.dto(facade.getCurrentDraft(userId));
     }
 
     @PostMapping("/{userId}/summaries/{summaryId}/cancel")
-    public SummaryDTO cancelSummary(@PathVariable UUID userId, @PathVariable String summaryId) {
+    public SummaryDTO cancelSummary(@PathVariable("userId") UUID userId, @PathVariable("summaryId") String summaryId) {
         return DTOMapper.dto(facade.cancelSummary(UUID.fromString(summaryId), userId));
     }
 

@@ -1,6 +1,7 @@
 package personal.finance.iam.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,11 +41,14 @@ public class AccessManagementConfiguration {
     @Autowired
     JwtServiceImpl jwtService;
 
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
+
     @Bean
     public AccessManagementFacade accessManagementFacade() {
         return new AccessManagementFacade(userRepository, passwordEncoder, verificationTokenRepository,
             passwordResetTokenRepository, emailSenderService,
-            authenticationManager, jwtService);
+            authenticationManager, jwtService, applicationEventPublisher);
     }
 
     public AccessManagementFacade accessManagementFacadeTest() {
@@ -56,7 +60,7 @@ public class AccessManagementConfiguration {
         return new AccessManagementFacade(
             userRepository, passwordEncoder, new InMemoryVerificationTokenRepository().clear(),
             new InMemoryPasswordResetTokenRepository().clear(),
-            new EmailSenderServiceMock(), providerManager, new JwtServiceMock()
+            new EmailSenderServiceMock(), providerManager, new JwtServiceMock(), new ApplicationEventPublisherMock()
         );
     }
 

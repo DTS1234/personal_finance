@@ -27,6 +27,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatInputModule} from "@angular/material/input";
+import {SignUpComponent} from "./auth/sign-up/sign-up.component";
+import {LoginComponent} from "./auth/login/login.component";
 
 @NgModule({
   declarations: [
@@ -49,7 +51,7 @@ import {MatInputModule} from "@angular/material/input";
     imports: [
         BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
         BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
-        MatNativeDateModule, MatInputModule
+        MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent
     ],
   providers: [DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi:true }],
   bootstrap: [AppComponent]

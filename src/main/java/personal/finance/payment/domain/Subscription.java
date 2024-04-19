@@ -1,5 +1,8 @@
 package personal.finance.payment.domain;
 
-public class Subscription {
+import lombok.Value;
 
+@Value
+public class Subscription {
+    String customerId;
 }

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
@@ -12,6 +12,11 @@ import {CurrencyService} from "../services/currency.service";
 export class NavbarComponent implements OnInit, OnDestroy {
   isAuthenticated = false
   private userSub: Subscription
+  showDropdown: boolean = false
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
 
   constructor(private authService: AuthService, private currencyService: CurrencyService, private router: Router) {
   }

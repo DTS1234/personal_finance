@@ -1,36 +1,69 @@
-<nav class="navbar navbar-expand nav-color">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col d-flex justify-content-center align-items-center" routerLinkActive="isActive"
-           routerLink="/homepage" *ngIf="!isAuthenticated">
-        <div class="nav-itemEntity"><h4>Home</h4></div>
-      </div>
-      <div class="col d-flex justify-content-center align-items-center" routerLinkActive="isActive"
-           routerLink="/dashboard" *ngIf="isAuthenticated">
-        <div class="nav-itemEntity"><h4>Dashboard</h4></div>
-      </div>
-      <div class="col d-flex justify-content-center align-items-center" routerLinkActive="isActive"
-           routerLink="/history" *ngIf="isAuthenticated">
-        <div class="nav-itemEntity"><h4>History</h4></div>
-      </div>
-      <div class="col d-flex justify-content-center align-items-center" routerLinkActive="isActive" routerLink="/manage"
-           *ngIf="isAuthenticated">
-        <div class="nav-itemEntity"><h4>Manage</h4></div>
-      </div>
-      <div class="col d-flex justify-content-center align-items-center" routerLinkActive="isActive" routerLink="/auth"
-           *ngIf="!isAuthenticated">
-        <div class="nav-itemEntity"><h4>Auth</h4></div>
-      </div>
-      <div class="col d-flex justify-content-center align-items-center" *ngIf="isAuthenticated">
-        <div class="nav-itemEntity" (click)="onLogout()"><h4>Logout</h4></div>
-      </div>
+<nav class="flex items-center justify-between bg-teal-500 p-6">
+
+  <div class="flex text-white mr-10">
+    <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/>
+    </svg>
+    <span class="font-semibold text-xl tracking-tight">Wealth Tracker</span>
+  </div>
+
+  <div class="flex items-center">
+    <div class="text-sm text-white">
+      <a class="mr-10"
+         routerLinkActive="isActive" routerLink="/homepage" *ngIf="!isAuthenticated">
+        Home
+      </a>
+      <a class="mr-10"
+         routerLinkActive="isActive" routerLink="/dashboard" *ngIf="isAuthenticated">
+        Dashboard
+      </a>
+      <a class="mr-10"
+         routerLinkActive="isActive" routerLink="/history" *ngIf="isAuthenticated">
+        History
+      </a>
+      <a class="mr-10"
+         routerLinkActive="isActive" routerLink="/manage" *ngIf="isAuthenticated">
+        Manage
+      </a>
+      <a class="mr-10"
+         routerLinkActive="isActive" routerLink="/auth" *ngIf="!isAuthenticated">
+        Sign In
+      </a>
     </div>
-    <div class="col d-flex justify-content-end align-items-center" *ngIf="isAuthenticated">
-      <select class="form-select form-select-sm" (change)="onCurrencyChange($event)">
-        <option value="PLN">PLN</option>
-        <option value="USD">USD</option>
-        <option selected value="EUR">EUR</option>
-      </select>
+    <!--    <div class="text-white">-->
+    <!--      <a class=""-->
+    <!--         *ngIf="isAuthenticated">Account</a>-->
+    <!--    </div>-->
+
+    <div class="flex items-center relative" *ngIf="isAuthenticated">
+      <!--      <span class="text-sm text-white pr-4">Signed in as user</span>-->
+      <!--      <div class="dropdown inline-block relative">-->
+      <!--        <button class="text-white focus:outline-none focus:shadow-outline">-->
+      <!--          Account-->
+      <!--          <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>-->
+      <!--        </button>-->
+      <!--        <ul class="dropdown-menu absolute text-gray-700 pt-1">-->
+      <!--          <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="/account-details">Account Details</a></li>-->
+      <!--          <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" (click)="onLogout()">Sign Out</a></li>-->
+      <!--        </ul>-->
+      <!--      </div>-->
+      <button type="button" (click)="toggleDropdown()" class="mr-10 text-white">
+        <i class="fas fa-user"></i> <!-- FontAwesome User Icon -->
+      </button>
+      <div class="relative" *ngIf="showDropdown" (mouseleave)="toggleDropdown()">
+        <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu"
+             aria-orientation="vertical" aria-labelledby="user-menu">
+          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+             routerLinkActive="isActive" *ngIf="isAuthenticated" (click)="onLogout()">
+            Logout
+          </a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Account Details</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Payment Method</a>
+        </div>
+      </div>
+
     </div>
+
   </div>
 </nav>

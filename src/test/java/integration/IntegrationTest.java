@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -51,9 +52,11 @@ public class IntegrationTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    private ApplicationEventPublisher publisher;
+
     AccessManagementFacade facadeSetUp() {
         return new AccessManagementFacade(userRepository, passwordEncoder,
-            verificationTokenRepository, passwordResetTokenRepository, emailSenderService, configAuthManager(), authTokenService);
+            verificationTokenRepository, passwordResetTokenRepository, emailSenderService, configAuthManager(), authTokenService, publisher);
     }
 
     AuthenticationManager configAuthManager() {

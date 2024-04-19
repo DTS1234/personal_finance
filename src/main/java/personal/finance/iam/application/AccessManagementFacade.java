@@ -1,6 +1,7 @@
 package personal.finance.iam.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -24,6 +25,7 @@ import personal.finance.iam.domain.UserInformation;
 import personal.finance.iam.domain.UserRepository;
 import personal.finance.iam.domain.VerificationToken;
 import personal.finance.iam.domain.VerificationTokenRepository;
+import personal.finance.iam.domain.event.UserRegistered;
 
 import java.util.UUID;
 
@@ -38,6 +40,7 @@ public class AccessManagementFacade {
     private final EmailSenderService emailSenderService;
     private final AuthenticationManager authenticationManager;
     private final AuthTokenService authTokenService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public UserRegistrationConfirmationDTO registerUser(UserRegistrationDTO registrationDto) {
         User newUser = new User();
@@ -72,7 +75,10 @@ public class AccessManagementFacade {
         if (verificationToken != null && !verificationToken.isExpired()) {
             User user = verificationToken.getUser();
             user.enable();
-            userRepository.save(user);
+            User saved = userRepository.save(user);
+            eventPublisher.publishEvent(new UserRegistered(this,
+                saved.getUserInformation().getEmail(),
+                saved.getId().value));
             return new UserRegistrationConfirmationDTO("User confirmed", RegistrationState.SUCCESS);
         } else {
             return new UserRegistrationConfirmationDTO("User confirmation failed", RegistrationState.FAILED);
