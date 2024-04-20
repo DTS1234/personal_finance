@@ -23,6 +23,7 @@ import personal.finance.summary.domain.SummaryState;
 import personal.finance.summary.infrastracture.persistance.repository.SummaryRepositorySql;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,6 @@ class StartupConfiguration {
     private personal.finance.iam.domain.UserRepository userRepositorySql;
     @Autowired
     private CurrencyManager currencyManager;
-
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -56,6 +56,10 @@ class StartupConfiguration {
             .password(encoder.encode("123"))
             .username("username")
             .email("user@gmail.com")
+            .firstname("Stefanos")
+            .lastname("Kozakos")
+            .gender("Male")
+            .birthdate(LocalDate.of(1999, 7, 11))
             .build());
 
         userRepositorySql.save(user);

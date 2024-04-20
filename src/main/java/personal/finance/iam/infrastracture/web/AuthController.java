@@ -55,10 +55,10 @@ public class AuthController {
     }
 
     private ResponseEntity<AuthResponseDTO> authenticate(String username, String password) {
-        AuthResponseDTO token = accessManagementFacade.login(username, password);
-        if (token != null) {
+        AuthResponseDTO authData = accessManagementFacade.login(username, password);
+        if (authData != null) {
             return ResponseEntity.ok().body(
-                new AuthResponseDTO(username, token.id(), token.token(), token.expiresIn())
+                new AuthResponseDTO(username, authData.id(), authData.token(), authData.expiresIn(), authData.userInformation())
             );
         } else {
             return ResponseEntity.status(401).build();

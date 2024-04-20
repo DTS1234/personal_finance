@@ -1,4 +1,14 @@
 {
   "message": "User confirmed",
-  "registrationState": "SUCCESS"
+  "registrationState": "SUCCESS",
+  "userInformation": {
+    "email": "new@gmail.com",
+    "username": "new@gmail.com",
+    "password": "$2a$12$vArfJ85nH8FRoxlcuLHonOEccQEsB8aGor3tJku6cFPsoxg7G.YUW",
+    "birthdate": [1999,7,7],
+    "gender": "Male",
+    "firstname": "Stefano",
+    "lastname": "Rodriguez",
+    "enabled": true
+  }
 }

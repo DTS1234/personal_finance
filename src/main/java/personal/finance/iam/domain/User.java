@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +13,13 @@ import lombok.Setter;
 import java.util.Objects;
 import java.util.Set;
 
+import static personal.finance.iam.domain.SubscriptionType.PREMIUM;
+
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 public class User {
-
 
     @EmbeddedId
     private UserId id;
@@ -28,13 +30,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VerificationToken> verificationTokens;
 
+    @OneToOne(optional = true)
+    private UserSubscription userSubscription;
+
     public User enable() {
-        this.setUserInformation(UserInformation.builder()
-            .enabled(true)
-            .password(this.userInformation.getPassword())
-            .username(this.userInformation.getUsername())
-            .email(this.userInformation.getEmail())
-            .build());
+        UserInformation enabled = this.getUserInformation().enable();
+        this.setUserInformation(enabled);
         return this;
     }
 
@@ -43,12 +44,8 @@ public class User {
     }
 
     public User changePassword(String encodedPassword) {
-        this.setUserInformation(UserInformation.builder()
-            .enabled(true)
-            .password(encodedPassword)
-            .username(this.userInformation.getUsername())
-            .email(this.userInformation.getEmail())
-            .build());
+        UserInformation newUserInfo = this.getUserInformation().changePassword(encodedPassword);
+        this.setUserInformation(newUserInfo);
         return this;
     }
 
@@ -67,5 +64,17 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static User create() {
+        User user = new User();
+        user.id = UserId.random();
+        return user;
+    }
+
+    public boolean isPremium() {
+        return this.userSubscription != null
+            && userSubscription.getSubscriptionType() == PREMIUM
+            && userSubscription.isActive();
     }
 }

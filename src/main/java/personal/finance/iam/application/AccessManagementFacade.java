@@ -46,6 +46,10 @@ public class AccessManagementFacade {
         User newUser = new User();
         newUser.setId(UserId.random());
         UserInformation userInformation = UserInformation.builder()
+            .birthdate(registrationDto.birthdate())
+            .firstname(registrationDto.firstname())
+            .lastname(registrationDto.lastname())
+            .gender(registrationDto.gender())
             .email(registrationDto.email())
             .username(registrationDto.email())
             .password(passwordEncoder.encode(registrationDto.password()))
@@ -67,21 +71,21 @@ public class AccessManagementFacade {
 
         return new UserRegistrationConfirmationDTO("User email address "
             + newUser.getUserInformation().getEmail() + " confirmation in progress.",
-            RegistrationState.IN_PROGRESS);
+            RegistrationState.IN_PROGRESS, userInformation);
     }
 
     public UserRegistrationConfirmationDTO confirmRegistration(String token) {
         VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken != null && !verificationToken.isExpired()) {
             User user = verificationToken.getUser();
-            user.enable();
+            user = user.enable();
             User saved = userRepository.save(user);
             eventPublisher.publishEvent(new UserRegistered(this,
                 saved.getUserInformation().getEmail(),
                 saved.getId().value));
-            return new UserRegistrationConfirmationDTO("User confirmed", RegistrationState.SUCCESS);
+            return new UserRegistrationConfirmationDTO("User confirmed", RegistrationState.SUCCESS, user.getUserInformation());
         } else {
-            return new UserRegistrationConfirmationDTO("User confirmation failed", RegistrationState.FAILED);
+            return new UserRegistrationConfirmationDTO("User confirmation failed", RegistrationState.FAILED, null);
         }
     }
 
@@ -93,7 +97,7 @@ public class AccessManagementFacade {
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 return new AuthResponseDTO(username, found.getId().value.toString(),
-                    authTokenService.token(authentication), "3600");
+                    authTokenService.token(authentication), "3600", found.getUserInformation());
             } else {
                 return null;
             }
@@ -145,8 +149,8 @@ public class AccessManagementFacade {
             throw new IllegalStateException("User email address is not confirmed.");
         }
 
-        user.changePassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        User userWithNewPassword = user.changePassword(passwordEncoder.encode(newPassword));
+        userRepository.save(userWithNewPassword);
 
         return new PasswordResetConfirmationDTO("Password changed successfully", PasswordResetState.SUCCESS);
     }

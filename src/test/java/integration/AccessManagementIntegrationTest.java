@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.application.AccessManagementFacade;
 import personal.finance.iam.application.dto.UserRegistrationDTO;
 
+import java.time.LocalDate;
+
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +25,8 @@ public class AccessManagementIntegrationTest extends IntegrationTest {
         // when
         String result = mockMvc.perform(MockMvcRequestBuilders.post("/registration")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new UserRegistrationDTO("new@gmail.com", "pass"))))
+                .content(objectMapper.writeValueAsString(
+                    new UserRegistrationDTO("new@gmail.com", "pass", LocalDate.of(1999, 7, 7), "Male", "Rodriguez", "Stefano"))))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andReturn().getResponse().getContentAsString();
@@ -31,13 +34,16 @@ public class AccessManagementIntegrationTest extends IntegrationTest {
         // then
         String expected = getFile("iam/should_register.json");
         assertThatJson(result)
+            .whenIgnoringPaths("userInformation.password")
             .isEqualTo(expected);
     }
 
     @Test
     public void shouldConfirmUserRegistration() throws Exception {
         // given
-        accessManagementFacade.registerUser(new UserRegistrationDTO("new@gmail.com", "pass"));
+        accessManagementFacade.registerUser(
+            new UserRegistrationDTO("new@gmail.com", "pass", LocalDate.of(1999, 7, 7), "Male", "Rodriguez", "Stefano")
+        );
         String verificationToken = getVerificationToken("new@gmail.com");
         // when
         String result = mockMvc.perform(MockMvcRequestBuilders.get("/registration/confirm?token="+verificationToken)
@@ -49,6 +55,7 @@ public class AccessManagementIntegrationTest extends IntegrationTest {
         // then
         String expected = getFile("iam/should_confirm.json");
         assertThatJson(result)
+            .whenIgnoringPaths("userInformation.password")
             .isEqualTo(expected);
     }
 }

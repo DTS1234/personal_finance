@@ -1,6 +1,8 @@
 
 package personal.finance.iam.application.dto;
 
-public record AuthResponseDTO(String username, String id, String token, String expiresIn) {
+import personal.finance.iam.domain.UserInformation;
+
+public record AuthResponseDTO(String username, String id, String token, String expiresIn, UserInformation userInformation) {
 
 }

@@ -29,13 +29,13 @@ public class SummaryQueryController {
     @PostMapping("/summaries")
     public Page<SummaryDTO> summaryQuery(
         @RequestBody SearchCriteria searchCriteria,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
+        @RequestParam(defaultValue = "0", name = "page") int page,
+        @RequestParam(defaultValue = "10", name = "size") int size) {
         return projection.query(searchCriteria, page, size);
     }
 
     @GetMapping("/{userId}/currency")
-    public String getCurrency(@PathVariable String userId) {
+    public String getCurrency(@PathVariable("userId") String userId) {
         return userRepository.getCurrency(UUID.fromString(userId)).name();
     }
 

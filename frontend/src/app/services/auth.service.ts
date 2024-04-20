@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {BehaviorSubject, Observable, throwError} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {BehaviorSubject, Observable} from "rxjs";
 import {User} from "../auth/user.model";
 import {tap} from "rxjs/operators";
 import {Router} from "@angular/router";
+import {UserSignUpRequest} from "../auth/sign-up/user-signup.model";
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +28,18 @@ export class AuthService {
       }))
   }
 
-  signUp(username: string, password: string): Observable<AuthResponseData> {
-    return this.http.post<AuthResponseData>(this.baseUrl + '/registration', {email: username, password: password});
+  signUp(user: UserSignUpRequest): Observable<SignUpResponseData> {
+    return this.http.post<SignUpResponseData>(this.baseUrl + '/registration', user);
   }
 
   private handleAuthentication(resData: AuthResponseData) {
     const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000)
-    const user = new User(resData.username, resData.id, resData.token, expirationDate)
+
+    let userInformation = resData.userInformation;
+    const user = new User(resData.username, resData.id, resData.token, expirationDate,
+      userInformation.firstname, userInformation.lastname,
+      userInformation.birthdate, userInformation.gender)
+
     this.user.next(user)
     this.autoLogout(+resData.expiresIn * 1000)
     localStorage.setItem("userData", JSON.stringify(user))
@@ -44,7 +50,11 @@ export class AuthService {
     if (!userData) {
       return;
     }
-    const loadedUser = new User(userData.username, userData.id, userData._token, new Date(userData._tokenExpirationDate))
+    const loadedUser = new User(userData.username, userData.id, userData._token, new Date(userData._tokenExpirationDate),
+      userData.firstname,
+      userData.lastname,
+      userData.birthdate,
+      userData.gender)
     if (loadedUser.token) {
       this.user.next(loadedUser);
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime()
@@ -52,27 +62,43 @@ export class AuthService {
     }
   }
 
-  logout(): void {
+  logout()
+    :
+    void {
     this.user.next(null)
     this.router.navigate(["/homepage"]);
     localStorage.removeItem("userData");
-    if (this.tokenExpirationTimer) {
+    if (this.tokenExpirationTimer
+    ) {
       clearTimeout(this.tokenExpirationTimer)
     }
     this.tokenExpirationTimer = null
   }
 
-  autoLogout(expirationDuration: number) {
+  autoLogout(expirationDuration
+               :
+               number
+  ) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration)
   }
 
-  requestPasswordReset(email: string): Observable<PasswordResetConfirmation> {
+  requestPasswordReset(email
+                         :
+                         string
+  ):
+    Observable<PasswordResetConfirmation> {
     return this.http.post<PasswordResetConfirmation>(this.baseUrl + '/password_reset/request', <PasswordResetRequest>{email: email})
   }
 
-  resetPassword(token: string, newPassword: string): Observable<PasswordResetConfirmation> {
+  resetPassword(token
+                  :
+                  string, newPassword
+                  :
+                  string
+  ):
+    Observable<PasswordResetConfirmation> {
     return this.http.post<PasswordResetConfirmation>(this.baseUrl + '/password_reset', <PasswordReset>{
       token: token,
       newPassword: newPassword
@@ -103,5 +129,12 @@ interface AuthResponseData {
   username: string,
   id: string,
   token: string,
-  expiresIn: string
+  expiresIn: string,
+  userInformation: UserSignUpRequest
+}
+
+interface SignUpResponseData {
+  username: string,
+  message: string,
+  userInformation: UserSignUpRequest
 }

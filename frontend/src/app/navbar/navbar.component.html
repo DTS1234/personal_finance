@@ -31,23 +31,8 @@
         Sign In
       </a>
     </div>
-    <!--    <div class="text-white">-->
-    <!--      <a class=""-->
-    <!--         *ngIf="isAuthenticated">Account</a>-->
-    <!--    </div>-->
 
     <div class="flex items-center relative" *ngIf="isAuthenticated">
-      <!--      <span class="text-sm text-white pr-4">Signed in as user</span>-->
-      <!--      <div class="dropdown inline-block relative">-->
-      <!--        <button class="text-white focus:outline-none focus:shadow-outline">-->
-      <!--          Account-->
-      <!--          <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>-->
-      <!--        </button>-->
-      <!--        <ul class="dropdown-menu absolute text-gray-700 pt-1">-->
-      <!--          <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="/account-details">Account Details</a></li>-->
-      <!--          <li class=""><a class="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" (click)="onLogout()">Sign Out</a></li>-->
-      <!--        </ul>-->
-      <!--      </div>-->
       <button type="button" (click)="toggleDropdown()" class="mr-10 text-white">
         <i class="fas fa-user"></i> <!-- FontAwesome User Icon -->
       </button>
@@ -58,7 +43,7 @@
              routerLinkActive="isActive" *ngIf="isAuthenticated" (click)="onLogout()">
             Logout
           </a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Account Details</a>
+          <a routerLink="/account" *ngIf="isAuthenticated" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Account Details</a>
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Payment Method</a>
         </div>
       </div>
