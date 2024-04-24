@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable} from "rxjs";
-import {User} from "../auth/user.model";
-import {tap} from "rxjs/operators";
+import {BehaviorSubject, Observable, of} from "rxjs";
+import {User} from "./user.model";
+import {catchError, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
-import {UserSignUpRequest} from "../auth/sign-up/user-signup.model";
+import {UserSignUpData} from "./sign-up/user-signup.model";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
+import {Subscription} from "../account/subscription.model";
+import {UserInformationData} from "./user-updata.model";
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +31,17 @@ export class AuthService {
       }))
   }
 
-  signUp(user: UserSignUpRequest): Observable<SignUpResponseData> {
+  signUp(user: UserSignUpData): Observable<SignUpResponseData> {
     return this.http.post<SignUpResponseData>(this.baseUrl + '/registration', user);
+  }
+
+  getSubscription(userId: string): Observable<Subscription> {
+    return this.http.get<Subscription>(this.baseUrl + `/${userId}/subscription`)
+      .pipe(
+        catchError(err => {
+          console.error('No subscription for user.', err);
+          return of(null); // Return null if there's an error or no subscription
+        }));
   }
 
   private handleAuthentication(resData: AuthResponseData) {
@@ -62,9 +74,7 @@ export class AuthService {
     }
   }
 
-  logout()
-    :
-    void {
+  logout(): void {
     this.user.next(null)
     this.router.navigate(["/homepage"]);
     localStorage.removeItem("userData");
@@ -75,36 +85,29 @@ export class AuthService {
     this.tokenExpirationTimer = null
   }
 
-  autoLogout(expirationDuration
-               :
-               number
-  ) {
+  autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration)
   }
 
-  requestPasswordReset(email
-                         :
-                         string
-  ):
-    Observable<PasswordResetConfirmation> {
+  requestPasswordReset(email: string): Observable<PasswordResetConfirmation> {
     return this.http.post<PasswordResetConfirmation>(this.baseUrl + '/password_reset/request', <PasswordResetRequest>{email: email})
   }
 
-  resetPassword(token
-                  :
-                  string, newPassword
-                  :
-                  string
-  ):
-    Observable<PasswordResetConfirmation> {
+  resetPassword(token: string, newPassword: string): Observable<PasswordResetConfirmation> {
     return this.http.post<PasswordResetConfirmation>(this.baseUrl + '/password_reset', <PasswordReset>{
       token: token,
       newPassword: newPassword
     })
   }
 
+  updateUserInfo(userInformation: UserInformationData): Observable<UserInformationData> {
+    let userData = JSON.parse(localStorage.getItem("userData"));
+    const userId = userData.id
+    console.log(userInformation)
+    return this.http.post<UserInformationData>(this.baseUrl + `/${userId}/update`, userInformation)
+  }
 }
 
 export interface PasswordResetConfirmation {
@@ -130,11 +133,11 @@ interface AuthResponseData {
   id: string,
   token: string,
   expiresIn: string,
-  userInformation: UserSignUpRequest
+  userInformation: UserSignUpData
 }
 
 interface SignUpResponseData {
   username: string,
   message: string,
-  userInformation: UserSignUpRequest
+  userInformation: UserSignUpData
 }

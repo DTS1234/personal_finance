@@ -51,6 +51,11 @@ public class AccessManagementConfiguration {
             authenticationManager, jwtService, applicationEventPublisher);
     }
 
+    public UserService userServiceTest() {
+        UserRepository userRepository = new InMemoryUserRepository().clear();
+        return new UserService(userRepository);
+    }
+
     public AccessManagementFacade accessManagementFacadeTest() {
         PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
         UserRepository userRepository = new InMemoryUserRepository().clear();

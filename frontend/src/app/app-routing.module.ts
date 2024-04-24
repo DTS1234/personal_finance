@@ -12,9 +12,11 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {PasswordResetComponent} from "./password/password-reset/password-reset.component";
 import {PasswordResetRequestComponent} from "./password/password-reset-request/password-reset-request.component";
 import {AuthGuardService} from "./services/auth-guard.service";
-import {PaymentComponent} from "./payment/payment.component";
+import {PaymentComponent} from "./subscription/payment/payment.component";
 import {SubscriptionComponent} from "./subscription/subscription.component";
 import {AccountComponent} from "./account/account.component";
+import {SuccessComponent} from "./subscription/success/success.component";
+import {BuyComponent} from "./subscription/buy/buy.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -49,10 +51,11 @@ const appRoutes: Routes = [
     path: 'password_reset/request', component: PasswordResetRequestComponent
   },
   {
-    path: 'payment', component: PaymentComponent
-  },
-  {
-    path: 'subscription', component: SubscriptionComponent
+    path: 'subscription', component: SubscriptionComponent, children: [
+      {path: "success", component: SuccessComponent},
+      {path: "buy", component: BuyComponent},
+      {path: "payment", component: PaymentComponent}
+    ]
   },
   {
     path: 'account', component: AccountComponent
@@ -61,7 +64,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(appRoutes, {}), CommonModule
+    RouterModule.forRoot(appRoutes, {enableTracing: true}), CommonModule
   ],
   exports: [RouterModule]
 })

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormsModule, NgForm} from "@angular/forms";
-import {AuthService} from "../../services/auth.service";
-import {UserSignUpRequest} from "./user-signup.model";
+import {AuthService} from "../auth.service";
+import {UserSignUpData} from "./user-signup.model";
 import {User} from "../user.model";
 
 @Component({
@@ -32,7 +32,7 @@ export class SignUpComponent {
     const birthdate= form.value.birthdate
     const gender = form.value.gender
 
-    this.auth.signUp(new UserSignUpRequest(username, password, birthdate, gender, lastname, firstname)).subscribe(
+    this.auth.signUp(new UserSignUpData(username, password, birthdate, gender, lastname, firstname)).subscribe(
       resData => {
         let userInformation = resData.userInformation;
         this.auth.user.next(new User(userInformation.email, "", "", new Date(),
@@ -42,6 +42,5 @@ export class SignUpComponent {
         this.error = error.error
       }
     );
-
   }
 }

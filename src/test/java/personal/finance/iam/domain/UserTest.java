@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static personal.finance.iam.domain.SubscriptionType.PREMIUM;
@@ -19,7 +19,7 @@ class UserTest {
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setSubscriptionType(PREMIUM);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         userSubscription.setStart(now.minusDays(1));
         userSubscription.setExpires(now.plusDays(1));
 
@@ -34,7 +34,7 @@ class UserTest {
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setSubscriptionType(PREMIUM);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         userSubscription.setStart(now.minusDays(2));
         userSubscription.setExpires(now.minusDays(1));
 
@@ -49,7 +49,7 @@ class UserTest {
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setSubscriptionType(PREMIUM);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         userSubscription.setStart(now.plusDays(1));
         userSubscription.setExpires(now.plusDays(31));
 

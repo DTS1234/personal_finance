@@ -4,6 +4,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -30,7 +32,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VerificationToken> verificationTokens;
 
-    @OneToOne(optional = true)
+    @OneToOne
     private UserSubscription userSubscription;
 
     public User enable() {
@@ -46,6 +48,11 @@ public class User {
     public User changePassword(String encodedPassword) {
         UserInformation newUserInfo = this.getUserInformation().changePassword(encodedPassword);
         this.setUserInformation(newUserInfo);
+        return this;
+    }
+
+    public User updateUserInfo(UserInformation userInformation) {
+        this.setUserInformation(userInformation);
         return this;
     }
 

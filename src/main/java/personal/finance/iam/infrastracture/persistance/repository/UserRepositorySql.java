@@ -3,6 +3,7 @@ package personal.finance.iam.infrastracture.persistance.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import personal.finance.iam.domain.User;
+import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserRepository;
 
 @RequiredArgsConstructor
@@ -26,5 +27,8 @@ public class UserRepositorySql implements UserRepository {
         repositoryJpa.deleteByUserInformationEmail(email);
     }
 
-
+    @Override
+    public User findById(UserId userId) {
+        return repositoryJpa.findById(userId).orElse(null);
+    }
 }

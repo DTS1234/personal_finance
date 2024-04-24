@@ -5,51 +5,89 @@
       <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">
         Firstname
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstName" type="text" placeholder="{{ user.firstname }}">
+      <input [disabled]="!isEditMode" [(ngModel)]="userModel.firstname" name="firstname"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstName"
+             type="text">
     </div>
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">
         Lastname
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lastName" type="text" placeholder="{{ user.lastname }}">
+      <input [disabled]="!isEditMode" [(ngModel)]="userModel.lastname" name="lastname"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lastName"
+             type="text">
     </div>
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
         Email
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="{{ user.username }}">
+      <input [disabled]="!isEditMode" name="email" [value]="userModel.username"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="email"
+             type="email">
     </div>
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="birthdate">
         Birthdate
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="birthdate" type="text" placeholder="{{ user.birthdate }}">
+      <input [disabled]="!isEditMode" [(ngModel)]="userModel.birthdate" name="birthdate"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+             id="birthdate" type="text">
     </div>
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">
         Gender
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="gender" type="text" placeholder="{{ user.gender }}">
+      <input [disabled]="!isEditMode" [(ngModel)]="userModel.gender" name="gender"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="gender"
+             type="text">
     </div>
+    <button *ngIf="!isEditMode" (click)="toggleEditMode()"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+      EDIT
+    </button>
+    <button *ngIf="isEditMode" (click)="updateUserInfo()"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+      SUBMIT
+    </button>
   </div>
 
   <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <h2 class="mb-6 text-2xl font-bold text-gray-700">Subscriptions Information</h2>
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="plan">
-        Subscription Plan
-      </label>
-      <select class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="plan">
-        <option>Basic</option>
-        <option>Premium</option>
-        <option>Enterprise</option>
-      </select>
+    <div *ngIf="subscription!=null">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+          Subscription Plan
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" disabled
+               id="status" type="text" placeholder="{{subscription.subscriptionType}}">
+      </div>
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
+          Start Date
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled
+               id="startDate" type="text" placeholder="{{subscription.start}}">
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="expires">
+          Expires
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled
+               id="expires" type="text" placeholder="{{subscription.expiresAt}}">
+      </div>
     </div>
-    <div class="mb-6">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
-        Subscription Status
-      </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="status" type="text" placeholder="Active" disabled>
+    <div *ngIf="subscription==null" class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+      <div class="flex-shrink-0">
+        <img class="h-12 w-12" src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Subscribe Icon">
+      </div>
+      <div>
+        <div class="text-xl font-medium text-black">No Subscription Found</div>
+        <p class="text-gray-500">You currently do not have a subscription. Subscribe now to gain full access.</p>
+        <button (click)="goToPayment()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Subscribe Now
+        </button>
+      </div>
     </div>
   </div>
 </div>

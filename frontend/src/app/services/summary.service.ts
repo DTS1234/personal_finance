@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Summary} from '../models/summary.model';
 import {Asset} from '../models/asset.model';
-import {AuthService} from "./auth.service";
+import {AuthService} from "../auth/auth.service";
 import {SearchCriteria} from "../models/search-criteria.model";
 
 

@@ -30,6 +30,11 @@ public class InMemoryUserRepository implements UserRepository {
         USERS.remove(findByEmail(email).getId().value);
     }
 
+    @Override
+    public User findById(UserId userId) {
+        return USERS.get(userId.value);
+    }
+
     public InMemoryUserRepository clear() {
         USERS.clear();
         return this;

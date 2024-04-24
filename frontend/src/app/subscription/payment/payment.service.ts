@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {Summary} from '../models/summary.model';
-import {SubscriptionRequest} from "../models/subscription-request.model";
-import {PaymentMethodSubmit} from "../models/payment-method-submit.model";
+import {Summary} from '../../models/summary.model';
+import {SubscriptionRequest} from "../../models/subscription-request.model";
+import {PaymentMethodSubmit} from "../../models/payment-method-submit.model";
 
 
 @Injectable({

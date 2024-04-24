@@ -83,7 +83,8 @@ public class AccessManagementFacade {
             eventPublisher.publishEvent(new UserRegistered(this,
                 saved.getUserInformation().getEmail(),
                 saved.getId().value));
-            return new UserRegistrationConfirmationDTO("User confirmed", RegistrationState.SUCCESS, user.getUserInformation());
+            return new UserRegistrationConfirmationDTO("User confirmed", RegistrationState.SUCCESS,
+                user.getUserInformation());
         } else {
             return new UserRegistrationConfirmationDTO("User confirmation failed", RegistrationState.FAILED, null);
         }

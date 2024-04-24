@@ -1,9 +1,25 @@
-<div class="container my-5">
-  <div class="card mx-auto" style="max-width: 400px;">
-    <div class="card-body">
-      <h5 class="card-title">Premium Wealth Tracker Subscription</h5>
-      <p class="card-text">Get access to premium wealth tracking features for only €10/month.</p>
-      <button class="btn btn-primary" (click)="purchaseSubscription()">Purchase Subscription</button>
+<div class="p-6 max-w-lg mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <div [class.highlight]="router.url.endsWith('/payment')" class="step">
+      <a>
+        <div class="step-number" [class.active]="router.url.endsWith('/payment')">1</div>
+        <div class="step-label">Payment</div>
+      </a>
+    </div>
+    <div [class.highlight]="router.url.endsWith('/buy')" class="step">
+      <a>
+        <div class="step-number" [class.active]="router.url.endsWith('/buy')">2</div>
+        <div class="step-label">Buy</div>
+      </a>
+    </div>
+    <div [class.highlight]="router.url.endsWith('/success')" class="step">
+      <a>
+        <div class="step-number" [class.active]="router.url.endsWith('/success')">3</div>
+        <div class="step-label">Success</div>
+      </a>
     </div>
   </div>
+
+  <!-- Router Outlet to render child components based on the active route -->
+  <router-outlet></router-outlet>
 </div>

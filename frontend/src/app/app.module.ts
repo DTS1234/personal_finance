@@ -29,6 +29,10 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatInputModule} from "@angular/material/input";
 import {SignUpComponent} from "./auth/sign-up/sign-up.component";
 import {LoginComponent} from "./auth/login/login.component";
+import {SuccessComponent} from "./subscription/success/success.component";
+import {SubscriptionComponent} from "./subscription/subscription.component";
+import {BuyComponent} from "./subscription/buy/buy.component";
+import {SpinnerComponent} from "./common/spinner/spinner.component";
 
 @NgModule({
   declarations: [
@@ -46,13 +50,16 @@ import {LoginComponent} from "./auth/login/login.component";
     AuthComponent,
     DashboardComponent,
     PasswordResetComponent,
-    PasswordResetRequestComponent
+    PasswordResetRequestComponent,
+    SubscriptionComponent,
+    SuccessComponent,
+    BuyComponent
   ],
-    imports: [
-        BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
-        BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
-        MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent
-    ],
+  imports: [
+    BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
+    BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
+    MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent, SpinnerComponent
+  ],
   providers: [DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi:true }],
   bootstrap: [AppComponent]
 })

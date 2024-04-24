@@ -5,6 +5,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,7 @@ public class StripeService {
     @Value("${stripe.api.key}")
     private String apiKey;
 
-    public String getPriceId() {
-        return priceId;
-    }
-
+    @Getter
     @Value("${stripe.price_id}")
     private String priceId;
 

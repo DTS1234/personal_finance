@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "./services/auth.service";
+import {AuthService} from "./auth/auth.service";
 import {CurrencyService} from "./services/currency.service";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("APP COMONENT ON INIT!!!!")
     this.auth.autoLogin();
     this.currencyService.fetchCurrencies().subscribe(
       data => console.log(data)

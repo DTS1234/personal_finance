@@ -1,4 +1,4 @@
-export class UserSignUpRequest {
+export class UserSignUpData {
 
   constructor(public email: string,
               public password: string,

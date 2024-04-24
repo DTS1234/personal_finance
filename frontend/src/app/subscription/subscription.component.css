@@ -1,0 +1,27 @@
+.step {
+  text-align: center;
+}
+
+.step-number {
+  display: block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  background-color: #ddd;
+  color: black;
+  margin-bottom: 4px;
+}
+
+.step-number.active {
+  background-color: blue;
+  color: white;
+}
+
+.step-label {
+  font-size: 14px;
+}
+
+.highlight {
+  font-weight: bold;
+}

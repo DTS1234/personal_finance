@@ -5,9 +5,12 @@ import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import personal.finance.iam.domain.SubscriptionType;
 import personal.finance.payment.domain.CustomerId;
 import personal.finance.payment.domain.CustomerRepository;
+import personal.finance.payment.domain.events.SubscriptionCreated;
 import personal.finance.payment.infrastracture.external.StripeService;
 
 import java.util.UUID;
@@ -19,6 +22,7 @@ public class PaymentService {
 
     private final CustomerRepository customerRepository;
     private final StripeService stripeService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public personal.finance.payment.domain.Customer submitPaymentMethod(String userId, String token) {
         personal.finance.payment.domain.Customer customerFound = customerRepository.findById(
@@ -47,7 +51,10 @@ public class PaymentService {
         }
 
         try {
-            return stripeService.createSubscription(customerFound.getCustomerStripeId(), stripeService.getPriceId());
+            Subscription subscription = stripeService.createSubscription(customerFound.getCustomerStripeId(),
+                stripeService.getPriceId());
+            applicationEventPublisher.publishEvent(new SubscriptionCreated(this, SubscriptionType.PREMIUM, UUID.fromString(userId)));
+            return subscription;
         } catch (Exception e) {
             String message = "Failed to create a subscription for " + customerFound;
             log.error(message);

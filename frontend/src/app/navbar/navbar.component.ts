@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../auth/auth.service";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {CurrencyService} from "../services/currency.service";

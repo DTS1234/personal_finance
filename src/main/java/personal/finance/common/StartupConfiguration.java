@@ -5,9 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import personal.finance.iam.domain.SubscriptionType;
 import personal.finance.iam.domain.User;
 import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserInformation;
+import personal.finance.iam.domain.UserSubscription;
+import personal.finance.iam.domain.UserSubscriptionId;
+import personal.finance.iam.query.UserSubscriptionQueryRepository;
 import personal.finance.payment.domain.Customer;
 import personal.finance.payment.domain.CustomerId;
 import personal.finance.payment.domain.CustomerRepository;
@@ -45,7 +49,7 @@ class StartupConfiguration {
 
     @Bean
     @Transactional
-    public Object init() throws Exception {
+    public Object init(UserSubscriptionQueryRepository userSubscriptionQueryRepository) throws Exception {
         currencyManager.updateExchangeRates();
 
         User user = new User();
@@ -62,6 +66,17 @@ class StartupConfiguration {
             .birthdate(LocalDate.of(1999, 7, 11))
             .build());
 
+        userRepositorySql.save(user);
+
+        UserSubscription userSubscription = new UserSubscription();
+        userSubscription.setUserSubscriptionId(UserSubscriptionId.random());
+        userSubscription.setSubscriptionType(SubscriptionType.PREMIUM);
+        userSubscription.setExpires(LocalDate.of(2024,4, 30));
+        userSubscription.setStart(LocalDate.of(2024, 4, 20));
+        userSubscription.setUser(user);
+        userSubscriptionQueryRepository.save(userSubscription);
+
+        user.setUserSubscription(userSubscription);
         userRepositorySql.save(user);
 
         User user2 = new User();

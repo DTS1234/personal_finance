@@ -8,4 +8,6 @@ public interface UserRepository {
 
     void deleteByEmail(String email);
 
+    User findById(UserId userId);
+
 }
