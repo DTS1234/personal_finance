@@ -19,8 +19,14 @@ public class StockApiProvider {
     public List<StockData> fetchForPeriod(LocalDate from, LocalDate to, String exchange, String ticker) {
         RestTemplate restTemplate = new RestTemplate();
         String query = BASE_URL + ticker + "." + exchange + "?from=" + from + "&to=" + to + "&period=d&api_token=" + API_KEY + "&fmt=json";
-        System.out.println(query);
         ResponseEntity<StockData[]> forEntity = restTemplate.getForEntity(query, StockData[].class);
+        return List.of(forEntity.getBody());
+    }
+
+    public List<ExchangeData> fetchExchangeList() {
+        String query = "https://eodhd.com/api/exchanges-list/?api_token=658aef2bda56c7.96723277&fmt=json";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<ExchangeData[]> forEntity = restTemplate.getForEntity(query, ExchangeData[].class);
         return List.of(forEntity.getBody());
     }
 
