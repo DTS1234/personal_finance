@@ -51,7 +51,7 @@ export class AccountComponent {
   }
 
   updateUserInfo() {
-    this.authService.updateUserInfo(new UserInformationData(this.userModel.username, new Date(this.userForm.birthdate), this.userModel.gender, this.userForm.lastname, this.userForm.firstname))
+    this.authService.updateUserInfo(new UserInformationData(this.userModel.username, new Date(this.userModel.birthdate), this.userModel.gender, this.userModel.lastname, this.userModel.firstname))
       .subscribe(userData => {
         this.authService.user.next(this.userModel)
         this.toggleEditMode()

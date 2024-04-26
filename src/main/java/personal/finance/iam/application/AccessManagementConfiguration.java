@@ -26,12 +26,16 @@ public class AccessManagementConfiguration {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Autowired
     UserRepositorySql userRepository;
+
     @Autowired
     VerificationTokenRepository verificationTokenRepository;
+
     @Autowired
     PasswordResetTokenRepository passwordResetTokenRepository;
+
     @Autowired
     EmailSenderServiceImpl emailSenderService;
 

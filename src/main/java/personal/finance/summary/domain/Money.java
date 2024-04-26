@@ -66,7 +66,14 @@ public class Money {
     public Money multiplyBy(BigDecimal multiplier) {
         return new Money(moneyValue.multiply(multiplier), currency);
     }
-    
+
+    public Money divideBy(BigDecimal divisor) {
+        return new Money(moneyValue.divide(divisor, 4, RoundingMode.HALF_EVEN), currency);
+    }
+
+    public Money divideBy(double divisor) {
+        return new Money(moneyValue.divide(BigDecimal.valueOf(divisor), RoundingMode.HALF_UP), currency);
+    }
 
     public boolean greaterThan(Money other) {
         return moneyValue.compareTo(other.moneyValue) > 0;
