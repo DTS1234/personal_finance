@@ -1,13 +1,25 @@
-<div class="row m-3">
-  <div *ngFor="let summary of summaries" class="col">
-    <app-summary-box [summary]="summary" [rate]="rate"></app-summary-box>
-  </div>
-</div>
-<hr/>
-<h4>Current assets:</h4>
-<div class="row m-3">
-  <div *ngFor="let assetEntity of assets" class="col">
-    <app-asset-box [asset]="assetEntity" [rate]="rate"></app-asset-box>
+<!-- Adding a container for padding and centering the content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-5">
+  <!-- Section for Summaries with improved spacing and border -->
+  <div class="mt-6 bg-white shadow-sm rounded-lg p-4 divide-y divide-gray-200">
+    <h4 class="text-lg font-semibold mb-4">Summaries</h4>
+    <div class="flex flex-wrap -mx-2">
+      <div *ngFor="let summary of summaries" class="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+        <app-summary-box [summary]="summary" [rate]="rate" class="h-full"></app-summary-box>
+      </div>
+    </div>
   </div>
 
+  <!-- Horizontal rule to separate sections -->
+  <hr class="my-6"/>
+
+  <!-- Section for Assets with similar styling -->
+  <div class="bg-white shadow-sm rounded-lg p-4 divide-y divide-gray-200">
+    <h4 class="text-lg font-semibold mb-4">Current assets:</h4>
+    <div class="flex flex-wrap -mx-2">
+      <div *ngFor="let assetEntity of assets" class="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+        <app-asset-box [asset]="assetEntity" [rate]="rate" class="h-full"></app-asset-box>
+      </div>
+    </div>
+  </div>
 </div>

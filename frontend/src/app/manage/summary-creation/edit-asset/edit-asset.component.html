@@ -1,40 +1,46 @@
-<form [formGroup]="assetForm" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" class="form-control" id="name" formControlName="name">
-    <div *ngIf="assetForm.controls.name.touched && assetForm.controls.name.errors?.required" class="text-danger">
+<form [formGroup]="assetForm" (ngSubmit)="onSubmit()" class="space-y-4">
+  <div>
+    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+    <input type="text" id="name" formControlName="name"
+           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    <div *ngIf="assetForm.controls.name.touched && assetForm.controls.name.errors?.required" class="text-red-500 text-xs mt-1">
       Name is required.
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="money">Money Value</label>
-    <input type="number" class="form-control" id="money" formControlName="money">
-    <div *ngIf="assetForm.controls.money.touched && assetForm.controls.money.errors?.required" class="text-danger">
+  <div>
+    <label for="money" class="block text-sm font-medium text-gray-700">Money Value</label>
+    <input type="number" id="money" formControlName="money"
+           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    <div *ngIf="assetForm.controls.money.touched && assetForm.controls.money.errors?.required" class="text-red-500 text-xs mt-1">
       Money Value is required.
     </div>
   </div>
 
   <div formArrayName="items">
     <div *ngFor="let itemEntity of assetForm.get('items')['controls']; let i=index" [formGroupName]="i">
-      <div class="form-group">
-        <label for="itemName{{i}}">Item Name</label>
-        <input type="text" class="form-control" id="itemName{{i}}" formControlName="name">
+      <div>
+        <label for="itemName{{i}}" class="block text-sm font-medium text-gray-700">Item Name</label>
+        <input type="text" id="itemName{{i}}" formControlName="name"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
       </div>
 
-      <div class="form-group">
-        <label for="itemMoneyValue{{i}}">Item Money Value</label>
-        <input type="number" class="form-control" id="itemMoneyValue{{i}}" formControlName="money">
+      <div>
+        <label for="itemMoneyValue{{i}}" class="block text-sm font-medium text-gray-700">Item Money Value</label>
+        <input type="number" id="itemMoneyValue{{i}}" formControlName="money"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
       </div>
 
-      <div class="form-group">
-        <label for="itemQuantity{{i}}">Item Quantity</label>
-        <input type="number" class="form-control" id="itemQuantity{{i}}" formControlName="quantity">
+      <div>
+        <label for="itemQuantity{{i}}" class="block text-sm font-medium text-gray-700">Item Quantity</label>
+        <input type="number" id="itemQuantity{{i}}" formControlName="quantity"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
       </div>
     </div>
   </div>
 
-  <button type="button" (click)="addItem()">Add Item</button>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <div class="flex space-x-4">
+    <button type="button" (click)="addItem()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Add Item</button>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+  </div>
 </form>

@@ -1,6 +1,8 @@
-<div class="card shadow-sm" style="width: 180px;height: 150px">
-  <div class="card-body">
-    <p>Summary {{ summary.date }}</p>
-    <p>{{ (summary.money / this.rate).toFixed(2) + " " + this.currency }}</p>
+<div class="w-45 h-37 bg-white rounded-lg shadow-sm flex flex-col justify-between p-4">
+  <div>
+    <p class="text-sm font-medium text-gray-700">Summary {{ summary.date }}</p>
+  </div>
+  <div>
+    <p class="text-lg font-semibold text-gray-900">{{ (summary.money / this.rate).toFixed(2) + " " + this.currency }}</p>
   </div>
 </div>

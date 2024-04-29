@@ -1,18 +1,10 @@
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <div class="row">
-        <div class="col">
-          <h6>{{asset.name}}</h6>
-        </div>
-        <div class="col"></div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <p><b>{{(asset.money / this.rate).toFixed(2) + ' ' + this.currency}}</b></p>
-        </div>
-        <div class="col">
-          <button class="btn-primary btn-block" (click)="onClick()">Details</button>
-        </div>
-      </div>
-    </div>
+<div class="bg-white shadow-sm rounded-lg p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h6 class="text-sm font-semibold text-gray-800">{{ asset.name }}</h6>
+    <div> <!-- Intentionally left empty for alignment purposes --> </div>
   </div>
+  <div class="flex justify-between items-center">
+    <p class="font-bold text-gray-900">{{ (asset.money / this.rate).toFixed(2) + ' ' + this.currency }}</p>
+    <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" (click)="onClick()">Details</button>
+  </div>
+</div>

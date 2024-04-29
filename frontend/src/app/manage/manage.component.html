@@ -1,48 +1,46 @@
-<h4>Current assets:</h4>
-<div class="bg-secondary p-5">
-  <div class="row" style="background: #FFFFFF">
-
-    <table class="table table-bordered">
-      <thead>
+<h4 class="text-lg font-bold mb-4">Current assets:</h4>
+<div class="bg-gray-200 p-5 rounded-lg">
+  <div class="bg-white p-4 rounded shadow">
+    <table class="min-w-full divide-y divide-gray-300">
+      <thead class="bg-gray-50">
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Asset</th>
-        <th scope="col">Value</th>
-        <th scope="col">No. of Items</th>
-        <th scope="col">Percentage</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. of Items</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-white divide-y divide-gray-200">
       <tr *ngFor="let assetEntity of assets; let i = index">
-        <th scope="row">{{ i + 1}}</th>
-        <td>{{ assetEntity.name}}</td>
-        <td>{{ (assetEntity.money / this.rate).toFixed(2) + " " + this.currency}}</td>
-        <td>{{ assetEntity.items.length }}</td>
-        <td>{{ percentages[i] | percent }}</td>
+        <th scope="row" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ i + 1 }}</th>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ assetEntity.name }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ (assetEntity.money / this.rate).toFixed(2) + " " + this.currency }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ assetEntity.items.length }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ percentages[i] | percent }}</td>
       </tr>
       <tr>
-        <th scope="row">{{assets.length + 1}}</th>
-        <td><strong>SUM</strong></td>
-        <td><strong>{{(sum / this.rate).toFixed(2) + " " + this.currency}}</strong></td>
-        <td><strong>{{numberOfItems}}</strong></td>
-        <td><strong>100.00%</strong></td>
+        <th scope="row" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ assets.length + 1 }}</th>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">SUM</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">{{ (sum / this.rate).toFixed(2) + " " + this.currency }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">{{ numberOfItems }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">100.00%</td>
       </tr>
       </tbody>
     </table>
-
   </div>
 </div>
 
 <div class="my-2">
-  <button class="btn btn-secondary btn-lg btn-block mb-2" role="button"
-          [disabled]="inSummaryCreation"
-          (click)="createNewSummary()">
+  <button
+    class="bg-gray-700 text-white text-lg px-4 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 shadow-lg block w-full mb-2"
+    [disabled]="inSummaryCreation"
+    (click)="createNewSummary()">
     CREATE NEW SUMMARY
   </button>
-  <button class="btn btn-secondary btn-lg btn-block mb-2" role="button"
-          *ngIf="inSummaryCreation == true"
+  <button *ngIf="inSummaryCreation == true"
+          class="bg-gray-700 text-white text-lg px-4 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 shadow-lg block w-full mb-2"
           (click)="continueCreation()">
     CONTINUE CREATING SUMMARY
   </button>
 </div>
-

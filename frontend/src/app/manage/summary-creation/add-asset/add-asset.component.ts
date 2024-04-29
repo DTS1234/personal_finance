@@ -115,4 +115,8 @@ export class AddAssetComponent implements OnInit {
     });
     this.assetForm.get('money').setValue(totalValue);
   }
+
+  cancelSummary() {
+
+  }
 }

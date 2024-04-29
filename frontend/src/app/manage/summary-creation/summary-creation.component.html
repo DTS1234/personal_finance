@@ -1,48 +1,50 @@
-<div class="row">
-  <h4 class="m-4">Available assets:</h4>
-  <table class="table table-bordered ml-4 mr-4">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Asset</th>
-      <th scope="col">Value</th>
-      <th scope="col">No. of Items</th>
-      <th scope="col">Edit</th>
-      <th scope="col">Remove</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let asset of availableAssets; let i = index">
-      <th scope="row">{{ i + 1 }}</th>
-      <td>{{ asset.name}}</td>
-      <td>{{ (asset.money / this.rate).toFixed(2) + " " + this.currency }}</td>
-      <td>{{ asset.items.length }}</td>
-      <td>
-        <button (click)="edit(i)">Edit</button>
-      </td>
-      <td>
-        <button (click)="removeAsset(i)">Remove</button>
-      </td>
-    </tr>
-
-    <tr *ngFor="let assetEntityEntity of newAssets; let i = index" style="background: green">
-      <th scope="row">{{ assetEntityEntity.id }}</th>
-      <td>{{ assetEntityEntity.name}}</td>
-      <td>{{ (assetEntityEntity.money / this.rate).toFixed(2) }}</td>
-      <td>{{ assetEntityEntity.items.length }}</td>
-      <td>
-        <button>Edit</button>
-      </td>
-      <td>
-        <button (click)="removeAsset(i)">Remove</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+<div class="flex flex-col">
+  <h4 class="mx-4 mt-4 mb-2 text-lg font-semibold text-gray-800">Available assets:</h4>
+  <div class="overflow-x-auto mx-4">
+    <table class="min-w-full divide-y divide-gray-300">
+      <thead class="bg-gray-50">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. of Items</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remove</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let asset of availableAssets; let i = index">
+        <th scope="row" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ i + 1 }}</th>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asset.name }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ (asset.money / this.rate).toFixed(2) + " " + this.currency }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ asset.items.length }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <button class="text-blue-500 hover:text-blue-700" (click)="edit(i)">Edit</button>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <button class="text-red-500 hover:text-red-700" (click)="removeAsset(i)">Remove</button>
+        </td>
+      </tr>
+      <!-- Green row for new assets -->
+      <tr *ngFor="let assetEntityEntity of newAssets; let i = index" class="bg-green-500">
+        <th scope="row" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{{ assetEntityEntity.id }}</th>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ assetEntityEntity.name }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ (assetEntityEntity.money / this.rate).toFixed(2) }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ assetEntityEntity.items.length }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <button class="text-white">Edit</button>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <button class="text-white" (click)="removeAsset(i)">Remove</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<div class="m-2">
-  <button (click)="confirmSummary()" class="btn btn-primary mx-1">SUBMIT SUMMARY</button>
-  <button (click)="addAssetPage()" class="btn btn-secondary mx-1">ADD ASSET</button>
-  <button (click)="cancelSummary()" class="btn btn-danger mx-1">CANCEL</button>
+<div class="flex space-x-2 m-2">
+  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="confirmSummary()">SUBMIT SUMMARY</button>
+  <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" (click)="addAssetPage()">ADD ASSET</button>
+  <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="cancelSummary()">CANCEL</button>
 </div>
