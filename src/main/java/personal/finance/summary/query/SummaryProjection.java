@@ -1,4 +1,4 @@
-package personal.finance.summary.application.query;
+package personal.finance.summary.query;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

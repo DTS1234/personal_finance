@@ -1,6 +1,49 @@
 package personal.finance.summary.infrastracture.external;
 
-public record ExchangeData(String Name, String Code, String OperatingMIC, String Country, String Currency,
-                           String CountryISO2, String CountryISO3) {
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.Set;
+import java.util.UUID;
+
+@Entity
+@NoArgsConstructor
+public class ExchangeData {
+
+    @Setter
+    @Id
+    @Getter
+    private UUID id;
+    public String Name;
+    @JsonProperty("Code")
+    public String code;
+    public String OperatingMIC;
+    public String Country;
+    public String Currency;
+    public String CountryISO2;
+    public String CountryISO3;
+
+    public ExchangeData(String name, String code, String operatingMIC, String country, String currency,
+        String countryISO2, String countryISO3) {
+        this.id = UUID.randomUUID();
+        Name = name;
+        this.code = code;
+        OperatingMIC = operatingMIC;
+        Country = country;
+        Currency = currency;
+        CountryISO2 = countryISO2;
+        CountryISO3 = countryISO3;
+    }
+
+    @OneToMany
+    @JsonIgnore
+    public Set<TickerData> tickers;
 }

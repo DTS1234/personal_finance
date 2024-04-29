@@ -1,4 +1,4 @@
-package personal.finance.summary.infrastracture.web;
+package personal.finance.summary.query;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,8 +13,6 @@ import personal.finance.summary.application.CurrencyManager;
 import personal.finance.summary.application.dto.CurrenciesDTO;
 import personal.finance.summary.domain.UserRepository;
 import personal.finance.summary.application.dto.SummaryDTO;
-import personal.finance.summary.application.query.SearchCriteria;
-import personal.finance.summary.application.query.SummaryProjection;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package personal.finance.summary.application.query;
+package personal.finance.summary.query;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
