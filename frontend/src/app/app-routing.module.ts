@@ -17,6 +17,9 @@ import {SubscriptionComponent} from "./subscription/subscription.component";
 import {AccountComponent} from "./account/account.component";
 import {SuccessComponent} from "./subscription/success/success.component";
 import {BuyComponent} from "./subscription/buy/buy.component";
+import {ExplorerComponent} from "./explorer/explorer.component";
+import {SubscriptionGuardService} from "./auth/subscription-guard.service";
+import {NoSubscriptionComponent} from "./auth/no-subscription/no-subscription.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -55,10 +58,16 @@ const appRoutes: Routes = [
       {path: "success", component: SuccessComponent},
       {path: "buy", component: BuyComponent},
       {path: "payment", component: PaymentComponent}
-    ]
+    ], canActivate: [AuthGuardService]
   },
   {
     path: 'account', component: AccountComponent
+  },
+  {
+    path: 'explorer', component: ExplorerComponent, canActivate: [AuthGuardService, SubscriptionGuardService]
+  },
+  {
+    path: 'get-subscription', component: NoSubscriptionComponent
   }
 ];
 

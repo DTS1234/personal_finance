@@ -23,6 +23,10 @@
         History
       </a>
       <a class="mr-10"
+         routerLinkActive="isActive" routerLink="/explorer" *ngIf="isAuthenticated">
+        Explorer
+      </a>
+      <a class="mr-10"
          routerLinkActive="isActive" routerLink="/manage" *ngIf="isAuthenticated">
         Manage
       </a>

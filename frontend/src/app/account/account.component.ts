@@ -22,14 +22,6 @@ export class AccountComponent {
   protected userModel: User;
   protected subscription: Subscription | null = null;
   protected isEditMode = false;
-
-  userForm = {
-    firstname: '',
-    lastname: '',
-    birthdate: '',
-    gender: ''
-  };
-
   constructor(private authService: AuthService, public router: Router) {
     authService.user.subscribe(user => {
         console.log("user loaded: " + JSON.stringify(user))
@@ -38,7 +30,7 @@ export class AccountComponent {
     )
     authService.getSubscription(this.userModel.id).subscribe(it => {
       this.subscription = it
-      console.log(this.subscription)
+      this.authService.subscription.next(it)
     });
   }
 

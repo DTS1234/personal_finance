@@ -16,6 +16,7 @@ export class AuthService {
 
   authenticated = false;
   user = new BehaviorSubject<User>(null)
+  subscription:BehaviorSubject<Subscription> = new BehaviorSubject<Subscription>(null)
   token: string | null = null
   private tokenExpirationTimer: any;
 
