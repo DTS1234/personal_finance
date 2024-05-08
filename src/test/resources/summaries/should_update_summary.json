@@ -7,10 +7,11 @@
   "currency": "EUR",
   "assets": [
     {
-      "id": "IGNOE",
+      "id": "IGNORED",
       "money": 0.00,
       "name": "new Asset",
-      "items": []
+      "items": [],
+      "assetType": "NORMAL"
     }
   ]
 }

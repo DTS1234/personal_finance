@@ -81,7 +81,8 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
             new Asset(AssetId.random(),
                 a.getMoney(),
                 a.getName(),
-                getNewItemsForAsset(a)
+                getNewItemsForAsset(a),
+                a.getType()
             )
         ).collect(Collectors.toList());
     }

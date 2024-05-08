@@ -1,4 +1,4 @@
-create table asset_entity (money_value numeric(38,2), id uuid not null, name varchar(255), primary key (id));
+create table asset_entity (money_value numeric(38,2), type tinyint check (type between 0 and 1), id uuid not null, name varchar(255), primary key (id));
 create table asset_entity_item_entities (asset_entity_id uuid not null, item_entities_id uuid not null unique);
 create table customer (customer_id uuid not null, customer_stripe_id varchar(255), email varchar(255) not null, payment_method_id varchar(255), primary key (customer_id));
 create table exchange_data (id uuid not null, code varchar(255), country varchar(255), countryiso2 varchar(255), countryiso3 varchar(255), currency varchar(255), name varchar(255), operatingmic varchar(255), primary key (id));

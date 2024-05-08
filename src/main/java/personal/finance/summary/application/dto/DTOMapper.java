@@ -2,6 +2,7 @@ package personal.finance.summary.application.dto;
 
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
+import personal.finance.summary.domain.AssetType;
 import personal.finance.summary.domain.Currency;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
@@ -50,7 +51,8 @@ public class DTOMapper {
             getId(a),
             a.getMoney().getMoneyValue(),
             itemsDto(a),
-            a.getName())).collect(Collectors.toList());
+            a.getName(),
+            a.getType())).collect(Collectors.toList());
     }
 
     private static List<AssetDTO> assetsDto(SummaryEntity summary) {
@@ -58,7 +60,8 @@ public class DTOMapper {
             a.getId(),
             a.getMoneyValue(),
             itemsDto(a),
-            a.getName())).collect(Collectors.toList());
+            a.getName(),
+            a.getType())).collect(Collectors.toList());
     }
 
     private static UUID getId(Asset a) {
@@ -105,7 +108,7 @@ public class DTOMapper {
     private static List<Asset> mapAssets(SummaryDTO summaryDTO) {
         return summaryDTO.assets.stream()
             .map(a -> new Asset(
-                getOrCreateId(a), new Money(a.money, summaryDTO.currency), a.name, mapItems(a, summaryDTO.currency)))
+                getOrCreateId(a), new Money(a.money, summaryDTO.currency), a.name, mapItems(a, summaryDTO.currency), AssetType.NORMAL))
             .collect(Collectors.toList());
     }
 

@@ -3,6 +3,7 @@ package personal.finance.summary.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
@@ -25,9 +26,19 @@ public class Asset {
     }
 
     private AssetId id;
+    @Setter
     private Money money;
     private String name;
     private List<Item> items;
+    private AssetType type;
+
+    public Asset(AssetId id, Money money, String name, List<Item> items) {
+        this.id = id;
+        this.money = money;
+        this.name = name;
+        this.items = items;
+        this.type = AssetType.NORMAL;
+    }
 
     public List<Item> getItems() {
         if (this.items == null) {
@@ -51,10 +62,6 @@ public class Asset {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
-
-    public void setMoney(Money newMoney) {
-        this.money = newMoney;
     }
 
     public UUID getIdValue() {

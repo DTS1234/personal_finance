@@ -77,7 +77,7 @@ class DomainModelMapper {
     }
 
     AssetEntity map(Asset asset) {
-        return new AssetEntity(getIdValue(asset), asset.getMoney().getMoneyValue(), asset.getName(), mapItems(asset));
+        return new AssetEntity(getIdValue(asset), asset.getMoney().getMoneyValue(), asset.getName(), mapItems(asset), asset.getType());
     }
 
     private List<ItemEntity> mapItems(Asset asset) {

@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import personal.finance.summary.domain.AssetType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,6 +37,7 @@ public class AssetEntity {
     private String name;
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<ItemEntity> itemEntities;
+    private AssetType type;
 
     @Override
     public boolean equals(Object o) {

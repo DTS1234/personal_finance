@@ -2,6 +2,7 @@ package personal.finance;
 
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
+import personal.finance.summary.domain.AssetType;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
@@ -31,6 +32,7 @@ public class GivenAssets {
                     Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00))).build(),
                     Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.31))).build()
                 ))
+                .type(AssetType.NORMAL)
                 .buildAsset(),
             Asset.builder()
                 .id(assetIdTwo)
@@ -41,6 +43,7 @@ public class GivenAssets {
                     Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.01))).build(),
                     Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(1000.11))).build()
                 ))
+                .type(AssetType.NORMAL)
                 .buildAsset(),
             Asset.builder()
                 .id(assetIdThree)
@@ -50,6 +53,7 @@ public class GivenAssets {
                     Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20))).build(),
                     Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04))).build()
                 ))
+                .type(AssetType.NORMAL)
                 .buildAsset());
         // sum of values : 2000.43 + 2201.24 = 4201.67
         // percentages: 11,91 %, 35,70%, 52,39%
@@ -68,7 +72,9 @@ public class GivenAssets {
             .money(new Money(BigDecimal.valueOf(10, 0)))
             .items(new ArrayList<>(
                 List.of(testItemOne)
-            )).buildAsset();
+            ))
+            .type(AssetType.NORMAL)
+            .buildAsset();
     }
 
 }

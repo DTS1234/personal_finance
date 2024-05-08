@@ -9,6 +9,7 @@ import personal.finance.summary.application.dto.DTOMapper;
 import personal.finance.summary.application.exceptions.NoSummaryInDraftException;
 import personal.finance.summary.domain.Asset;
 import personal.finance.summary.domain.AssetId;
+import personal.finance.summary.domain.AssetType;
 import personal.finance.summary.domain.Item;
 import personal.finance.summary.domain.ItemId;
 import personal.finance.summary.domain.Money;
@@ -19,7 +20,6 @@ import personal.finance.summary.infrastracture.external.CurrencyFakeProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -133,6 +133,7 @@ public class SummarySpecTest {
                                     .id(ItemId.random())
                                     .build()
                             ))
+                            .type(AssetType.NORMAL)
                             .buildAsset())
                     )
                     .state(SummaryState.DRAFT)
