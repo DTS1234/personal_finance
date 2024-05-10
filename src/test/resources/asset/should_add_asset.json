@@ -1,0 +1,15 @@
+{
+  "id": "IGNORED",
+  "money": 5.00,
+  "name": "Asset 1",
+  "items": [
+    {
+      "id": "IGNORED",
+      "money": 5.00,
+      "name": "Item 1",
+      "quantity": 1
+    }
+  ],
+  "assetType": "NORMAL",
+  "summaryId": "IGNORED"
+}

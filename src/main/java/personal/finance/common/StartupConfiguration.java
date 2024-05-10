@@ -15,16 +15,16 @@ import personal.finance.iam.query.UserSubscriptionQueryRepository;
 import personal.finance.payment.domain.Customer;
 import personal.finance.payment.domain.CustomerId;
 import personal.finance.payment.domain.CustomerRepository;
-import personal.finance.summary.application.CurrencyManager;
-import personal.finance.summary.domain.Asset;
-import personal.finance.summary.domain.AssetId;
-import personal.finance.summary.domain.Item;
-import personal.finance.summary.domain.ItemId;
-import personal.finance.summary.domain.Money;
-import personal.finance.summary.domain.Summary;
-import personal.finance.summary.domain.SummaryId;
-import personal.finance.summary.domain.SummaryState;
-import personal.finance.summary.infrastracture.persistance.repository.SummaryRepositorySql;
+import personal.finance.tracking.summary.application.CurrencyManager;
+import personal.finance.tracking.asset.domain.Asset;
+import personal.finance.tracking.asset.domain.AssetId;
+import personal.finance.tracking.asset.domain.Item;
+import personal.finance.tracking.asset.domain.ItemId;
+import personal.finance.tracking.summary.domain.Money;
+import personal.finance.tracking.summary.domain.Summary;
+import personal.finance.tracking.summary.domain.SummaryId;
+import personal.finance.tracking.summary.domain.SummaryState;
+import personal.finance.tracking.summary.infrastracture.persistance.repository.SummaryRepositorySql;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -45,7 +45,6 @@ class StartupConfiguration {
     private CurrencyManager currencyManager;
     @Autowired
     private CustomerRepository customerRepository;
-
 
     @Bean
     @Transactional
@@ -91,6 +90,18 @@ class StartupConfiguration {
 
         userRepositorySql.save(user2);
 
+        User user3 = new User();
+        UserId u3 = UserId.random();
+        user3.setId(u3);
+        user3.setUserInformation(UserInformation.builder()
+            .enabled(true)
+            .password(encoder.encode("123"))
+            .username("user@empty.pl")
+            .email("user@empty.pl")
+            .build());
+
+        userRepositorySql.save(user3);
+
         customerRepository.save(
             new Customer(new CustomerId(user.getId().value), user.getUserInformation().getEmail(), "cus_Phz6xa4OHy10mB",
                 null));
@@ -100,6 +111,11 @@ class StartupConfiguration {
         AssetId assetIdOne = AssetId.random();
         AssetId assetIdTwo = AssetId.random();
         AssetId assetIdThree = AssetId.random();
+
+        SummaryId firstId = SummaryId.random();
+        SummaryId secondId = SummaryId.random();
+        SummaryId thirdId = SummaryId.random();
+        SummaryId fourthId = SummaryId.random();
 
         List<Asset> assets = Arrays.asList(
             Asset.builder()
@@ -116,6 +132,7 @@ class StartupConfiguration {
                         .quantity(BigDecimal.TEN)
                         .money(new Money(BigDecimal.valueOf(300.31))).build()
                 ))
+                .summaryId(secondId)
                 .buildAsset(),
             Asset.builder()
                 .id(assetIdTwo)
@@ -137,6 +154,7 @@ class StartupConfiguration {
                         .quantity(BigDecimal.ONE)
                         .build()
                 ))
+                .summaryId(thirdId)
                 .buildAsset(),
             Asset.builder()
                 .id(assetIdThree)
@@ -152,13 +170,10 @@ class StartupConfiguration {
                         .quantity(BigDecimal.valueOf(3))
                         .build()
                 ))
+                .summaryId(fourthId)
                 .buildAsset()
         );
 
-        SummaryId firstId = SummaryId.random();
-        SummaryId secondId = SummaryId.random();
-        SummaryId thirdId = SummaryId.random();
-        SummaryId fourthId = SummaryId.random();
 
         List<Summary> summaryEntities = summarySQLRepository.saveAll(
             Arrays.asList(

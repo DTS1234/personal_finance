@@ -9,17 +9,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.application.AccessManagementFacade;
-import personal.finance.summary.application.SummaryFacade;
-import personal.finance.summary.application.dto.DTOMapper;
-import personal.finance.summary.domain.Asset;
-import personal.finance.summary.domain.AssetId;
-import personal.finance.summary.domain.Money;
-import personal.finance.summary.domain.Summary;
+import personal.finance.tracking.summary.application.SummaryFacade;
+import personal.finance.tracking.summary.application.dto.DTOMapper;
+import personal.finance.tracking.asset.domain.Asset;
+import personal.finance.tracking.asset.domain.AssetId;
+import personal.finance.tracking.summary.domain.Money;
+import personal.finance.tracking.summary.domain.Summary;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.function.Consumer;
 
+import static integration.Fixtures.USER_ID;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,7 +32,6 @@ public class SummaryIntegrationTest extends IntegrationTest {
     private AccessManagementFacade accessManagementFacade;
     @Autowired
     private SummaryFacade summaryFacade;
-    private static final String USER_ID = "66ea2da5-841c-4d16-9838-25cd2634af09";
 
     @BeforeEach
     void setUp() {

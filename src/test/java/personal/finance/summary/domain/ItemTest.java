@@ -1,6 +1,8 @@
 package personal.finance.summary.domain;
 
 import org.junit.jupiter.api.Test;
+import personal.finance.tracking.asset.domain.StockItem;
+import personal.finance.tracking.summary.domain.Money;
 
 import java.math.BigDecimal;
 

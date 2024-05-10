@@ -5,18 +5,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import personal.finance.GivenAssets;
-import personal.finance.summary.application.dto.DTOMapper;
-import personal.finance.summary.application.exceptions.NoSummaryInDraftException;
-import personal.finance.summary.domain.Asset;
-import personal.finance.summary.domain.AssetId;
-import personal.finance.summary.domain.AssetType;
-import personal.finance.summary.domain.Item;
-import personal.finance.summary.domain.ItemId;
-import personal.finance.summary.domain.Money;
-import personal.finance.summary.domain.Summary;
-import personal.finance.summary.domain.SummaryId;
-import personal.finance.summary.domain.SummaryState;
-import personal.finance.summary.infrastracture.external.CurrencyFakeProvider;
+import personal.finance.tracking.summary.application.CurrencyManager;
+import personal.finance.tracking.summary.application.SummaryConfiguration;
+import personal.finance.tracking.summary.application.SummaryFacade;
+import personal.finance.tracking.summary.application.dto.DTOMapper;
+import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;
+import personal.finance.tracking.asset.domain.Asset;
+import personal.finance.tracking.asset.domain.AssetId;
+import personal.finance.tracking.asset.domain.AssetType;
+import personal.finance.tracking.asset.domain.Item;
+import personal.finance.tracking.asset.domain.ItemId;
+import personal.finance.tracking.summary.domain.Money;
+import personal.finance.tracking.summary.domain.Summary;
+import personal.finance.tracking.summary.domain.SummaryId;
+import personal.finance.tracking.summary.domain.SummaryState;
+import personal.finance.tracking.summary.infrastracture.external.CurrencyFakeProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -97,6 +100,7 @@ public class SummarySpecTest {
         s2.addAsset(Asset.builder().id(AssetId.random())
             .name("Stock GPW")
             .money(new Money(ten))
+            .summaryId(s2.getId())
             .items(List.of(Item.builder().money(new Money(ten))
                 .quantity(BigDecimal.ONE)
                 .name("Allegro")
@@ -113,7 +117,7 @@ public class SummarySpecTest {
         // then
         Assertions.assertThat(result)
             .usingRecursiveComparison()
-            .ignoringFields("assets.id", "assets.items.id")
+            .ignoringFields("assets.id", "assets.items.id", "assetsIds")
             .isEqualTo(
                 Summary.builder()
                     .id(result.getId())
@@ -134,6 +138,7 @@ public class SummarySpecTest {
                                     .build()
                             ))
                             .type(AssetType.NORMAL)
+                            .summaryId(s2.getId())
                             .buildAsset())
                     )
                     .state(SummaryState.DRAFT)
@@ -182,7 +187,7 @@ public class SummarySpecTest {
         // then - updated summary is saved
         Assertions.assertThat(updated)
             .usingRecursiveComparison()
-            .ignoringFields("assets.items.id", "date")
+            .ignoringFields("assets.items.id", "date", "assetsIds")
             .isEqualTo(updatedSummaryInDraft);
 
         Assertions.assertThat(updated.getDate().truncatedTo(ChronoUnit.MINUTES))

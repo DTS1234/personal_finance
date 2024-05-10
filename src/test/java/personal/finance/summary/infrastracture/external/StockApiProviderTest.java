@@ -4,6 +4,9 @@ import integration.IntegrationTest;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import personal.finance.tracking.summary.infrastracture.external.ExchangeData;
+import personal.finance.tracking.summary.infrastracture.external.StockApiProvider;
+import personal.finance.tracking.summary.infrastracture.external.StockData;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -24,15 +24,13 @@ public class UserRegistrationListener {
         customer.setId(new CustomerId(event.getId()));
         customer.setEmail(event.getEmail());
         Customer saved = customerRepositoryJpa.save(customer);
-        log.info("Customer created with email: " + saved.getEmail());
-
+        log.info("Customer created with email: {}", saved.getEmail());
         try {
             com.stripe.model.Customer stripeCustomer = stripeService.createStripeCustomer(event.getEmail());
             saved.setCustomerStripeId(stripeCustomer.getId());
-            log.info("Customer stripe id assigned: " + saved.getCustomerStripeId());
+            log.info("Customer stripe id assigned: {}", saved.getCustomerStripeId());
         } catch (Exception e) {
-            log.error("Failed to create a stripe customer.");
-            e.printStackTrace();
+            log.error("Failed to create a stripe customer. {}", e.getMessage());
         }
     }
 }

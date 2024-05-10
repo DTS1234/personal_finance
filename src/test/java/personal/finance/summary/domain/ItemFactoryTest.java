@@ -3,6 +3,13 @@ package personal.finance.summary.domain;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import personal.finance.tracking.asset.domain.Item;
+import personal.finance.tracking.asset.domain.ItemFactory;
+import personal.finance.tracking.asset.domain.ItemRequest;
+import personal.finance.tracking.asset.domain.StockItem;
+import personal.finance.tracking.asset.domain.StockItemRequest;
+import personal.finance.tracking.summary.domain.Currency;
+import personal.finance.tracking.summary.domain.Money;
 
 import java.math.BigDecimal;
 

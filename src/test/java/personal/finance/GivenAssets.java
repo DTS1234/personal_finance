@@ -1,11 +1,11 @@
 package personal.finance;
 
-import personal.finance.summary.domain.Asset;
-import personal.finance.summary.domain.AssetId;
-import personal.finance.summary.domain.AssetType;
-import personal.finance.summary.domain.Item;
-import personal.finance.summary.domain.ItemId;
-import personal.finance.summary.domain.Money;
+import personal.finance.tracking.asset.domain.Asset;
+import personal.finance.tracking.asset.domain.AssetId;
+import personal.finance.tracking.asset.domain.AssetType;
+import personal.finance.tracking.asset.domain.Item;
+import personal.finance.tracking.asset.domain.ItemId;
+import personal.finance.tracking.summary.domain.Money;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

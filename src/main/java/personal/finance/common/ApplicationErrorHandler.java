@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import personal.finance.summary.application.exceptions.NoSummaryInDraftException;
+import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;
 
 @RestControllerAdvice
 @CrossOrigin
