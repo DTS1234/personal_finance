@@ -73,18 +73,18 @@ export class AddAssetComponent implements OnInit {
       null,
       assetData.name,
       assetData.money,
-      assetData.items
+      assetData.items,
+      this.summary.id
     );
 
     const newSummary = JSON.parse(JSON.stringify(this.summary));
 
-    newSummary.assets.push(asset)
-    newSummary.money += assetData.money
-
-    this.summaryService.updateSummary(newSummary).subscribe(
-      updatedData => {
-        this.summaryService.setNewSummary(updatedData)
-        this.summary = updatedData
+    this.summaryService.addAsset(asset).subscribe(
+      asset => {
+        newSummary.assets.push(asset)
+        newSummary.money += assetData.money
+        this.summaryService.setNewSummary(newSummary)
+        this.summary = newSummary
         this.updatingSummary = false;
 
         this.assetForm.reset();
@@ -92,7 +92,7 @@ export class AddAssetComponent implements OnInit {
         const currentUrl = this.router.url;
         const index = currentUrl.indexOf('/add-asset');
         const newUrl = currentUrl.substring(0, index);
-        this.router.navigate([newUrl]).then(r => console.log(r));
+        this.router.navigate([newUrl]).then(r => console.log(r))
       }
     )
   }

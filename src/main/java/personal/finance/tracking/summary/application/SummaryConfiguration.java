@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import personal.finance.common.events.EventPublisher;
+import personal.finance.common.events.FakeEventPublisher;
 import personal.finance.tracking.summary.domain.SummaryRepository;
 import personal.finance.tracking.summary.domain.UserRepository;
 import personal.finance.tracking.summary.infrastracture.persistance.repository.SummaryInMemoryRepository;
@@ -17,15 +19,17 @@ public class SummaryConfiguration {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private EventPublisher eventPublisher;
 
     public SummaryFacade summaryFacadeTest() {
         UserInMemoryRepository userRepository1 = new UserInMemoryRepository();
-        return new SummaryFacade(new SummaryInMemoryRepository().clear(), userRepository1);
+        return new SummaryFacade(new SummaryInMemoryRepository().clear(), userRepository1, new FakeEventPublisher());
     }
 
     @Bean
     SummaryFacade summaryFacade(SummaryRepository summaryRepository) {
-        return new SummaryFacade(summaryRepository, userRepository);
+        return new SummaryFacade(summaryRepository, userRepository, eventPublisher);
     }
 
     @Bean

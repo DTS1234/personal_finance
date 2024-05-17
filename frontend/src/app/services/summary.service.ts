@@ -56,11 +56,12 @@ export class SummaryService {
 
   updateSummary(summary: Summary): Observable<Summary> {
     let userId = JSON.parse(localStorage.getItem("userData")).id;
-    return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summary.id}/update`, summary);
+    return this.http.post<Summary>(`${this.basePath}/summaries/${summary.id}/update`, summary);
   }
 
-  updateAsset(summaryId: number, assetId: number, asset: Asset): Observable<Summary> {
-    return this.http.post<Summary>(`${this.basePath}/summaries/${summaryId}/updateAsset/${assetId}`, asset);
+  updateAsset(summaryId: string, assetId: string, asset: Asset): Observable<Asset> {
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<Asset>(`${this.basePath}/${userId}/summaries/${summaryId}/asset/${assetId}`, asset);
   }
 
   confirmSummary(summary: Summary): Observable<Summary> {
@@ -77,7 +78,7 @@ export class SummaryService {
     return this.http.get<Summary>(`${this.basePath}/${userId}/summaries/current`)
   }
 
-  cancelSummary(summaryId: number) {
+  cancelSummary(summaryId: string) {
     let userId = JSON.parse(localStorage.getItem("userData")).id;
     return this.http.post<Summary>(`${this.basePath}/${userId}/summaries/${summaryId}/cancel`, "")
   }
@@ -90,4 +91,15 @@ export class SummaryService {
       }
     });
   }
+
+  addAsset(asset: Asset) {
+    let userId = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<Asset>(`${this.basePath}/${userId}/summaries/${asset.summaryId}/asset/add`, asset)
+  }
+
+  // updateAsset(asset: Asset) {
+  //   let userId = JSON.parse(localStorage.getItem("userData")).id;
+  //   return this.http.post<Asset>(`${this.basePath}/${userId}/summaries/${asset.summaryId}/asset/add`, asset)
+  // }
+
 }

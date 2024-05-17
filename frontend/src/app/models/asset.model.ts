@@ -3,10 +3,11 @@ import {Item} from './item.model';
 export class Asset {
 
   constructor(
-    public id: number,
+    public id: string,
     public name: string,
     public money: number,
-    public items: Item[]
+    public items: Item[],
+    public summaryId: string
   ) {
   }
 

@@ -30,6 +30,17 @@ public class AssetDTOMapper {
         );
     }
 
+    public static AssetDTO dto(AssetEntity asset) {
+        return new AssetDTO(
+            asset.getId(),
+            asset.getMoneyValue(),
+            itemsDto(asset),
+            asset.getName(),
+            asset.getType(),
+            asset.getSummaryId()
+        );
+    }
+
     private static UUID getId(Asset a) {
         AssetId id = a.getId();
         if (id == null) {

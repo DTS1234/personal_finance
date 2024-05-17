@@ -45,18 +45,6 @@ public class SummaryController {
         return DTOMapper.dto(facade.createNewSummary(UUID.fromString(userId)));
     }
 
-    @GetMapping("/{userId}/summaries")
-    public List<SummaryDTO> getSummaries(@PathVariable("userId") UUID userId) {
-        return facade.getConfirmedSummaries(userId).stream()
-            .map(DTOMapper::dto)
-            .collect(Collectors.toList());
-    }
-
-    @GetMapping("/{userId}/summaries/current")
-    public SummaryDTO getCurrentDraft(@PathVariable("userId") UUID userId) {
-        return DTOMapper.dto(facade.getCurrentDraft(userId));
-    }
-
     @PostMapping("/{userId}/summaries/{summaryId}/cancel")
     public SummaryDTO cancelSummary(@PathVariable("userId") UUID userId, @PathVariable("summaryId") String summaryId) {
         return DTOMapper.dto(facade.cancelSummary(UUID.fromString(summaryId), userId));

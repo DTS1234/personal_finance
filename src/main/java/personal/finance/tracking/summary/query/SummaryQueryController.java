@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import personal.finance.tracking.summary.application.CurrencyManager;
 import personal.finance.tracking.summary.application.dto.CurrenciesDTO;
+import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.domain.UserRepository;
 import personal.finance.tracking.summary.application.dto.SummaryDTO;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -46,5 +49,15 @@ public class SummaryQueryController {
     @GetMapping("/currencies")
     public CurrenciesDTO currencies() {
         return new CurrenciesDTO(CurrencyManager.currencies);
+    }
+
+    @GetMapping("/{userId}/summaries/current")
+    public SummaryDTO getCurrentDraft(@PathVariable("userId") UUID userId) {
+        return projection.getCurrentDraft(userId);
+    }
+
+    @GetMapping("/{userId}/summaries")
+    public List<SummaryDTO> getSummaries(@PathVariable("userId") UUID userId) {
+        return projection.getConfirmedSummaries(userId);
     }
 }

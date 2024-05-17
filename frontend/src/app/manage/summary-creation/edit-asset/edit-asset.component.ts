@@ -64,22 +64,24 @@ export class EditAssetComponent implements OnInit {
     console.log(this.asset);
 
     const newSummary = JSON.parse(JSON.stringify(this.summary));
-    newSummary.money -= oldMoneyValue
-    newSummary.assets[this.index] = this.asset
-    newSummary.money += this.asset.money
-    this.summaryService.updateSummary(newSummary).subscribe(
-      s => {
-        this.summaryService.setNewSummary(s)
-        this.assetForm.reset();
-        const navigationExtras: NavigationExtras = {
-          queryParams: {reload: true} // Add a query parameter to force reload
-        };
-        const currentUrl = this.router.url;
-        const index = currentUrl.indexOf('/edit-asset');
-        const newUrl = currentUrl.substring(0, index);
-        this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
-      }
-    );
+
+    this.summaryService.updateAsset(this.summary.id, this.asset.id, this.asset)
+      .subscribe(
+        a => {
+          newSummary.money -= oldMoneyValue
+          newSummary.assets[this.index] = a
+          newSummary.money += a.money
+          this.summaryService.setNewSummary(newSummary)
+          const navigationExtras: NavigationExtras = {
+            queryParams: {reload: true} // Add a query parameter to force reload
+          };
+          const currentUrl = this.router.url;
+          const index = currentUrl.indexOf('/edit-asset');
+          const newUrl = currentUrl.substring(0, index);
+          this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
+        }
+      )
+
   }
 
   addItem(): void {

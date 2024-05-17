@@ -2,6 +2,7 @@ package personal.finance.tracking.summary.application;
 
 import lombok.RequiredArgsConstructor;
 import personal.finance.common.UseCase;
+import personal.finance.common.events.EventPublisher;
 import personal.finance.tracking.asset.domain.Asset;
 import personal.finance.tracking.asset.domain.AssetId;
 import personal.finance.tracking.asset.domain.Item;
@@ -11,6 +12,7 @@ import personal.finance.tracking.summary.domain.Summary;
 import personal.finance.tracking.summary.domain.SummaryId;
 import personal.finance.tracking.summary.domain.SummaryRepository;
 import personal.finance.tracking.summary.domain.SummaryState;
+import personal.finance.tracking.summary.domain.events.SummaryCreated;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,9 +27,9 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
 
     private final UUID userId;
     private final SummaryRepository summaryRepository;
+    private final EventPublisher eventPublisher;
 
     public Summary execute() {
-
         validatedIfThereAreNoDrafts();
 
         List<Summary> confirmedSummaries =
@@ -49,10 +51,12 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
                 newAssets.stream().map(Asset::getIdValue).collect(Collectors.toSet())
             );
 
+            eventPublisher.publishEvent(new SummaryCreated(summaryId.getValue(), lastConfirmed.getIdValue(), UUID.randomUUID()));
+
             return summaryRepository.save(summary);
         }
 
-        return summaryRepository.save(Summary.builder()
+        Summary summarySaved = summaryRepository.save(Summary.builder()
             .id(summaryId)
             .userId(userId)
             .date(LocalDateTime.now())
@@ -60,6 +64,9 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
             .assets(new ArrayList<>())
             .money(new Money(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP)))
             .build());
+
+        eventPublisher.publishEvent(new SummaryCreated(summarySaved.getIdValue(), null, UUID.randomUUID()));
+        return summarySaved;
     }
 
     private static BigDecimal calculateMoneyValue(List<Asset> lastConfirmedAssets) {

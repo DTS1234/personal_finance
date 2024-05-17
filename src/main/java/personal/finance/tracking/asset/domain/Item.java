@@ -36,6 +36,10 @@ public class Item {
         return id.getValue();
     }
 
+    public Item newCopyForAsset() {
+        return new Item(ItemId.random(), this.money, this.name, this.quantity);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

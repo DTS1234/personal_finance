@@ -45,7 +45,7 @@ export class CurrencyService {
   }
 
   getRateForCurrency(currency: string) {
-    return this.getRate(new Summary(0, 'date', 0, currency, []))
+    return this.getRate(new Summary("", 'date', 0, currency, []))
   }
 
   getRate(summary: Summary): Observable<number> {

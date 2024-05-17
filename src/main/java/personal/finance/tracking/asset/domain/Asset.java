@@ -54,6 +54,10 @@ public class Asset {
         return this.items;
     }
 
+    public Asset newCopyForSummary(SummaryId newSummaryId) {
+        return new Asset(AssetId.random(), this.money, this.name, this.items.stream().map(Item::newCopyForAsset).toList(), newSummaryId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

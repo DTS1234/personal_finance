@@ -12,6 +12,7 @@ import personal.finance.tracking.asset.domain.AssetType;
 import personal.finance.tracking.asset.domain.Item;
 import personal.finance.tracking.asset.domain.ItemId;
 import personal.finance.tracking.asset.domain.events.AssetCreated;
+import personal.finance.tracking.asset.domain.events.AssetUpdated;
 import personal.finance.tracking.summary.application.dto.AssetDTO;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.SummaryId;
@@ -53,6 +54,12 @@ class AssetFacadeTest {
         assertThat(asset.getMoney()).isEqualTo(new Money(10));
         assertThat(asset.getSummaryId()).isEqualTo(new SummaryId(summaryId));
         assertThat(asset.getItems()).isEqualTo(List.of(item));
+
+        FakeEventPublisher eventPublisher = (FakeEventPublisher)assetFacade.getEventPublisher();
+        AssetUpdated assetUpdated = (AssetUpdated) eventPublisher.publishedStore.getFirst();
+
+        assertThat(assetUpdated.eventId).isNotNull();
+        assertThat(assetUpdated.timestamp).isNotNull();
     }
 
     @Test

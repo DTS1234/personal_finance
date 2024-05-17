@@ -5,20 +5,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import personal.finance.GivenAssets;
+import personal.finance.common.events.FakeEventPublisher;
 import personal.finance.tracking.summary.application.CurrencyManager;
 import personal.finance.tracking.summary.application.SummaryConfiguration;
 import personal.finance.tracking.summary.application.SummaryFacade;
 import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;
 import personal.finance.tracking.asset.domain.Asset;
-import personal.finance.tracking.asset.domain.AssetId;
-import personal.finance.tracking.asset.domain.AssetType;
-import personal.finance.tracking.asset.domain.Item;
-import personal.finance.tracking.asset.domain.ItemId;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.Summary;
 import personal.finance.tracking.summary.domain.SummaryId;
 import personal.finance.tracking.summary.domain.SummaryState;
+import personal.finance.tracking.summary.domain.events.SummaryCreated;
 import personal.finance.tracking.summary.infrastracture.external.CurrencyFakeProvider;
 
 import java.math.BigDecimal;
@@ -87,64 +85,25 @@ public class SummarySpecTest {
     }
 
     @Test
-    void shouldCreateNewSummaryWithAllTheAssetsFromTheLastConfirmedSummary() {
-        BigDecimal ten = BigDecimal.TEN.setScale(2, RoundingMode.HALF_UP);
-
+    void should_publish_correct_event_for_each_new_summary_creation() {
         // given - one cancelled summary
         UUID userId = UUID.randomUUID();
         Summary s1 = facade.createNewSummary(userId);
-        s1.cancel();
+        s1.confirm();
         // second updated and confirmed summary
         Summary s2 = facade.createNewSummary(userId);
-        s2.updateMoneyValue(new Money(ten));
-        s2.addAsset(Asset.builder().id(AssetId.random())
-            .name("Stock GPW")
-            .money(new Money(ten))
-            .summaryId(s2.getId())
-            .items(List.of(Item.builder().money(new Money(ten))
-                .quantity(BigDecimal.ONE)
-                .name("Allegro")
-                .id(ItemId.random())
-                .build()))
-            .buildAsset());
-
-        facade.updateSummaryInDraft(DTOMapper.dto(s2), userId);
         facade.confirmSummary(s2.getId().getValue(), userId);
 
-        // when
-        Summary result = facade.createNewSummary(userId);
+        FakeEventPublisher eventPublisher = (FakeEventPublisher) facade.getEventPublisher();
 
-        // then
-        Assertions.assertThat(result)
-            .usingRecursiveComparison()
-            .ignoringFields("assets.id", "assets.items.id", "assetsIds")
-            .isEqualTo(
-                Summary.builder()
-                    .id(result.getId())
-                    .userId(userId)
-                    .date(
-                        result.getDate()
-                    )
-                    .assets(
-                        List.of(Asset.builder()
-                            .id(AssetId.random())
-                            .name("Stock GPW")
-                            .money(new Money(ten))
-                            .items(List.of(
-                                Item.builder().money(new Money(ten))
-                                    .quantity(BigDecimal.ONE)
-                                    .name("Allegro")
-                                    .id(ItemId.random())
-                                    .build()
-                            ))
-                            .type(AssetType.NORMAL)
-                            .summaryId(s2.getId())
-                            .buildAsset())
-                    )
-                    .state(SummaryState.DRAFT)
-                    .money(new Money(ten))
-                    .build()
-            );
+        // when
+        assertThat(eventPublisher.publishedStore).hasSize(2);
+        SummaryCreated actual = (SummaryCreated)eventPublisher.publishedStore.getFirst();
+        assertThat(actual.newSummaryId).isEqualTo(s1.getIdValue());
+        assertThat(actual.previousSummaryId).isNull();
+        SummaryCreated actual2 = (SummaryCreated)eventPublisher.publishedStore.get(1);
+        assertThat(actual2.newSummaryId).isEqualTo(s2.getIdValue());
+        assertThat(actual2.previousSummaryId).isEqualTo(s1.getIdValue());
     }
 
     @Test
@@ -152,6 +111,7 @@ public class SummarySpecTest {
         UUID userId = UUID.randomUUID();
         Summary summary = facade.createNewSummary(userId);
 
+        // summary is returned
         Assertions.assertThat(summary)
             .usingRecursiveComparison()
             .ignoringFields("date")
@@ -162,6 +122,15 @@ public class SummarySpecTest {
                 .assets(List.of())
                 .state(SummaryState.DRAFT)
                 .build());
+
+
+        // and event is published
+        FakeEventPublisher eventPublisher = (FakeEventPublisher) facade.getEventPublisher();
+        SummaryCreated actual = (SummaryCreated)eventPublisher.publishedStore.getFirst();
+        assertThat(actual.newSummaryId).isEqualTo(summary.getIdValue());
+        assertThat(actual.previousSummaryId).isNull();
+        assertThat(actual.eventID).isNotNull();
+        assertThat(actual.timestamp).isNotNull();
     }
 
     @Test

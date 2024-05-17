@@ -1,5 +1,8 @@
 package personal.finance.tracking.summary.application;
 
+import lombok.Getter;
+import personal.finance.common.events.EventPublisher;
+import personal.finance.tracking.asset.domain.AssetRepository;
 import personal.finance.tracking.summary.application.dto.SummaryDTO;
 import personal.finance.tracking.summary.domain.Currency;
 import personal.finance.tracking.summary.domain.SummaryRepository;
@@ -15,10 +18,14 @@ public class SummaryFacade {
 
     private final SummaryRepository summaryRepository;
     private final UserRepository userRepository;
+    @Getter
+    private final EventPublisher eventPublisher;
 
-    public SummaryFacade(SummaryRepository summaryRepository, UserRepository userRepository) {
+    public SummaryFacade(SummaryRepository summaryRepository, UserRepository userRepository,
+        EventPublisher eventPublisher) {
         this.summaryRepository = summaryRepository;
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public Summary confirmSummary(UUID summaryId, UUID userId) {
@@ -26,7 +33,7 @@ public class SummaryFacade {
     }
 
     public Summary createNewSummary(UUID userId) {
-        return new CreateNewSummaryUseCase(userId, summaryRepository).execute();
+        return new CreateNewSummaryUseCase(userId, summaryRepository, eventPublisher).execute();
     }
 
     public Summary updateSummaryInDraft(SummaryDTO updatedSummary, UUID userId) {

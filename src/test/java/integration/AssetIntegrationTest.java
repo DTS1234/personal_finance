@@ -18,6 +18,7 @@ import personal.finance.tracking.summary.application.SummaryFacade;
 import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.Summary;
+import personal.finance.tracking.summary.domain.SummaryId;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,7 +42,7 @@ public class AssetIntegrationTest extends IntegrationTest {
 
     @Test
     void should_update_asset_in_summary() throws Exception {
-        AuthResponseDTO login = accessManagementFacade.login("user@gmail.com", "123");
+        AuthResponseDTO login = accessManagementFacade.login("user@empty.pl", "123");
         String token = login.token();
 
         Summary newSummary = summaryFacade.createNewSummary(UUID.fromString(login.id()));
@@ -53,23 +54,23 @@ public class AssetIntegrationTest extends IntegrationTest {
             .type(AssetType.NORMAL)
             .money(new Money(5))
             .items(List.of(oldItem))
+            .summaryId(newSummary.getId())
             .buildAsset();
 
-        newSummary.addAsset(oldAsset);
-        Summary summary = summaryFacade.updateSummaryInDraft(DTOMapper.dto(newSummary), UUID.fromString(login.id()));
+        assetFacade.createAsset(newSummary.getIdValue(), oldAsset);
 
-        String summaryId = summary.getIdValue().toString();
-        String assetId = summary.getAssets().get(0).getIdValue().toString();
+        UUID summaryId = newSummary.getIdValue();
+        UUID assetId = oldAsset.getIdValue();
 
         Asset newAsset = Asset.builder()
-            .id(new AssetId(UUID.fromString(assetId)))
+            .id(new AssetId(assetId))
             .type(AssetType.NORMAL)
             .name("Asset 1")
             .money(new Money(10))
             .items(List.of(
                 Item.builder().name("Item 1").money(new Money(10)).quantity(BigDecimal.ONE)
                     .build()))
-            .summaryId(summary.getId())
+            .summaryId(new SummaryId(summaryId))
             .buildAsset();
 
         String result = mockMvc.perform(
@@ -98,7 +99,10 @@ public class AssetIntegrationTest extends IntegrationTest {
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andReturn().getResponse().getContentAsString();
 
-
+        String expectedQueryResult = getFile("asset/should_return_updated_summary.json");
+        assertThatJson(queryResult)
+            .whenIgnoringPaths("date", "id", "assets[0].id", "userId", "assets[0].items[0].id", "assets[0].summaryId")
+            .isEqualTo(expectedQueryResult);
 
     }
 
