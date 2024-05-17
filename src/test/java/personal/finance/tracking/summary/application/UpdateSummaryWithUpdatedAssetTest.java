@@ -28,7 +28,7 @@ class UpdateSummaryWithUpdatedAssetTest {
     void should_update_summary_money_value_with_updated_asset() {
         // given
         SummaryId summaryId = SummaryId.random();
-        Summary summary = new Summary(summaryId, UUID.randomUUID(), new Money(20), LocalDateTime.now(), SummaryState.DRAFT, null, null);
+        Summary summary = new Summary(summaryId, UUID.randomUUID(), new Money(20), LocalDateTime.now(), SummaryState.DRAFT);
         summaryRepository.save(summary);
 
         Asset oldAsset = new Asset(AssetId.random(), new Money(10), "item 1", List.of(), summaryId);

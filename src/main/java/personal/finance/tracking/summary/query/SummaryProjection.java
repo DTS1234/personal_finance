@@ -2,7 +2,6 @@ package personal.finance.tracking.summary.query;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.metamodel.model.domain.internal.DomainModelHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,6 @@ import personal.finance.tracking.summary.application.dto.AssetDTO;
 import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.application.dto.SummaryDTO;
 import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;
-import personal.finance.tracking.summary.domain.Summary;
 import personal.finance.tracking.summary.domain.SummaryState;
 import personal.finance.tracking.summary.infrastracture.persistance.entity.SummaryEntity;
 import personal.finance.tracking.summary.infrastracture.persistance.repository.SummaryJpaRepository;
@@ -22,7 +20,6 @@ import personal.finance.tracking.summary.infrastracture.persistance.repository.U
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,10 +46,11 @@ public class SummaryProjection {
         }
         log.info("Looking for all assets for summary: {}", summaryId);
         List<AssetEntity> assetsFoundForSummary = assetJpaRepository.findAllBySummaryId(summaryId);
-        log.info("All assets retrived: {}", assetsFoundForSummary);
-        assetsFoundForSummary.forEach(summaryEntity::addAsset);
+        log.info("All assets retrieved: {}", assetsFoundForSummary);
 
-        return DTOMapper.dto(summaryEntity);
+        SummaryDTO dto = DTOMapper.dto(summaryEntity);
+        dto.assets = assetsFoundForSummary.stream().map(AssetDTOMapper::dto).toList();
+        return dto;
     }
 
     public SummaryDTO getCurrentDraft(UUID userID) {

@@ -69,44 +69,6 @@ public class SummaryIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void shouldUpdateSummary() throws Exception {
-        // given
-        String token = accessManagementFacade.login("user@gmail.com", "123").token();
-        Summary newSummary = summaryFacade.createNewSummary(UUID.fromString(USER_ID));
-        AssetId assetID = AssetId.random();
-        newSummary.addAsset(Asset.builder().id(assetID).name("new Asset").money(new Money(BigDecimal.ZERO)).buildAsset());
-
-        // when
-        String result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + USER_ID + "/summaries/" + newSummary.getId() + "/update")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .contentType("application/json")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(DTOMapper.dto(newSummary))))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andReturn().getResponse().getContentAsString();
-
-        // then
-        String expected = getFile("summaries/should_update_summary.json");
-
-        assertThatJson(result)
-            .whenIgnoringPaths("date", "id", "assets[0].id")
-            .isEqualTo(expected);
-
-        assertThatJson(result)
-            .inPath("id")
-            .isString();
-
-        assertThatJson(result)
-            .inPath("assets[0].id")
-            .isEqualTo(assetID.getValue());
-
-        String actualDate = JsonPath.read(result, "$.date");
-        DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
-    }
-
-    @Test
     public void shouldConfirmSummary() throws Exception {
         // given
         String token = accessManagementFacade.login("user@gmail.com", "123").token();

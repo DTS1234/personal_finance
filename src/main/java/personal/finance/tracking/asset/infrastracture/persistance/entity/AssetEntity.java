@@ -13,6 +13,7 @@ import org.hibernate.Hibernate;
 import personal.finance.tracking.asset.domain.AssetType;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -33,6 +34,11 @@ public class AssetEntity {
 
     @Id
     private UUID id;
+
+    public BigDecimal getMoneyValue() {
+        return moneyValue.setScale(2, RoundingMode.HALF_UP);
+    }
+
     private BigDecimal moneyValue;
     private String name;
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)

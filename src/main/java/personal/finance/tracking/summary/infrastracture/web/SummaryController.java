@@ -29,12 +29,6 @@ public class SummaryController {
 
     private final SummaryFacade facade;
 
-    @PostMapping("/{userId}/summaries/{id}/update")
-    public SummaryDTO updateSummaryInDraft(@PathVariable("id") String id, @PathVariable("userId") String userId,
-        @RequestBody SummaryDTO summaryDTO) {
-        return DTOMapper.dto(facade.updateSummaryInDraft(summaryDTO, UUID.fromString(userId)));
-    }
-
     @PostMapping("/{userId}/summaries/{summaryId}/confirm")
     public SummaryDTO confirmSummary(@PathVariable("summaryId") String summaryId, @PathVariable("userId") String userId) {
         return DTOMapper.dto(facade.confirmSummary(UUID.fromString(summaryId), UUID.fromString(userId)));

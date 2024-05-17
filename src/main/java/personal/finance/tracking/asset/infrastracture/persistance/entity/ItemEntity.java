@@ -12,6 +12,7 @@ import org.hibernate.Hibernate;
 import personal.finance.common.BigDecimalConverterQuantity;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,6 +37,10 @@ public class ItemEntity {
 
     public ItemEntity() {
 
+    }
+
+    public BigDecimal getMoneyValue() {
+        return moneyValue.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override

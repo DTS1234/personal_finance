@@ -13,14 +13,4 @@ public class InvariantsUtils {
         ).isEqual(otherSummary.getDate().truncatedTo(ChronoUnit.MINUTES));
     }
 
-    public static boolean moneyValueIsInconsistent(Summary summary) {
-
-        log.debug("CHECKING MONEY VALUES:");
-        log.debug("Summary money value: " + summary.getMoney());
-        log.debug("Items money value: " + summary.sumItemsMoney());
-        log.debug("Assets money value: " + summary.sumAssetsMoney());
-
-        return !summary.getMoney().equals(summary.sumItemsMoney())
-            || !summary.getMoney().equals(summary.sumAssetsMoney());
-    }
 }

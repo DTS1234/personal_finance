@@ -36,10 +36,6 @@ public class SummaryFacade {
         return new CreateNewSummaryUseCase(userId, summaryRepository, eventPublisher).execute();
     }
 
-    public Summary updateSummaryInDraft(SummaryDTO updatedSummary, UUID userId) {
-        return new UpdateSummaryInDraftUseCase(summaryRepository, updatedSummary, userId).execute();
-    }
-
     public Summary cancelSummary(UUID id, UUID userId) {
         return new CancelSummaryUseCase(summaryRepository, new SummaryId(id), userId).execute();
     }
@@ -54,11 +50,5 @@ public class SummaryFacade {
 
     public Currency updateCurrency(UUID userId, Currency currency) {
         return userRepository.updateCurrency(userId.toString(), currency);
-    }
-
-    public Summary addAsset(UUID assetId, UUID summaryId) {
-        Summary summary = summaryRepository.findById(summaryId);
-        summary.addAsset(assetId);
-        return summaryRepository.save(summary);
     }
 }

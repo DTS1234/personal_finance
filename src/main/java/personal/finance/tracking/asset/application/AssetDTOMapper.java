@@ -13,6 +13,7 @@ import personal.finance.tracking.summary.domain.Currency;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.SummaryId;
 
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

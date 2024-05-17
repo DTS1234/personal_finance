@@ -5,13 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import personal.finance.tracking.asset.domain.Asset;
-import personal.finance.tracking.asset.domain.Item;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -26,42 +21,13 @@ public class Summary {
     private Money money;
     private LocalDateTime date;
     private SummaryState state;
-    private List<Asset> assets;
-    private Set<UUID> assetsIds;
 
     public void updateMoneyValue(Money newValue) {
         this.money = newValue;
     }
 
-    public void addAsset(UUID assetId) {
-        this.assetsIds.add(assetId);
-    }
-
-    public void addAsset(Asset asset) {
-        if (this.assets == null) {
-            this.assets = new ArrayList<>();
-        }
-        this.assets.add(asset);
-        this.money = sumAssetsMoney();
-    }
-
-    public Money sumAssetsMoney() {
-        return this.assets.stream()
-            .map(Asset::getMoney)
-            .reduce(new Money(0), Money::add);
-    }
-
     public boolean isInDraft() {
         return this.state.compareTo(SummaryState.DRAFT) != 0;
-    }
-
-    public Money sumItemsMoney() {
-        return getAssets().stream()
-            .map(assetEntity -> assetEntity.getItems()
-                .stream()
-                .map(Item::getMoney)
-                .reduce(new Money(0), Money::add))
-            .reduce(new Money(0), Money::add);
     }
 
     public Summary confirm() {
@@ -76,13 +42,6 @@ public class Summary {
     public Summary cancel() {
         this.state = SummaryState.CANCELED;
         return this;
-    }
-
-    public List<Asset> getAssets() {
-        if (this.assets == null) {
-            return new ArrayList<>();
-        }
-        return this.assets;
     }
 
     public UUID getIdValue() {
