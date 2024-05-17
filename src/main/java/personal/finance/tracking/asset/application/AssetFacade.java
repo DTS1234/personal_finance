@@ -3,7 +3,6 @@ package personal.finance.tracking.asset.application;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import personal.finance.common.events.EventPublisher;
 import personal.finance.tracking.asset.domain.Asset;
@@ -25,7 +24,8 @@ public class AssetFacade {
     private final EventPublisher eventPublisher;
 
     public Asset updateAsset(UUID userId, UUID summaryId, UUID assetId, Asset updatedAsset) {
-        eventPublisher.publishEvent(new AssetUpdated(null, null, Instant.now(), UUID.randomUUID()));
+        Asset oldAsset = assetRepository.findById(new AssetId(assetId));
+        eventPublisher.publishEvent(new AssetUpdated(summaryId, updatedAsset, oldAsset, Instant.now(), UUID.randomUUID()));
         return new UpdateAssetUseCase(assetRepository, assetId, updatedAsset).execute();
     }
 
