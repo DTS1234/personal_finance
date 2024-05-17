@@ -10,6 +10,7 @@ import personal.finance.tracking.asset.domain.Asset;
 import personal.finance.tracking.asset.domain.AssetId;
 import personal.finance.tracking.asset.domain.AssetRepository;
 import personal.finance.tracking.asset.domain.events.AssetCreated;
+import personal.finance.tracking.asset.domain.events.AssetUpdated;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -24,12 +25,13 @@ public class AssetFacade {
     private final EventPublisher eventPublisher;
 
     public Asset updateAsset(UUID userId, UUID summaryId, UUID assetId, Asset updatedAsset) {
+        eventPublisher.publishEvent(new AssetUpdated(null, null, Instant.now(), UUID.randomUUID()));
         return new UpdateAssetUseCase(assetRepository, assetId, updatedAsset).execute();
     }
 
     public Asset createAsset(UUID summaryId, Asset asset) {
         Asset assetCreated = new CreateAssetUseCase(asset, assetRepository).execute();
-        eventPublisher.publishEvent(new AssetCreated(summaryId, assetCreated.getIdValue(), Instant.now(), UUID.randomUUID()));
+        eventPublisher.publishEvent(new AssetCreated(summaryId, assetCreated, Instant.now(), UUID.randomUUID()));
         return assetCreated;
     }
 }

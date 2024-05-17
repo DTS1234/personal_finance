@@ -55,8 +55,8 @@ class AssetFacadeTest {
         assertThat(asset.getSummaryId()).isEqualTo(new SummaryId(summaryId));
         assertThat(asset.getItems()).isEqualTo(List.of(item));
 
-        FakeEventPublisher eventPublisher = (FakeEventPublisher)assetFacade.getEventPublisher();
-        AssetUpdated assetUpdated = (AssetUpdated) eventPublisher.publishedStore.getFirst();
+        FakeEventPublisher eventPublisher = (FakeEventPublisher) assetFacade.getEventPublisher();
+        AssetUpdated assetUpdated = (AssetUpdated) eventPublisher.publishedStore.get(1);
 
         assertThat(assetUpdated.eventId).isNotNull();
         assertThat(assetUpdated.timestamp).isNotNull();
@@ -88,6 +88,6 @@ class AssetFacadeTest {
         assertThat(assetCreated.eventId).isNotNull();
         assertThat(assetCreated.summaryId).isEqualTo(summaryId);
         assertThat(assetCreated.timestamp).isNotNull();
-        assertThat(assetCreated.assetId).isEqualTo(asset.getIdValue());
+        assertThat(assetCreated.asset).isEqualTo(asset);
     }
 }

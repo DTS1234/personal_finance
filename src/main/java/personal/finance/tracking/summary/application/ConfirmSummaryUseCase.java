@@ -29,17 +29,6 @@ class ConfirmSummaryUseCase implements UseCase<Summary> {
             throw new IllegalStateException("Summary can be confirmed only if it is in DRAFT state.");
         }
 
-        if (!summaryFound.sumAssetsMoney().equals(summaryFound.getMoney())
-            || !summaryFound.sumItemsMoney().equals(summaryFound.getMoney())) {
-            log.error("Money value are not inline: summary :{} \nassets: {} \nitems:{} ",
-                summaryFound.getMoney(),
-                summaryFound.sumAssetsMoney(),
-                summaryFound.sumItemsMoney());
-
-            throw new IllegalStateException("Invalid money value for the summary, "
-                + "it should be equal to the sum of all items money value.");
-        }
-
         Summary unsavedConfirmed = summaryFound.confirm();
         return summaryRepository.save(unsavedConfirmed);
     }

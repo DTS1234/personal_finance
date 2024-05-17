@@ -51,9 +51,10 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
                 newAssets.stream().map(Asset::getIdValue).collect(Collectors.toSet())
             );
 
-            eventPublisher.publishEvent(new SummaryCreated(summaryId.getValue(), lastConfirmed.getIdValue(), UUID.randomUUID()));
+            Summary newSummary = summaryRepository.save(summary);
+            eventPublisher.publishEvent(new SummaryCreated(newSummary.getIdValue(), lastConfirmed.getIdValue(), UUID.randomUUID()));
 
-            return summaryRepository.save(summary);
+            return newSummary;
         }
 
         Summary summarySaved = summaryRepository.save(Summary.builder()

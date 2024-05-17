@@ -100,9 +100,12 @@ class StartupConfiguration {
     }
 
     private static Summary summaryFourth(SummaryId fourthId, UserId u2) {
-        return Summary.builder().id(fourthId).userId(u2.value).state(SummaryState.CONFIRMED)
+        return Summary.builder()
+            .id(fourthId).userId(u2.value)
+            .state(SummaryState.CONFIRMED)
             .money(new Money(BigDecimal.valueOf(3127.59)))
-            .date(LocalDateTime.of(2022, 4, 1, 0, 0)).build();
+            .date(LocalDateTime.of(2022, 4, 1, 0, 0))
+            .build();
     }
 
     private static Summary summaryStocks(SummaryId thirdId, UserId u2) {
