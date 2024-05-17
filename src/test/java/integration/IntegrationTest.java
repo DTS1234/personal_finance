@@ -54,11 +54,6 @@ public class IntegrationTest {
 
     private ApplicationEventPublisher publisher;
 
-    AccessManagementFacade facadeSetUp() {
-        return new AccessManagementFacade(userRepository, passwordEncoder,
-            verificationTokenRepository, passwordResetTokenRepository, emailSenderService, configAuthManager(), authTokenService, publisher);
-    }
-
     AuthenticationManager configAuthManager() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(new BCryptPasswordEncoder(12));
         CustomUserDetailsManager customUserDetailsManager = new CustomUserDetailsManager(userRepository, passwordEncoder);

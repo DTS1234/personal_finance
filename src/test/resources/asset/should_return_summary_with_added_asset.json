@@ -1,19 +1,19 @@
 {
   "id": "IGNORED",
   "userId": "66ea2da5-841c-4d16-9838-25cd2634af09",
-  "money": 5.00,
+  "money": 5.0,
   "date": "IGNORED",
   "state": "DRAFT",
   "currency": "EUR",
   "assets": [
     {
       "id": "IGNORED",
-      "money": 5.00,
+      "money": 5.0,
       "name": "Asset 1",
       "items": [
         {
           "id": "IGNORED",
-          "money": 5.00,
+          "money": 5.0,
           "name": "Item 1",
           "quantity": 1
         }

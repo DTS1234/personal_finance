@@ -1,4 +1,4 @@
-package personal.finance.summary.infrastracture.external;
+package personal.finance.tracking.external;
 
 import integration.IntegrationTest;
 import org.junit.jupiter.api.DisplayNameGeneration;

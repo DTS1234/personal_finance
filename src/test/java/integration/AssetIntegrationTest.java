@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.application.AccessManagementFacade;
 import personal.finance.iam.application.dto.AuthResponseDTO;
 import personal.finance.tracking.asset.application.AssetDTOMapper;
@@ -29,6 +30,7 @@ import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 public class AssetIntegrationTest extends IntegrationTest {
 
     @Autowired
@@ -103,7 +105,6 @@ public class AssetIntegrationTest extends IntegrationTest {
         assertThatJson(queryResult)
             .whenIgnoringPaths("date", "id", "assets[0].id", "userId", "assets[0].items[0].id", "assets[0].summaryId")
             .isEqualTo(expectedQueryResult);
-
     }
 
     @Test

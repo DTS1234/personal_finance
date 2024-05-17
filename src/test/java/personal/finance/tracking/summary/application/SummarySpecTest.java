@@ -1,4 +1,4 @@
-package personal.finance.summary.application;
+package personal.finance.tracking.summary.application;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -6,9 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import personal.finance.GivenAssets;
 import personal.finance.common.events.FakeEventPublisher;
-import personal.finance.tracking.summary.application.CurrencyManager;
-import personal.finance.tracking.summary.application.SummaryConfiguration;
-import personal.finance.tracking.summary.application.SummaryFacade;
 import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;
 import personal.finance.tracking.asset.domain.Asset;

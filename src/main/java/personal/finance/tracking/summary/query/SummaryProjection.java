@@ -77,7 +77,7 @@ public class SummaryProjection {
                 List<AssetDTO> assets = assetJpaRepository.findAllBySummaryId(s.getId()).stream().map(AssetDTOMapper::dto)
                     .toList();
                 BigDecimal money = assets.stream().map(a -> a.money).reduce(BigDecimal.ZERO, BigDecimal::add);
-                money.setScale(2, RoundingMode.HALF_UP);
+                money = money.setScale(4, RoundingMode.HALF_UP);
                 SummaryDTO dto = DTOMapper.dto(s);
                 dto.money = money;
                 dto.assets = assets;

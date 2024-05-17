@@ -1,10 +1,8 @@
-package personal.finance.summary.domain;
+package personal.finance.tracking.summary.domain;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import personal.finance.tracking.summary.domain.Currency;
-import personal.finance.tracking.summary.domain.Money;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
