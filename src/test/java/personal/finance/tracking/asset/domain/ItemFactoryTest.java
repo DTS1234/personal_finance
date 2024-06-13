@@ -3,11 +3,13 @@ package personal.finance.tracking.asset.domain;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import personal.finance.tracking.asset.application.CustomItemDTO;
 import personal.finance.tracking.asset.application.StockItemDTO;
 import personal.finance.tracking.summary.domain.Currency;
 import personal.finance.tracking.summary.domain.Money;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +19,7 @@ class ItemFactoryTest {
     @Test
     void should_create_a_custom_item() {
         ItemFactory itemFactory = new ItemFactory();
-        Item item = itemFactory.createItem(new ItemRequest("Cash account", null, new Money(1000.00)));
+        Item item = itemFactory.createItem(new CustomItemDTO(UUID.randomUUID(), BigDecimal.valueOf(1000), "Cash account"));
 
         assertThat(item.getMoney()).isEqualTo(new Money(1000.00, Currency.EUR));
         assertThat(item.getName()).isEqualTo("Cash account");
