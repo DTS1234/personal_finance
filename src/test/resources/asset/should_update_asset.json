@@ -4,12 +4,12 @@
   "name": "Asset 1",
   "items": [
     {
+      "type": "CUSTOM",
       "id": "IGNORED",
       "money": 10.00,
-      "name": "Item 1",
-      "quantity": 1
+      "name": "Item 1"
     }
   ],
-  "assetType": "NORMAL",
+  "type": "CUSTOM",
   "summaryId": "IGNORED"
 }

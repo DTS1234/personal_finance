@@ -1,6 +1,5 @@
 package integration;
 
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +9,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import personal.finance.iam.application.AccessManagementFacade;
 import personal.finance.tracking.summary.application.SummaryFacade;
-import personal.finance.tracking.summary.application.dto.DTOMapper;
-import personal.finance.tracking.asset.domain.Asset;
-import personal.finance.tracking.asset.domain.AssetId;
-import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.Summary;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import static integration.Fixtures.USER_ID;
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static integration.SummaryAssert.assertThatSummary;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,17 +49,10 @@ public class SummaryIntegrationTest extends IntegrationTest {
 
         // then
         String expected = getFile("summaries/should_create_summary.json");
-
-        assertThatJson(result)
-            .whenIgnoringPaths("date", "id")
-            .isEqualTo(expected);
-
-        assertThatJson(result)
-            .inPath("id")
-            .isString();
-
-        String actualDate = JsonPath.read(result, "$.date");
-        DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
+        assertThatSummary(result)
+            .isEqualTo(expected)
+            .idIsUUID()
+            .dateIsFormatted();
     }
 
     @Test
@@ -86,17 +73,10 @@ public class SummaryIntegrationTest extends IntegrationTest {
 
         // then
         String expected = getFile("summaries/should_confirm_summary.json");
-
-        assertThatJson(result)
-            .whenIgnoringPaths("date", "id")
-            .isEqualTo(expected);
-
-        assertThatJson(result)
-            .inPath("id")
-            .isString();
-
-        String actualDate = JsonPath.read(result, "$.date");
-        DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
+        assertThatSummary(result)
+            .isEqualTo(expected)
+            .idIsUUID()
+            .dateIsFormatted();
     }
 
     @Test
@@ -117,11 +97,9 @@ public class SummaryIntegrationTest extends IntegrationTest {
 
         // then
         String expected = getFile("summaries/should_return_current_draft.json");
-        assertThatJson(result)
-            .whenIgnoringPaths("date", "id")
-            .isEqualTo(expected);
-
-        String actualDate = JsonPath.read(result, "$.date");
-        DateAssertion.assertDateFormat(actualDate, "dd.MM.yyyy HH:mm:ss");
+        assertThatSummary(result)
+            .isEqualTo(expected)
+            .idIsUUID()
+            .dateIsFormatted();
     }
 }

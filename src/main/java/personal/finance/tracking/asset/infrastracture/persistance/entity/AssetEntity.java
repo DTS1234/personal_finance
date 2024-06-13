@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 import personal.finance.tracking.asset.domain.AssetType;
@@ -27,24 +28,21 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @ToString()
+@NoArgsConstructor
 public class AssetEntity {
-
-    public AssetEntity() {
-    }
 
     @Id
     private UUID id;
-
-    public BigDecimal getMoneyValue() {
-        return moneyValue.setScale(2, RoundingMode.HALF_UP);
-    }
-
     private BigDecimal moneyValue;
     private String name;
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<ItemEntity> itemEntities;
     private AssetType type;
     private UUID summaryId;
+
+    public BigDecimal getMoneyValue() {
+        return moneyValue.setScale(2, RoundingMode.HALF_UP);
+    }
 
     @Override
     public boolean equals(Object o) {

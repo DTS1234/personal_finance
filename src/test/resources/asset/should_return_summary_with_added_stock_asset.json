@@ -1,24 +1,29 @@
 {
   "id": "IGNORED",
   "userId": "66ea2da5-841c-4d16-9838-25cd2634af09",
-  "money": 10.00,
+  "money": 5.00,
   "date": "IGNORED",
   "state": "DRAFT",
   "currency": "EUR",
   "assets": [
     {
       "id": "IGNORED",
-      "money": 10.00,
+      "money": 5.00,
       "name": "Asset 1",
       "items": [
         {
           "id": "IGNORED",
-          "money": 10.00,
+          "money": 5.00,
           "name": "Item 1",
-          "type": "CUSTOM"
+          "quantity": 1,
+          "purchasePrice": 3.00,
+          "currentPrice": 5.00,
+          "ticker": "Stock Item",
+          "type": "STOCK"
         }
       ],
-      "type": "CUSTOM"
+      "type": "STOCK",
+      "summaryId":"IGNORED"
     }
   ]
 }

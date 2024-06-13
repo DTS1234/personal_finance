@@ -1,4 +1,4 @@
-package personal.finance.tracking.summary.application.dto;
+package personal.finance.tracking.asset.application;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,6 @@ public class AssetDTO {
     public BigDecimal money;
     public List<ItemDTO> items;
     public String name;
-    public AssetType assetType;
+    public AssetType type;
     public UUID summaryId;
 }

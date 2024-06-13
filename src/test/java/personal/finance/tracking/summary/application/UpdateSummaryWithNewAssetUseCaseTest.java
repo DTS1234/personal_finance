@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static personal.finance.tracking.asset.domain.AssetType.CUSTOM;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class UpdateSummaryWithNewAssetUseCaseTest {
@@ -27,9 +28,10 @@ class UpdateSummaryWithNewAssetUseCaseTest {
     void should_update_summary_money_value_with_a_created_asset() {
         // given
         SummaryId summaryId = SummaryId.random();
-        Summary summary = new Summary(summaryId, UUID.randomUUID(), new Money(20), LocalDateTime.now(), SummaryState.DRAFT);
+        Summary summary = new Summary(summaryId, UUID.randomUUID(), new Money(20), LocalDateTime.now(),
+            SummaryState.DRAFT);
         summaryRepository.save(summary);
-        Asset newAsset = new Asset(AssetId.random(), new Money(15), "item 1", List.of(), summaryId);
+        Asset newAsset = new Asset(AssetId.random(), new Money(15), "item 1", List.of(), CUSTOM, summaryId);
         // when
         Summary result = new UpdateSummaryWithNewAssetUseCase(summaryRepository, newAsset, summaryId).execute();
         // then

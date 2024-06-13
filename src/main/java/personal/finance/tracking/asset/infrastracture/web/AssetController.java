@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import personal.finance.tracking.asset.application.AssetDTOMapper;
 import personal.finance.tracking.asset.application.AssetFacade;
-import personal.finance.tracking.summary.application.dto.AssetDTO;
+import personal.finance.tracking.asset.application.AssetDTO;
 
 import java.util.UUID;
 

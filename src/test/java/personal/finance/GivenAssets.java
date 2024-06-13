@@ -3,8 +3,9 @@ package personal.finance;
 import personal.finance.tracking.asset.domain.Asset;
 import personal.finance.tracking.asset.domain.AssetId;
 import personal.finance.tracking.asset.domain.AssetType;
-import personal.finance.tracking.asset.domain.Item;
+import personal.finance.tracking.asset.domain.CustomItem;
 import personal.finance.tracking.asset.domain.ItemId;
+import personal.finance.tracking.asset.domain.StockItem;
 import personal.finance.tracking.summary.domain.Money;
 
 import java.math.BigDecimal;
@@ -29,42 +30,48 @@ public class GivenAssets {
                 .name("Crypto")
                 .money(new Money(BigDecimal.valueOf(500.31)))
                 .items(List.of(
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00))).build(),
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.31))).build()
+                    StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00)))
+                        .build(),
+                    StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.31)))
+                        .build()
                 ))
-                .type(AssetType.NORMAL)
+                .type(AssetType.CUSTOM)
                 .buildAsset(),
             Asset.builder()
                 .id(assetIdTwo)
                 .name("Account 1")
                 .money(new Money(BigDecimal.valueOf(1500.12)))
                 .items(List.of(
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00))).build(),
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.01))).build(),
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(1000.11))).build()
+                    CustomItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(200.00)))
+                        .build(),
+                    CustomItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(300.01)))
+                        .build(),
+                    CustomItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(1000.11)))
+                        .build()
                 ))
-                .type(AssetType.NORMAL)
+                .type(AssetType.CUSTOM)
                 .buildAsset(),
             Asset.builder()
                 .id(assetIdThree)
                 .name("Stocks 1")
                 .money(new Money(BigDecimal.valueOf(2201.24)))
                 .items(List.of(
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20))).build(),
-                    Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04))).build()
+                    StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20)))
+                        .build(),
+                    StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04)))
+                        .build()
                 ))
-                .type(AssetType.NORMAL)
+                .type(AssetType.CUSTOM)
                 .buildAsset());
         // sum of values : 2000.43 + 2201.24 = 4201.67
         // percentages: 11,91 %, 35,70%, 52,39%
     }
 
     public static Asset newAssetOfTenWithOneItem() {
-        Item testItemOne = Item.builder()
+        CustomItem testItemOne = CustomItem.builder()
             .money(new Money(BigDecimal.valueOf(10, 0)))
             .name("testItemOne")
             .id(ItemId.random())
-            .quantity(BigDecimal.valueOf(1L))
             .build();
 
         return Asset.builder()
@@ -73,7 +80,7 @@ public class GivenAssets {
             .items(new ArrayList<>(
                 List.of(testItemOne)
             ))
-            .type(AssetType.NORMAL)
+            .type(AssetType.CUSTOM)
             .buildAsset();
     }
 

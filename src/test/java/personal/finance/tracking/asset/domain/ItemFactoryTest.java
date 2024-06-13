@@ -3,6 +3,7 @@ package personal.finance.tracking.asset.domain;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import personal.finance.tracking.asset.application.StockItemDTO;
 import personal.finance.tracking.summary.domain.Currency;
 import personal.finance.tracking.summary.domain.Money;
 
@@ -14,21 +15,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ItemFactoryTest {
 
     @Test
-    void should_create_a_regular_item() {
+    void should_create_a_custom_item() {
         ItemFactory itemFactory = new ItemFactory();
-        Item item = itemFactory.createItem("Normal", new ItemRequest("Cash account", null, new Money(1000.00)));
+        Item item = itemFactory.createItem(new ItemRequest("Cash account", null, new Money(1000.00)));
 
         assertThat(item.getMoney()).isEqualTo(new Money(1000.00, Currency.EUR));
         assertThat(item.getName()).isEqualTo("Cash account");
         assertThat(item.getId()).isNotNull();
-        assertThat(item.getQuantity()).isNull();
     }
 
     @Test
     void should_create_a_stock_item() {
         ItemFactory itemFactory = new ItemFactory();
-        Item item = itemFactory.createItem("STOCK", new StockItemRequest("AAPL", BigDecimal.TEN, BigDecimal.TWO, "Apple Stock", BigDecimal.ONE));
-        StockItem casted = (StockItem)item;
+        Item item = itemFactory.createItem(
+            new StockItemDTO(null, null, "Apple Stock", "AAPL", BigDecimal.TEN, BigDecimal.TWO, BigDecimal.ONE));
+        StockItem casted = (StockItem) item;
 
         assertThat(casted.getMoney()).isEqualTo(new Money(2.00, Currency.EUR));
         assertThat(casted.getName()).isEqualTo("Apple Stock");

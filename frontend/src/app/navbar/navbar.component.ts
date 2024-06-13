@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isAuthenticated = false
   private userSub: Subscription
   showDropdown: boolean = false
+  currencies = ['USD', 'EUR', 'PLN'];  // Replace with actual currencies
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;

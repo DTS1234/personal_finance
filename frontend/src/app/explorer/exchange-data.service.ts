@@ -1,6 +1,6 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {ExchangeData} from "./exchange-data.model";
 import {TickerData} from "./ticker-data.model";
 import {StockData} from "./stock-data.model";
@@ -24,5 +24,9 @@ export class ExchangeDataService {
 
   getStockData(exchange: string, stock: string): Observable<StockData[]> {
     return this.http.get<StockData[]>('http://localhost:8080/' + exchange + "/" + stock)
+  }
+
+  getCurrentPrice(ticker: any):Observable<number> {
+    return of(10.00);
   }
 }

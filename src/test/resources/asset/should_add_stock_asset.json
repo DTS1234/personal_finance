@@ -7,9 +7,13 @@
       "id": "IGNORED",
       "money": 5.00,
       "name": "Item 1",
-      "type": "CUSTOM"
+      "quantity": 1,
+      "purchasePrice": 3.00,
+      "currentPrice": 5.00,
+      "ticker": "Stock Item",
+      "type": "STOCK"
     }
   ],
-  "type": "CUSTOM",
+  "type": "STOCK",
   "summaryId": "IGNORED"
 }

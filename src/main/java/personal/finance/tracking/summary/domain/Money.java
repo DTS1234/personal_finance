@@ -1,6 +1,7 @@
 package personal.finance.tracking.summary.domain;
 
 import lombok.Value;
+import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,12 +10,13 @@ import java.util.Objects;
 @Value
 public class Money {
 
+    @NonNull
     BigDecimal moneyValue;
 
     Currency currency;
 
-    public Money(BigDecimal moneyValue) {
-        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_EVEN);
+    public Money(@NonNull BigDecimal moneyValue) {
+        this.moneyValue = moneyValue;
         this.currency = Currency.EUR;
     }
 

@@ -1,29 +1,24 @@
 package personal.finance.tracking.asset.domain;
 
+import personal.finance.tracking.asset.application.StockItemDTO;
 import personal.finance.tracking.summary.domain.Money;
 
 public class ItemFactory {
 
-    public Item createItem(String type, Object object) {
-        if (type.equals("STOCK")) {
-            StockItemRequest request = (StockItemRequest) object;
+    public Item createItem(Object object) {
+        if (object instanceof StockItemDTO request) {
             StockItem stockItem = new StockItem();
             stockItem.setId(ItemId.random());
-            stockItem.setQuantity(request.quantity());
-            stockItem.setPurchasePrice(new Money(request.purchasePrice()));
-            stockItem.setCurrentPrice(new Money(request.currentPrice()));
-            stockItem.setMoney(new Money(request.currentPrice().multiply(request.quantity())));
-            stockItem.setName(request.name());
-
+            stockItem.setQuantity(request.getQuantity());
+            stockItem.setPurchasePrice(new Money(request.getPurchasePrice()));
+            stockItem.setCurrentPrice(new Money(request.getCurrentPrice()));
+            stockItem.setMoney(new Money(stockItem.getCurrentPrice().getMoneyValue().multiply(request.getQuantity())));
+            stockItem.setName(request.getName());
+            stockItem.setTicker(request.getTicker());
             return stockItem;
         } else {
             ItemRequest request = (ItemRequest) object;
-            Item item = new Item();
-            item.setId(ItemId.random());
-            item.setName(request.name());
-            item.setQuantity(request.quantity());
-            item.setMoney(request.money());
-            return item;
+            return new CustomItem(ItemId.random(), request.money(), request.name());
         }
     }
 

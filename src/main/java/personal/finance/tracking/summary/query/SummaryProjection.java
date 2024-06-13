@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import personal.finance.tracking.asset.application.AssetDTOMapper;
 import personal.finance.tracking.asset.infrastracture.persistance.entity.AssetEntity;
 import personal.finance.tracking.asset.infrastracture.persistance.repository.AssetJpaRepository;
-import personal.finance.tracking.summary.application.dto.AssetDTO;
+import personal.finance.tracking.asset.application.AssetDTO;
 import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.application.dto.SummaryDTO;
 import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;

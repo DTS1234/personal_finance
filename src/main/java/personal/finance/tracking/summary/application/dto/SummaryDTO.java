@@ -2,6 +2,7 @@ package personal.finance.tracking.summary.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import personal.finance.tracking.asset.application.AssetDTO;
 import personal.finance.tracking.summary.domain.Currency;
 import personal.finance.tracking.summary.domain.SummaryState;
 

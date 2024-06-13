@@ -33,6 +33,8 @@ import {SuccessComponent} from "./subscription/success/success.component";
 import {SubscriptionComponent} from "./subscription/subscription.component";
 import {BuyComponent} from "./subscription/buy/buy.component";
 import {SpinnerComponent} from "./common/spinner/spinner.component";
+import {StockItemFormComponent} from "./manage/summary-creation/stock-item-form/stock-item-form.component";
+import {NormalItemFormComponent} from "./manage/summary-creation/normal-item-form/normal-item-form.component";
 
 @NgModule({
   declarations: [
@@ -58,7 +60,7 @@ import {SpinnerComponent} from "./common/spinner/spinner.component";
   imports: [
     BrowserModule, HttpClientModule, RouterModule, AppRoutingModule,
     BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
-    MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent, SpinnerComponent
+    MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent, SpinnerComponent, StockItemFormComponent, NormalItemFormComponent
   ],
   providers: [DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi:true }],
   bootstrap: [AppComponent]

@@ -15,10 +15,10 @@
           "id": "IGNORED",
           "money": 5.00,
           "name": "Item 1",
-          "quantity": 1
+          "type": "CUSTOM"
         }
       ],
-      "assetType": "NORMAL",
+      "type": "CUSTOM",
       "summaryId":"IGNORED"
     }
   ]

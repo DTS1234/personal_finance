@@ -1,0 +1,35 @@
+<div class="bg-white shadow mt-3 p-4 rounded-lg">
+  <form [formGroup]="assetForm">
+    <div class="mt-4">
+      <label for="ticker">Ticker</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="ticker"
+             formControlName="ticker">
+    </div>
+    <div class="mt-4">
+      <label for="purchasePrice">Purchase Price</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             id="purchasePrice" formControlName="purchasePrice" type="number">
+    </div>
+    <div class="mt-4">
+      <label for="currentPrice">Current Price</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             id="currentPrice" formControlName="currentPrice" type="number" disabled>
+    </div>
+    <div class="mt-4">
+      <label for="name">Name</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name"
+             formControlName="name">
+    </div>
+    <div class="mt-4">
+      <label for="quantity">Quantity</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity"
+             formControlName="quantity" type="number">
+    </div>
+    <div class="mt-4">
+      <label for="type">Type</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="type"
+             formControlName="type">
+    </div>
+
+  </form>
+</div>

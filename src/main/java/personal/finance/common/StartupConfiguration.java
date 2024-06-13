@@ -15,13 +15,13 @@ import personal.finance.iam.query.UserSubscriptionQueryRepository;
 import personal.finance.payment.domain.Customer;
 import personal.finance.payment.domain.CustomerId;
 import personal.finance.payment.domain.CustomerRepository;
-import personal.finance.tracking.asset.domain.AssetRepository;
-import personal.finance.tracking.asset.infrastracture.persistance.repository.AssetSqlRepository;
-import personal.finance.tracking.summary.application.CurrencyManager;
 import personal.finance.tracking.asset.domain.Asset;
 import personal.finance.tracking.asset.domain.AssetId;
-import personal.finance.tracking.asset.domain.Item;
+import personal.finance.tracking.asset.domain.AssetRepository;
+import personal.finance.tracking.asset.domain.CustomItem;
 import personal.finance.tracking.asset.domain.ItemId;
+import personal.finance.tracking.asset.domain.StockItem;
+import personal.finance.tracking.summary.application.CurrencyManager;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.Summary;
 import personal.finance.tracking.summary.domain.SummaryId;
@@ -63,12 +63,14 @@ class StartupConfiguration {
 
         userRepositorySql.save(user);
         // stripe user 1 code customer
-        customerRepository.save(new Customer(new CustomerId(u1.value), user.getUserInformation().getEmail(), "cus_Phz6xa4OHy10mB", null));
+        customerRepository.save(
+            new Customer(new CustomerId(u1.value), user.getUserInformation().getEmail(), "cus_Phz6xa4OHy10mB", null));
 
         User user2 = userRepositorySql.save(userTwo());
         UserId u2 = user2.getId();
         // stripe user 2 code customer
-        customerRepository.save(new Customer(new CustomerId(u2.value), user2.getUserInformation().getEmail(), "cus_Phz60VNLojAeut", null));
+        customerRepository.save(
+            new Customer(new CustomerId(u2.value), user2.getUserInformation().getEmail(), "cus_Phz60VNLojAeut", null));
 
         userRepositorySql.save(userThree());
 
@@ -109,7 +111,9 @@ class StartupConfiguration {
     }
 
     private static Summary summaryStocks(SummaryId thirdId, UserId u2) {
-        return Summary.builder().id(thirdId).userId(u2.value).state(SummaryState.CONFIRMED)
+        return Summary.builder()
+            .id(thirdId)
+            .userId(u2.value).state(SummaryState.CONFIRMED)
             .money(new Money(BigDecimal.valueOf(2201.24)))
             .date(LocalDateTime.of(2022, 3, 1, 0, 0)).build();
     }
@@ -132,13 +136,19 @@ class StartupConfiguration {
             .name("Stocks 1")
             .money(new Money(BigDecimal.valueOf(2201.24)))
             .items(List.of(
-                Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20)))
+                StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20)))
                     .name("Tesla")
                     .quantity(BigDecimal.valueOf(2))
+                    .ticker("TSLA")
+                    .currentPrice(new Money(2201.24/2))
+                    .purchasePrice(new Money(1000.00))
                     .build(),
-                Item.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04)))
+                StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(2000.04)))
                     .name("Facebook")
                     .quantity(BigDecimal.valueOf(3))
+                    .ticker("FCB")
+                    .currentPrice(new Money(2000.04/3))
+                    .purchasePrice(new Money(500.00))
                     .build()
             ))
             .summaryId(fourthId)
@@ -151,19 +161,16 @@ class StartupConfiguration {
             .name("Account 1")
             .money(new Money(BigDecimal.valueOf(1500.12)))
             .items(List.of(
-                Item.builder().id(ItemId.random())
+                CustomItem.builder().id(ItemId.random())
                     .name("EUR account")
-                    .quantity(BigDecimal.ONE)
                     .money(new Money(BigDecimal.valueOf(200.00))).build(),
-                Item.builder().id(ItemId.random())
+                CustomItem.builder().id(ItemId.random())
                     .money(new Money(BigDecimal.valueOf(300.01)))
                     .name("USD account")
-                    .quantity(BigDecimal.ONE)
                     .build(),
-                Item.builder().id(ItemId.random())
+                CustomItem.builder().id(ItemId.random())
                     .money(new Money(BigDecimal.valueOf(1000.11)))
                     .name("PLN account")
-                    .quantity(BigDecimal.ONE)
                     .build()
             ))
             .summaryId(thirdId)
@@ -176,13 +183,20 @@ class StartupConfiguration {
             .name("Crypto")
             .money(new Money(BigDecimal.valueOf(500.31)))
             .items(List.of(
-                Item.builder().id(ItemId.random())
+                StockItem.builder().id(ItemId.random())
                     .name("Bitcoin")
                     .quantity(BigDecimal.ONE)
-                    .money(new Money(BigDecimal.valueOf(200.00))).build(),
-                Item.builder().id(ItemId.random())
+                    .money(new Money(BigDecimal.valueOf(200.00)))
+                    .purchasePrice(new Money(100.00))
+                    .currentPrice(new Money(200.00))
+                    .ticker("BTC")
+                    .build(),
+                StockItem.builder().id(ItemId.random())
                     .name("Ethereum")
-                    .quantity(BigDecimal.TEN)
+                    .quantity(BigDecimal.ONE)
+                    .purchasePrice(new Money(100.00))
+                    .currentPrice(new Money(300.31))
+                    .ticker("BTC")
                     .money(new Money(BigDecimal.valueOf(300.31))).build()
             ))
             .summaryId(secondId)
@@ -193,7 +207,7 @@ class StartupConfiguration {
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setUserSubscriptionId(UserSubscriptionId.random());
         userSubscription.setSubscriptionType(SubscriptionType.PREMIUM);
-        userSubscription.setExpires(LocalDate.of(2024,4, 30));
+        userSubscription.setExpires(LocalDate.of(2024, 4, 30));
         userSubscription.setStart(LocalDate.of(2024, 4, 20));
         userSubscription.setUser(user);
         return userSubscription;
@@ -241,5 +255,4 @@ class StartupConfiguration {
             .build());
         return user3;
     }
-
 }

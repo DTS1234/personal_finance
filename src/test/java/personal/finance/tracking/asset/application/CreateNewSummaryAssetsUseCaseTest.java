@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import personal.finance.tracking.asset.domain.Asset;
 import personal.finance.tracking.asset.domain.AssetId;
+import personal.finance.tracking.asset.domain.AssetType;
 import personal.finance.tracking.asset.infrastracture.persistance.repository.AssetInMemoryRepository;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.SummaryId;
@@ -24,7 +25,7 @@ class CreateNewSummaryAssetsUseCaseTest {
         SummaryId previousConfirmedSummary = SummaryId.random();
         SummaryId newSummaryId = SummaryId.random();
 
-        Asset given = new Asset(AssetId.random(), new Money(0), "name", List.of(), previousConfirmedSummary);
+        Asset given = new Asset(AssetId.random(), new Money(0), "name", List.of(), AssetType.CUSTOM, previousConfirmedSummary);
         repository.saveAll(List.of(given));
 
         List<Asset> assets = new CreateNewSummaryAssetsUseCase(repository, previousConfirmedSummary,

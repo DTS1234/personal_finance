@@ -11,7 +11,7 @@
       "money": 0.00,
       "name": "new Asset",
       "items": [],
-      "assetType": "NORMAL"
+      "assetType": "CUSTOM"
     }
   ]
 }

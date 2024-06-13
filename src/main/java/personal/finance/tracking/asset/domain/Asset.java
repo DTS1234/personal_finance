@@ -1,6 +1,5 @@
 package personal.finance.tracking.asset.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,6 @@ import java.util.UUID;
  * @create 17.06.2022
  */
 @Builder(buildMethodName = "buildAsset")
-@AllArgsConstructor
 @Getter
 @ToString()
 public class Asset {
@@ -38,12 +36,12 @@ public class Asset {
     @Setter
     private SummaryId summaryId;
 
-    public Asset(AssetId id, Money money, String name, List<Item> items, SummaryId summaryId) {
+    public Asset(AssetId id, Money money, String name, List<Item> items, AssetType type, SummaryId summaryId) {
         this.id = id;
         this.money = money;
         this.name = name;
         this.items = items;
-        this.type = AssetType.NORMAL;
+        this.type = type;
         this.summaryId = summaryId;
     }
 
@@ -55,7 +53,8 @@ public class Asset {
     }
 
     public Asset newCopyForSummary(SummaryId newSummaryId) {
-        return new Asset(AssetId.random(), this.money, this.name, this.items.stream().map(Item::newCopyForAsset).toList(), newSummaryId);
+        return new Asset(AssetId.random(), this.money, this.name,
+            this.items.stream().map(Item::newCopyForAsset).toList(), this.type, newSummaryId);
     }
 
     @Override

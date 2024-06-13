@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Asset} from '../../../models/asset.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SummaryService} from "../../../services/summary.service";
@@ -15,7 +15,6 @@ export class AddAssetComponent implements OnInit {
   asset: Asset;
   mode = 'add';
   summary: Summary;
-  private updatingSummary = false;
 
   constructor(private formBuilder: UntypedFormBuilder,
               private summaryService: SummaryService,
@@ -39,6 +38,7 @@ export class AddAssetComponent implements OnInit {
         this.assetForm = this.formBuilder.group({
           name: ['', Validators.required],
           money: ['', Validators.required],
+          type: ['', Validators.required],
           items: this.formBuilder.array([]) // You can add item fields dynamically
         });
       }
@@ -62,6 +62,10 @@ export class AddAssetComponent implements OnInit {
     });
   }
 
+  get items(): FormArray {
+    return this.assetForm.get('items') as FormArray;
+  }
+
   onSubmit(): void {
     if (this.assetForm.invalid) {
       return;
@@ -74,7 +78,8 @@ export class AddAssetComponent implements OnInit {
       assetData.name,
       assetData.money,
       assetData.items,
-      this.summary.id
+      this.summary.id,
+      assetData.type
     );
 
     const newSummary = JSON.parse(JSON.stringify(this.summary));
@@ -85,7 +90,6 @@ export class AddAssetComponent implements OnInit {
         newSummary.money += assetData.money
         this.summaryService.setNewSummary(newSummary)
         this.summary = newSummary
-        this.updatingSummary = false;
 
         this.assetForm.reset();
 
@@ -97,14 +101,34 @@ export class AddAssetComponent implements OnInit {
     )
   }
 
+  updateFormArray(type: string): void {
+    this.items.clear();
+    if (type === 'STOCK') {
+      this.addStockItem();
+    } else if (type === 'NORMAL') {
+      this.addItem();
+    }
+  }
+
   addItem(): void {
-    const items = this.assetForm.get('items') as UntypedFormArray;
     const newItem = this.formBuilder.group({
       name: ['', Validators.required],
       money: ['', Validators.required],
       quantity: ['', Validators.required]
     });
-    items.push(newItem);
+    this.items.push(newItem);
+  }
+
+  addStockItem(): void {
+    const stockItemForm = this.formBuilder.group({
+      ticker: ['', Validators.required],
+      purchasePrice: ['', Validators.required],
+      currentPrice: [{ value: '1' }, Validators.required],
+      name: ['', Validators.required],
+      quantity: ['', Validators.required],
+      type: ['STOCK', Validators.required]
+    });
+    this.items.push(stockItemForm);
   }
 
   updateAssetMoneyValue() {
