@@ -33,7 +33,6 @@ export class AddAssetComponent implements OnInit {
       if (assetString) {
         this.asset = JSON.parse(assetString);
         this.initializeForm();
-        this.mode = 'edit';
       } else {
         this.assetForm = this.formBuilder.group({
           name: ['', Validators.required],
@@ -54,8 +53,7 @@ export class AddAssetComponent implements OnInit {
         this.asset.items.map(item =>
           this.formBuilder.group({
             name: [item.name, Validators.required],
-            money: [item.money, Validators.required],
-            quantity: [item.quantity, Validators.required]
+            money: [item.money, Validators.required]
           })
         )
       )
@@ -105,7 +103,7 @@ export class AddAssetComponent implements OnInit {
     this.items.clear();
     if (type === 'STOCK') {
       this.addStockItem();
-    } else if (type === 'NORMAL') {
+    } else if (type === 'CUSTOM') {
       this.addItem();
     }
   }
@@ -114,7 +112,7 @@ export class AddAssetComponent implements OnInit {
     const newItem = this.formBuilder.group({
       name: ['', Validators.required],
       money: ['', Validators.required],
-      quantity: ['', Validators.required]
+      type: ['CUSTOM', Validators.required]
     });
     this.items.push(newItem);
   }

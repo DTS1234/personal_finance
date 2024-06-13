@@ -24,7 +24,6 @@ public abstract class ItemDTO {
     UUID id;
     BigDecimal money;
     String name;
-    String type;
 
     public ItemDTO(UUID id, BigDecimal money, String name) {
         this.id = id;

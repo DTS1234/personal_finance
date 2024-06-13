@@ -18,6 +18,7 @@ import personal.finance.payment.domain.CustomerRepository;
 import personal.finance.tracking.asset.domain.Asset;
 import personal.finance.tracking.asset.domain.AssetId;
 import personal.finance.tracking.asset.domain.AssetRepository;
+import personal.finance.tracking.asset.domain.AssetType;
 import personal.finance.tracking.asset.domain.CustomItem;
 import personal.finance.tracking.asset.domain.ItemId;
 import personal.finance.tracking.asset.domain.StockItem;
@@ -134,6 +135,7 @@ class StartupConfiguration {
         return Asset.builder()
             .id(assetIdThree)
             .name("Stocks 1")
+            .type(AssetType.STOCK)
             .money(new Money(BigDecimal.valueOf(2201.24)))
             .items(List.of(
                 StockItem.builder().id(ItemId.random()).money(new Money(BigDecimal.valueOf(201.20)))
@@ -160,6 +162,7 @@ class StartupConfiguration {
             .id(assetIdTwo)
             .name("Account 1")
             .money(new Money(BigDecimal.valueOf(1500.12)))
+            .type(AssetType.CUSTOM)
             .items(List.of(
                 CustomItem.builder().id(ItemId.random())
                     .name("EUR account")
@@ -182,6 +185,7 @@ class StartupConfiguration {
             .id(assetIdOne)
             .name("Crypto")
             .money(new Money(BigDecimal.valueOf(500.31)))
+            .type(AssetType.STOCK)
             .items(List.of(
                 StockItem.builder().id(ItemId.random())
                     .name("Bitcoin")

@@ -1,5 +1,6 @@
 package personal.finance.tracking.asset.domain;
 
+import personal.finance.tracking.asset.application.CustomItemDTO;
 import personal.finance.tracking.asset.application.StockItemDTO;
 import personal.finance.tracking.summary.domain.Money;
 
@@ -17,8 +18,8 @@ public class ItemFactory {
             stockItem.setTicker(request.getTicker());
             return stockItem;
         } else {
-            ItemRequest request = (ItemRequest) object;
-            return new CustomItem(ItemId.random(), request.money(), request.name());
+            CustomItemDTO request = (CustomItemDTO) object;
+            return new CustomItem(ItemId.random(), new Money(request.getMoney()), request.getName());
         }
     }
 

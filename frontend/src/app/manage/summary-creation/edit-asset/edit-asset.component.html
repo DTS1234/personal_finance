@@ -17,30 +17,20 @@
     </div>
   </div>
 
-  <div formArrayName="items">
+  <div class="w-full md:w-1/2 px-2" formArrayName="items">
     <div *ngFor="let itemEntity of assetForm.get('items')['controls']; let i=index" [formGroupName]="i">
-      <div>
-        <label for="itemName{{i}}" class="block text-sm font-medium text-gray-700">Item Name</label>
-        <input type="text" id="itemName{{i}}" formControlName="name"
-               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-      </div>
-
-      <div>
-        <label for="itemMoneyValue{{i}}" class="block text-sm font-medium text-gray-700">Item Money Value</label>
-        <input type="number" id="itemMoneyValue{{i}}" formControlName="money"
-               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-      </div>
-
-      <div>
-        <label for="itemQuantity{{i}}" class="block text-sm font-medium text-gray-700">Item Quantity</label>
-        <input type="number" id="itemQuantity{{i}}" formControlName="quantity"
-               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-      </div>
+      <app-stock-item-form *ngIf="assetForm.value.type=='STOCK'" [assetForm]="items.at(i)"></app-stock-item-form>
+      <app-normal-item-form *ngIf="assetForm.value.type=='CUSTOM'" [assetForm]="items.at(i)"></app-normal-item-form>
     </div>
   </div>
 
-  <div class="flex space-x-4">
-    <button type="button" (click)="addItem()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Add Item</button>
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+  <div class="flex items-center justify-start space-x-2 mt-4">
+    <button type="button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            (click)="updateFormArray(assetForm.value.type)">Add Item
+    </button>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            (click)="cancelEditing()">Cancel
+    </button>
   </div>
 </form>

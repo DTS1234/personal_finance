@@ -39,11 +39,9 @@ export class ManageComponent implements OnInit {
           data => {
             if (data != null) {
               this.summaryService.setNewSummary(data)
-
               this.currencyService.getRate(data).subscribe(data => {
                 this.rate = data;
               })
-
               this.inSummaryCreation = true;
             } else {
               this.inSummaryCreation = false;
