@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <div class="flex items-center ml-4">
+    <div class="flex items-center ml-4" *ngIf="isAuthenticated">
       <select (change)="onCurrencyChange($event)" class="text-white bg-primary border-none">
         <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
       </select>
