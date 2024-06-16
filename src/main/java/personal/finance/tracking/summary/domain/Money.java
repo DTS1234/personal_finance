@@ -16,12 +16,12 @@ public class Money {
     Currency currency;
 
     public Money(@NonNull BigDecimal moneyValue) {
-        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_UP);
+        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_EVEN);
         this.currency = Currency.EUR;
     }
 
     public Money(BigDecimal moneyValue, Currency currency) {
-        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_UP);
+        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_EVEN);
         this.currency = currency;
     }
 
