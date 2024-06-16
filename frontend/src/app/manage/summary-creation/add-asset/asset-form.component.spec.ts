@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddAssetComponent } from './add-asset.component';
+import { AssetFormComponent } from './asset-form.component';
 
 describe('AddAssetComponent', () => {
-  let component: AddAssetComponent;
-  let fixture: ComponentFixture<AddAssetComponent>;
+  let component: AssetFormComponent;
+  let fixture: ComponentFixture<AssetFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddAssetComponent ]
+      declarations: [ AssetFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddAssetComponent);
+    fixture = TestBed.createComponent(AssetFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -15,7 +15,7 @@
           <label for="type" class="block text-gray-700 text-sm font-bold mb-2">Type</label>
           <select type="text" id="type" formControlName="type"
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <option>NORMAL</option>
+            <option>CUSTOM</option>
             <option>STOCK</option>
           </select>
           <div *ngIf="assetForm.controls.type.touched && assetForm.controls.type.errors?.required"
@@ -38,7 +38,7 @@
     <div class="w-full md:w-1/2 px-2" formArrayName="items">
       <div *ngFor="let itemEntity of assetForm.get('items')['controls']; let i=index" [formGroupName]="i">
         <app-stock-item-form *ngIf="assetForm.value.type=='STOCK'" [assetForm]="items.at(i)"></app-stock-item-form>
-        <app-normal-item-form *ngIf="assetForm.value.type=='NORMAL'" [assetForm]="items.at(i)"></app-normal-item-form>
+        <app-normal-item-form *ngIf="assetForm.value.type=='CUSTOM'" [assetForm]="items.at(i)"></app-normal-item-form>
       </div>
     </div>
   </div>

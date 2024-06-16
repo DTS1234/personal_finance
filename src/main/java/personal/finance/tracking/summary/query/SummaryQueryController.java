@@ -16,7 +16,9 @@ import personal.finance.tracking.summary.application.dto.DTOMapper;
 import personal.finance.tracking.summary.domain.UserRepository;
 import personal.finance.tracking.summary.application.dto.SummaryDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

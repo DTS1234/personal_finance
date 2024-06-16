@@ -7,14 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import personal.finance.tracking.summary.infrastracture.external.ExchangeData;
+import personal.finance.tracking.summary.infrastracture.external.SearchStockData;
 import personal.finance.tracking.summary.infrastracture.external.StockApiProvider;
 import personal.finance.tracking.summary.infrastracture.external.StockData;
 import personal.finance.tracking.summary.infrastracture.external.TickerData;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -67,6 +70,17 @@ public class StockExplorerController {
         } else {
             return stockApiProvider.fetchStockPerExchange(exchange);
         }
+    }
+
+    @GetMapping("/{ticker}/current_price")
+    public Map<String, BigDecimal> getStockCurrentPrice(@PathVariable("ticker") String ticker) {
+        BigDecimal value = stockApiProvider.fetchPriceByTicker(ticker);
+        return Map.of(ticker, value);
+    }
+
+    @GetMapping("/exchange-list/{query}/search")
+    public List<SearchStockData> getStocksBySearch(@PathVariable("query") String query) {
+        return stockApiProvider.fetchSearchStockData(query);
     }
 
 }

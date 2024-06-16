@@ -58,7 +58,7 @@ export class SummaryCreationComponent implements OnInit {
   }
 
   edit(index: number): void {
-    this.router.navigate([`/summary/${this.summary.id}/edit-asset`],
+    this.router.navigate([`/summary/${this.summary.id}/add-asset`],
       {queryParams: {index: JSON.stringify(index)}}).then(r => console.log(r));
   }
 

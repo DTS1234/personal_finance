@@ -1,9 +1,17 @@
 <div class="bg-white shadow mt-3 p-4 rounded-lg">
   <form [formGroup]="assetForm">
     <div class="mt-4">
+      <label for="query">query</label>
+      <input id="query" [formControl]="query"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text">
+
       <label for="ticker">Ticker</label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="ticker"
-             formControlName="ticker">
+      <select (change)="selectTicker()" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="ticker"
+              formControlName="ticker">
+        <option [value]="i.Name" *ngFor="let i of this.found">{{ i.Code }} | {{ i.Country }} | {{ i.Name }}</option>
+      </select>
+      <button class="button" (click)="search()">search</button>
     </div>
     <div class="mt-4">
       <label for="purchasePrice">Purchase Price</label>
@@ -13,7 +21,7 @@
     <div class="mt-4">
       <label for="currentPrice">Current Price</label>
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-             id="currentPrice" formControlName="currentPrice" type="number" disabled>
+             id="currentPrice" formControlName="currentPrice" type="number">
     </div>
     <div class="mt-4">
       <label for="name">Name</label>

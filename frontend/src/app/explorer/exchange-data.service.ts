@@ -4,6 +4,7 @@ import {Observable, of} from "rxjs";
 import {ExchangeData} from "./exchange-data.model";
 import {TickerData} from "./ticker-data.model";
 import {StockData} from "./stock-data.model";
+import {SearchStockData} from "../manage/summary-creation/stock-item-form/search-stock-item.model";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,12 @@ export class ExchangeDataService {
     return this.http.get<StockData[]>('http://localhost:8080/' + exchange + "/" + stock)
   }
 
-  getCurrentPrice(ticker: any):Observable<number> {
+  getCurrentPrice(ticker: any): Observable<number> {
     return of(10.00);
   }
+
+  getBySearch(query: string) {
+    return this.http.get<SearchStockData[]>("http://localhost:8080/exchange-list/" + query + "/search")
+  }
+
 }
