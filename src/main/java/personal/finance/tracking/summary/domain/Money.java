@@ -21,7 +21,7 @@ public class Money {
     }
 
     public Money(BigDecimal moneyValue, Currency currency) {
-        this.moneyValue = moneyValue.setScale(2, RoundingMode.HALF_EVEN);
+        this.moneyValue = moneyValue.setScale(4, RoundingMode.HALF_EVEN);
         this.currency = currency;
     }
 
@@ -40,6 +40,10 @@ public class Money {
             return Currency.EUR;
         }
         return currency;
+    }
+
+    public BigDecimal getMoneyValue() {
+        return this.moneyValue.setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public Money add(Money other) {
@@ -70,7 +74,7 @@ public class Money {
     }
 
     public Money divideBy(BigDecimal divisor) {
-        return new Money(moneyValue.divide(divisor, 2, RoundingMode.HALF_EVEN), currency);
+        return new Money(moneyValue.divide(divisor, 4, RoundingMode.HALF_EVEN), currency);
     }
 
     public Money divideBy(double divisor) {
