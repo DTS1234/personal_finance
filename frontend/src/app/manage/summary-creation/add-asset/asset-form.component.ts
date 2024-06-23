@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Asset} from '../../../models/asset.model';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {SummaryService} from "../../../services/summary.service";
 import {Summary} from "../../../models/summary.model";
-import {Item} from "../../../models/item.model";
 
 @Component({
   selector: 'app-add-asset',
@@ -12,20 +11,27 @@ import {Item} from "../../../models/item.model";
   styleUrls: ['./asset-form.component.css']
 })
 export class AssetFormComponent implements OnInit {
-  assetForm: UntypedFormGroup;
+  assetForm: FormGroup;
   asset: Asset;
   mode = 'add';
   summary: Summary;
   index: number
 
-  constructor(private formBuilder: UntypedFormBuilder,
-              private summaryService: SummaryService,
-              private router: Router,
-              private route: ActivatedRoute) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private summaryService: SummaryService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.assetForm = this.formBuilder.group({
+      assetName: ['', Validators.required],
+      money: ['', Validators.required],
+      type: ['', Validators.required],
+      items: this.formBuilder.array([])
+    });
   }
 
   ngOnInit(): void {
-
     this.summaryService.getCurrentDraft().subscribe(data => {
       this.summary = data
 
@@ -42,44 +48,14 @@ export class AssetFormComponent implements OnInit {
             this.mode = "edit"
           }
 
-          console.log("ASSET " + JSON.stringify(this.asset))
+          this.assetForm.patchValue({
+            assetName: this.asset.name,
+            money: this.asset.money,
+            type: this.asset.type,
+          });
 
-          this.assetForm = this.formBuilder.group({
-            name: [this.asset.name],
-            money: [this.asset.money],
-            type: [this.asset.type],
-            items: this.formBuilder.array(
-              this.asset.items.map(item => {
-                  console.log("Adding custom items...")
-                  if (this.asset.type == "CUSTOM") {
-                    return this.formBuilder.group({
-                      name: [item.name],
-                      money: [item.money],
-                      type: [this.asset.type]
-                    })
-                  } else {
-                    if (!(item instanceof Item)) {
-                      return this.formBuilder.group({
-                        ticker: [item.ticker, Validators.required],
-                        purchasePrice: [item.purchasePrice, Validators.required],
-                        currentPrice: [item.currentPrice, Validators.required],
-                        name: [item.name, Validators.required],
-                        quantity: [item.quantity, Validators.required],
-                        type: ['STOCK', Validators.required]
-                      });
-                    }
-                  }
-                }
-              )
-            )
-          });
-        } else {
-          this.assetForm = this.formBuilder.group({
-            name: [''],
-            money: ['', Validators.required],
-            type: ['', Validators.required],
-            items: this.formBuilder.array([]) // You can add item fields dynamically
-          });
+          const itemsArray = this.asset.items.map(item => this.createItemGroup(item));
+          this.assetForm.setControl('items', this.formBuilder.array(itemsArray));
         }
       });
     })
@@ -89,18 +65,43 @@ export class AssetFormComponent implements OnInit {
     return this.assetForm.get('items') as FormArray;
   }
 
+  createItemGroup(item?: any): FormGroup {
+    if (item) {
+      if (item.type === "CUSTOM") {
+        return this.formBuilder.group({
+          name: [item.name, Validators.required],
+          money: [item.money, Validators.required],
+          type: [item.type, Validators.required]
+        });
+      } else {
+        return this.formBuilder.group({
+          ticker: [item.ticker, Validators.required],
+          purchasePrice: [item.purchasePrice, Validators.required],
+          currentPrice: [item.currentPrice, Validators.required],
+          name: [item.name, Validators.required],
+          quantity: [item.quantity, Validators.required],
+          type: [item.type, Validators.required]
+        });
+      }
+    } else {
+      return this.formBuilder.group({
+        name: ['', Validators.required],
+        money: ['', Validators.required],
+        type: ['CUSTOM', Validators.required]
+      });
+    }
+  }
+
   onSubmit(): void {
     if (this.assetForm.invalid) {
-      console.log(this.assetForm.controls)
-      console.log("INVALID FORM, RETURNING ...")
+      console.log("INVALID FORM ...")
       return;
     }
 
     const assetData = this.assetForm.value;
-
     const asset = new Asset(
       null,
-      assetData.name,
+      assetData.assetName,
       assetData.money,
       assetData.items,
       this.summary.id,
@@ -125,10 +126,12 @@ export class AssetFormComponent implements OnInit {
           this.router.navigate([newUrl]).then(r => console.log(r))
         }
       )
-      console.log("ADDED ASSET")
     } else {
       const oldMoneyValue = this.asset.money
-      this.asset.name = assetData.name;
+
+      console.log("updating with : " + JSON.stringify(assetData))
+
+      this.asset.name = assetData.assetName
       this.asset.money = assetData.money;
       this.asset.items = assetData.items;
 
@@ -150,10 +153,7 @@ export class AssetFormComponent implements OnInit {
             this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
           }
         )
-      console.log("UPDATED ASSET")
     }
-
-
   }
 
   updateFormArray(type: string): void {
