@@ -70,7 +70,7 @@ public class Money {
     }
 
     public Money divideBy(BigDecimal divisor) {
-        return new Money(moneyValue.divide(divisor, 4, RoundingMode.HALF_EVEN), currency);
+        return new Money(moneyValue.divide(divisor, 2, RoundingMode.HALF_EVEN), currency);
     }
 
     public Money divideBy(double divisor) {
