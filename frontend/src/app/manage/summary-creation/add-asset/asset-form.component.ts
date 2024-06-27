@@ -4,6 +4,8 @@ import {Asset} from '../../../models/asset.model';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {SummaryService} from "../../../services/summary.service";
 import {Summary} from "../../../models/summary.model";
+import {Item} from "../../../models/item.model";
+import {StockItemRequestDTO} from "../stock-item-form/stock-item.model";
 
 @Component({
   selector: 'app-add-asset',
@@ -25,7 +27,7 @@ export class AssetFormComponent implements OnInit {
   ) {
     this.assetForm = this.formBuilder.group({
       assetName: ['', Validators.required],
-      money: ['', Validators.required],
+      money: [{value: '', disabled: false}],
       type: ['', Validators.required],
       items: this.formBuilder.array([])
     });
@@ -56,6 +58,7 @@ export class AssetFormComponent implements OnInit {
 
           const itemsArray = this.asset.items.map(item => this.createItemGroup(item));
           this.assetForm.setControl('items', this.formBuilder.array(itemsArray));
+          this.onChanges();
         }
       });
     })
@@ -90,6 +93,21 @@ export class AssetFormComponent implements OnInit {
         type: ['CUSTOM', Validators.required]
       });
     }
+  }
+
+  onChanges(): void {
+    let itemControls = this.assetForm.get('items') as FormArray
+    itemControls.valueChanges.subscribe(val => {
+      const type = this.asset?.type
+      console.log("on changes !")
+      if (type == "STOCK") {
+        const items: StockItemRequestDTO[] = this.assetForm.get('items').value;
+        let sum = 0
+        items.forEach(i => sum += (i.currentPrice * i.quantity))
+        this.assetForm.patchValue({money: sum}, {emitEvent: false})
+        console.log("new sum " + sum)
+      }
+    });
   }
 
   onSubmit(): void {
