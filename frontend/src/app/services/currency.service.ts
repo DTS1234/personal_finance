@@ -1,7 +1,7 @@
 // currency.service.ts
 import {Injectable, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {UpdateCurrency} from "../models/update-currency.model";
 import {CurrenciesResponse} from "../models/currencies-rates.model";
 import {map, tap} from "rxjs/operators";
