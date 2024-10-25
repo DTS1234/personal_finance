@@ -1,0 +1,76 @@
+{
+  "summaries": [
+    {
+      "id": "2",
+      "userId": "1",
+      "money": 1000,
+      "currency": "EUR",
+      "state": "DRAFT",
+      "date": "2023-10-01",
+      "assets": [
+        {
+          "id": "1",
+          "money": 500,
+          "name": "Asset 1",
+          "items": [],
+          "assetType": "CUSTOM"
+        },
+        {
+          "id": "2",
+          "money": 500,
+          "name": "Asset 2",
+          "items": [],
+          "assetType": "STOCK"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "userId": "123e4567-e89b-12d3-a456-426614174005",
+      "money": 2000,
+      "currency": "EUR",
+      "state": "CONFIRMED",
+      "date": "2023-09-15",
+      "assets": [
+        {
+          "id": "3",
+          "money": 1500,
+          "name": "Asset 3",
+          "items": [],
+          "assetType": "CUSTOM"
+        },
+        {
+          "id": "4",
+          "money": 500,
+          "name": "Asset 4",
+          "items": [],
+          "assetType": "STOCK"
+        }
+      ]
+    }
+  ],
+  "subscriptions": [
+    {
+      "userId": "1",
+      "plan": "Premium",
+      "validUntil": "2024-12-31",
+      "id": "9113"
+    }
+  ],
+  "assets": [
+    {
+      "id": "3",
+      "money": 1500,
+      "name": "Asset 4",
+      "items": [
+        {
+          "id": 1,
+          "type": "CUSTOM",
+          "money": 1500,
+          "name": "Item 1"
+        }
+      ],
+      "assetType": "CUSTOM"
+    }
+  ]
+}

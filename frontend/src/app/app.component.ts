@@ -8,7 +8,7 @@ import {CurrencyService} from "./services/currency.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'frontend';
+  title = 'PF';
 
   constructor(private auth: AuthService, private currencyService: CurrencyService) {
   }

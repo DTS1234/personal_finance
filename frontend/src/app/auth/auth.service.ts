@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {User} from "./user.model";
 import {catchError, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {UserSignUpData} from "./sign-up/user-signup.model";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {Subscription} from "../account/subscription.model";
 import {UserInformationData} from "./user-updata.model";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -16,24 +16,24 @@ export class AuthService {
 
   authenticated = false;
   user = new BehaviorSubject<User>(null)
-  subscription:BehaviorSubject<Subscription> = new BehaviorSubject<Subscription>(null)
+  subscription: BehaviorSubject<Subscription> = new BehaviorSubject<Subscription>(null)
   token: string | null = null
   private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient, private router: Router) {
   }
 
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = environment.useInMemoryDb ? 'http://localhost:3000' : 'http://localhost:8080';
 
   login(username: string, password: string): Observable<AuthResponseData> {
-    return this.http.post<AuthResponseData>(this.baseUrl + '/login', {username: username, password: password})
+    return this.http.post<AuthResponseData>(`${this.baseUrl}/login`, {username, password})
       .pipe(tap(resData => {
-        this.handleAuthentication(resData)
-      }))
+        this.handleAuthentication(resData);
+      }));
   }
 
   signUp(user: UserSignUpData): Observable<SignUpResponseData> {
-    return this.http.post<SignUpResponseData>(this.baseUrl + '/registration', user);
+    return this.http.post<SignUpResponseData>(`${this.baseUrl}/registration`, user);
   }
 
   getSubscription(userId: string): Observable<Subscription> {
@@ -129,7 +129,7 @@ interface PasswordReset {
   newPassword: string
 }
 
-interface AuthResponseData {
+export interface AuthResponseData {
   username: string,
   id: string,
   token: string,
@@ -137,7 +137,7 @@ interface AuthResponseData {
   userInformation: UserSignUpData
 }
 
-interface SignUpResponseData {
+export interface SignUpResponseData {
   username: string,
   message: string,
   userInformation: UserSignUpData

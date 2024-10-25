@@ -1,55 +1,65 @@
-<form [formGroup]="assetForm" (ngSubmit)="onSubmit()" class="p-4">
-  <div class="flex flex-wrap -mx-2">
-    <div class="w-full md:w-1/2 px-2">
-      <div class="bg-white shadow mt-3 p-4 rounded-lg">
-        <div>
-          <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-          <input type="text" formControlName="assetName"
-                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <div *ngIf="assetForm.get('assetName')?.touched && assetForm.get('assetName')?.errors?.required"
-               class="text-red-500 text-xs italic">
-            Name is required.
-          </div>
+<div class="max-w-2xl bg-slate-300 m-auto">
+  <form [formGroup]="assetForm" (ngSubmit)="onSubmit()" class="space-y-4 mt-10 font-medium">
+    <div class="m-2 space-y-1">
+      <label class="block" for="name">Name</label>
+      <input class="shadow-md rounded" id="name" formControlName="name"/>
+      <div *ngIf="assetForm.get('name').invalid && assetForm.get('name').touched">
+        Name is required.
+      </div>
+    </div>
+
+    <div class="m-2 space-y-1">
+      <label class="block" for="money">Money</label>
+      <input class="shadow-md rounded" id="money" type="number" formControlName="money"/>
+      <div *ngIf="assetForm.get('money').invalid && assetForm.get('money').touched">
+        Money must be a positive number.
+      </div>
+    </div>
+
+    <div class="m-2 space-y-1">
+      <label class="block" for="type">Type</label>
+      <select class="shadow-md rounded" id="type" formControlName="type">
+        <option value="" disabled>Select type</option>
+        <option value="STOCK">STOCK</option>
+        <option value="CUSTOM">CUSTOM</option>
+      </select>
+      <div *ngIf="assetForm.get('type').invalid && assetForm.get('type').touched">
+        Type is required.
+      </div>
+    </div>
+
+    <div formArrayName="items">
+      <div *ngFor="let item of items.controls; let i = index">
+        <div *ngIf="assetForm.get('type').value === 'STOCK'" [formGroupName]="i" class="bg-slate-400 relative p-5 shadow-sm">
+          <label class="block" for="ticker">Ticker</label>
+          <input class="shadow-md rounded" id="ticker" formControlName="ticker"/>
+          <label class="block" for="purchasePrice">Purchase Price</label>
+          <input class="shadow-md rounded" id="purchasePrice" type="number" formControlName="purchasePrice"/>
+          <label class="block" for="currentPrice">Current Price</label>
+          <input class="shadow-md rounded" id="currentPrice" type="number" formControlName="currentPrice"/>
+          <label class="block" for="name">Item Name</label>
+          <input class="shadow-md rounded" id="name" formControlName="name"/>
+          <label class="block" for="quantity">Quantity</label>
+          <input class="shadow-md rounded" id="quantity" type="number" formControlName="quantity"/>
+          <label class="block" for="money">Money</label>
+          <input class="shadow-md rounded" id="money" type="number" formControlName="money"/>
+          <div class="absolute top-5 right-5 text-white hover:font-bold cursor-pointer" (click)="removeItem(i)">X</div>
         </div>
-        <div class="mt-4">
-          <label for="type" class="block text-gray-700 text-sm font-bold mb-2">Type</label>
-          <select type="text" id="type" formControlName="type"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <option>CUSTOM</option>
-            <option>STOCK</option>
-          </select>
-          <div *ngIf="assetForm.get('type')?.touched && assetForm.get('type')?.errors?.required"
-               class="text-red-500 text-xs italic">
-            Type is required.
-          </div>
-        </div>
-        <div class="mt-4">
-          <label for="money" class="block text-gray-700 text-sm font-bold mb-2">Money Value</label>
-          <input type="number" id="money" formControlName="money" readonly
-                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <div *ngIf="assetForm.get('money')?.touched && assetForm.get('money')?.errors?.required"
-               class="text-red-500 text-xs italic">
-            Money Value is required.
-          </div>
+
+        <div *ngIf="assetForm.get('type').value === 'CUSTOM'" [formGroupName]="i" class="p-5 shadow-sm bg-slate-400 relative">
+          <label class="block" for="customName">Name</label>
+          <input class="shadow-md rounded" id="customName" formControlName="name"/>
+          <label class="block" for="customMoney">Money</label>
+          <input class="shadow-md rounded" id="customMoney" type="number" formControlName="money"/>
+          <div class="absolute top-5 right-5 text-white hover:font-bold cursor-pointer" (click)="removeItem(i)">X</div>
         </div>
       </div>
     </div>
 
-    <div class="w-full md:w-1/2 px-2" formArrayName="items">
-      <div *ngFor="let itemEntity of assetForm.get('items')?.['controls']; let i=index" [formGroupName]="i">
-        <app-stock-item-form *ngIf="assetForm.value.type=='STOCK'" [assetForm]="items.at(i)"></app-stock-item-form>
-        <app-normal-item-form *ngIf="assetForm.value.type=='CUSTOM'" [assetForm]="items.at(i)"></app-normal-item-form>
-      </div>
+    <div class="mx-auto space-x-3 my-2">
+      <button class="bg-secondary rounded py-2 px-4 text-white" type="submit" [disabled]="assetForm.invalid">Submit</button>
+      <button class="bg-secondary rounded py-2 px-4 text-white" type="button" (click)="addCustomItem()">Add</button>
     </div>
-  </div>
 
-  <div class="flex items-center justify-start space-x-2 mt-4">
-    <button type="button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            (click)="updateFormArray(assetForm.value.type)">Add Item
-    </button>
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
-    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            (click)="cancelSummary()">Cancel
-    </button>
-  </div>
-</form>
+  </form>
+</div>

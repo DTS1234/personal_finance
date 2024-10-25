@@ -4,8 +4,7 @@ import {Asset} from '../../../models/asset.model';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {SummaryService} from "../../../services/summary.service";
 import {Summary} from "../../../models/summary.model";
-import {Item} from "../../../models/item.model";
-import {StockItemRequestDTO} from "../stock-item-form/stock-item.model";
+import {StockItem} from "../stock-item-form/stock-item.model";
 
 @Component({
   selector: 'app-add-asset',
@@ -25,15 +24,26 @@ export class AssetFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.assetForm = this.formBuilder.group({
-      assetName: ['', Validators.required],
-      money: [{value: '', disabled: false}],
-      type: ['', Validators.required],
-      items: this.formBuilder.array([])
-    });
+
   }
 
   ngOnInit(): void {
+    this.assetForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      money: [0, [Validators.required, Validators.min(0)]],
+      type: ['', [Validators.required]],
+      items: this.formBuilder.array([])
+    });
+
+    this.assetForm.get('type').valueChanges.subscribe((type) => {
+      this.clearItems(); // Clear existing items when type changes
+      if (type === 'STOCK') {
+        this.addStockItem();
+      } else if (type === 'CUSTOM') {
+        this.addCustomItem();
+      }
+    });
+
     this.summaryService.getCurrentDraft().subscribe(data => {
       this.summary = data
 
@@ -51,126 +61,114 @@ export class AssetFormComponent implements OnInit {
           }
 
           this.assetForm.patchValue({
-            assetName: this.asset.name,
+            name: this.asset.name,
             money: this.asset.money,
             type: this.asset.type,
+            items: this.asset.items
           });
-
-          const itemsArray = this.asset.items.map(item => this.createItemGroup(item));
-          this.assetForm.setControl('items', this.formBuilder.array(itemsArray));
-          this.onChanges();
         }
       });
     })
+  }
+
+  addStockItem() {
+    const stockItemGroup = this.formBuilder.group({
+      ticker: ['', [Validators.required]],
+      purchasePrice: [0, [Validators.required, Validators.min(0)]],
+      currentPrice: [0, [Validators.required, Validators.min(0)]],
+      name: ['', [Validators.required]],
+      quantity: [0, [Validators.required, Validators.min(0)]],
+      money: [0, [Validators.required, Validators.min(0)]],
+      type: ['STOCK'] // Set a hidden control for type
+    });
+    this.items.push(stockItemGroup);
+  }
+
+  private clearItems() {
+    this.items.clear();
+  }
+
+  addCustomItem() {
+    const customItemGroup = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      money: [0, [Validators.required, Validators.min(0)]],
+      type: ['CUSTOM'] // Set a hidden control for type
+    });
+    this.items.push(customItemGroup);
   }
 
   get items(): FormArray {
     return this.assetForm.get('items') as FormArray;
   }
 
-  createItemGroup(item?: any): FormGroup {
-    if (item) {
-      if (item.type === "CUSTOM") {
-        return this.formBuilder.group({
-          name: [item.name, Validators.required],
-          money: [item.money, Validators.required],
-          type: [item.type, Validators.required]
-        });
-      } else {
-        return this.formBuilder.group({
-          ticker: [item.ticker, Validators.required],
-          purchasePrice: [item.purchasePrice, Validators.required],
-          currentPrice: [item.currentPrice, Validators.required],
-          name: [item.name, Validators.required],
-          quantity: [item.quantity, Validators.required],
-          type: [item.type, Validators.required]
-        });
-      }
-    } else {
-      return this.formBuilder.group({
-        name: ['', Validators.required],
-        money: ['', Validators.required],
-        type: ['CUSTOM', Validators.required]
-      });
-    }
-  }
-
-  onChanges(): void {
-    let itemControls = this.assetForm.get('items') as FormArray
-    itemControls.valueChanges.subscribe(val => {
-      const type = this.asset?.type
-      console.log("on changes !")
-      if (type == "STOCK") {
-        const items: StockItemRequestDTO[] = this.assetForm.get('items').value;
-        let sum = 0
-        items.forEach(i => sum += (i.currentPrice * i.quantity))
-        this.assetForm.patchValue({money: sum}, {emitEvent: false})
-        console.log("new sum " + sum)
-      }
-    });
+  removeItem(index: number): void {
+    const items = this.assetForm.get('items') as FormArray;
+    items.removeAt(index);
   }
 
   onSubmit(): void {
-    if (this.assetForm.invalid) {
-      console.log("INVALID FORM ...")
-      return;
-    }
 
-    const assetData = this.assetForm.value;
-    const asset = new Asset(
-      null,
-      assetData.assetName,
-      assetData.money,
-      assetData.items,
-      this.summary.id,
-      assetData.type
-    );
-
-    const newSummary = JSON.parse(JSON.stringify(this.summary));
-
-    if (this.mode == 'add') {
-      this.summaryService.addAsset(asset).subscribe(
-        asset => {
-          newSummary.assets.push(asset)
-          newSummary.money += assetData.money
-          this.summaryService.setNewSummary(newSummary)
-          this.summary = newSummary
-
-          this.assetForm.reset();
-
-          const currentUrl = this.router.url;
-          const index = currentUrl.indexOf('/add-asset');
-          const newUrl = currentUrl.substring(0, index);
-          this.router.navigate([newUrl]).then(r => console.log(r))
-        }
-      )
-    } else {
-      const oldMoneyValue = this.asset.money
-
-      console.log("updating with : " + JSON.stringify(assetData))
-
-      this.asset.name = assetData.assetName
-      this.asset.money = assetData.money;
-      this.asset.items = assetData.items;
+    if (this.assetForm.valid) {
+      const assetData = this.assetForm.value;
+      const asset = new Asset(
+        null,
+        assetData.name,
+        assetData.money,
+        assetData.items,
+        this.summary.id,
+        assetData.type
+      );
 
       const newSummary = JSON.parse(JSON.stringify(this.summary));
-      this.summaryService.updateAsset(this.summary.id, this.asset.id, this.asset)
-        .subscribe(
-          a => {
-            newSummary.money -= oldMoneyValue
-            newSummary.assets[this.index] = a
-            newSummary.money += a.money
+
+      if (this.mode == 'add') {
+        console.log("asset to be added: " + JSON.stringify(asset))
+        this.summaryService.addAsset(asset).subscribe(
+          asset => {
+            newSummary.assets.push(asset)
+            newSummary.money += assetData.money
             this.summaryService.setNewSummary(newSummary)
-            this.summary = newSummary;
-            const navigationExtras: NavigationExtras = {
-              queryParams: {reload: true} // Add a query parameter to force reload
-            };
+            this.summary = newSummary
+
+            this.assetForm.reset();
+
             const currentUrl = this.router.url;
             const index = currentUrl.indexOf('/add-asset');
             const newUrl = currentUrl.substring(0, index);
-            this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
+            this.router.navigate([newUrl]).then(r => console.log(r))
           }
         )
+      } else {
+        const oldMoneyValue = this.asset.money
+
+        console.log("updating with : " + JSON.stringify(assetData))
+
+        this.asset.name = assetData.name
+        this.asset.money = assetData.money;
+        this.asset.items = assetData.items;
+
+        const newSummary = JSON.parse(JSON.stringify(this.summary));
+        console.log("asset to be edited: " + JSON.stringify(asset))
+        this.summaryService.updateAsset(this.summary.id, this.asset.id, this.asset)
+          .subscribe(
+            a => {
+              newSummary.money -= oldMoneyValue
+              newSummary.assets[this.index] = a
+              newSummary.money += a.money
+              this.summaryService.setNewSummary(newSummary)
+              this.summary = newSummary;
+              const navigationExtras: NavigationExtras = {
+                queryParams: {reload: true} // Add a query parameter to force reload
+              };
+              const currentUrl = this.router.url;
+              const index = currentUrl.indexOf('/add-asset');
+              const newUrl = currentUrl.substring(0, index);
+              this.router.navigate([newUrl], navigationExtras).then(r => console.log(r));
+            }
+          )
+      }
+    } else {
+      this.assetForm.markAllAsTouched();
     }
   }
 
@@ -178,29 +176,8 @@ export class AssetFormComponent implements OnInit {
     if (type === 'STOCK') {
       this.addStockItem();
     } else if (type === 'CUSTOM') {
-      this.addItem();
+      this.addCustomItem();
     }
-  }
-
-  addItem(): void {
-    const newItem = this.formBuilder.group({
-      name: ['', Validators.required],
-      money: ['', Validators.required],
-      type: ['CUSTOM', Validators.required]
-    });
-    this.items.push(newItem);
-  }
-
-  addStockItem(): void {
-    const stockItemForm = this.formBuilder.group({
-      ticker: ['', Validators.required],
-      purchasePrice: ['', Validators.required],
-      currentPrice: [{value: '1'}, Validators.required],
-      name: ['', Validators.required],
-      quantity: ['', Validators.required],
-      type: ['STOCK', Validators.required]
-    });
-    this.items.push(stockItemForm);
   }
 
   cancelSummary() {

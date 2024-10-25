@@ -7,6 +7,4 @@ export class UserSignUpData {
               public lastname: string | null,
               public firstname: string | null) {
   }
-
-
 }

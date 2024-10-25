@@ -1,8 +1,10 @@
-<div class="row">
-  <div class="col-2">
+<div class="w-full flex flex-row">
+  <div class="border w-1/5 p-4"> <!-- Column 1 -->
+    <div class="flex flex-col space-y-4">
 
-    <div class="m-3">
-      <mat-form-field>
+      <p class="text-bold text-gray-600 p-2 text-xl border">Filters:</p>
+
+      <mat-form-field class="p-2 border">
         <mat-label>Start Date</mat-label>
         <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="startDate">
         <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
@@ -11,7 +13,7 @@
       </mat-form-field>
 
 
-      <mat-form-field>
+      <mat-form-field class="p-2 border">
         <mat-label>End Date</mat-label>
         <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="endDate">
         <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
@@ -19,12 +21,12 @@
         <mat-hint>MM/DD/YYY</mat-hint>
       </mat-form-field>
 
-      <button (click)="applyDateFilter()">Apply Filters</button>
+      <button class="py-2 px-4 w-4/5 mx-auto bg-secondary rounded shadow-sm hover:shadow-2xl text-white" (click)="applyDateFilter()">Apply Filters</button>
     </div>
 
   </div>
-  <div class="col-2"></div>
-  <div class="col-8">
+
+  <div class="w-4/5 p-4"> <!-- Column 2 -->
     <canvas id="canvas">
       {{chart}}
     </canvas>

@@ -1,5 +1,4 @@
-// stock-item-request.dto.ts
-export interface StockItemRequestDTO {
+export class StockItem {
   ticker: string;
   purchasePrice: number;
   currentPrice: number;

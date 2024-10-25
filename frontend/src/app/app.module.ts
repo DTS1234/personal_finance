@@ -6,7 +6,7 @@ import {HomepageComponent} from './homepage/homepage.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {ManageComponent} from './manage/manage.component';
 import {HistoryComponent} from './history/history.component';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {AppRoutingModule} from './app-routing.module';
 import {FooterComponent} from './footer/footer.component';
@@ -35,27 +35,33 @@ import {SpinnerComponent} from "./common/spinner/spinner.component";
 import {StockItemFormComponent} from "./manage/summary-creation/stock-item-form/stock-item-form.component";
 import {NormalItemFormComponent} from "./manage/summary-creation/normal-item-form/normal-item-form.component";
 
-@NgModule({ declarations: [
-        AppComponent,
-        HomepageComponent,
-        NavbarComponent,
-        ManageComponent,
-        HistoryComponent,
-        FooterComponent,
-        AssetBoxComponent,
-        SummaryBoxComponent,
-        SummaryCreationComponent,
-        AssetFormComponent,
-        AuthComponent,
-        DashboardComponent,
-        PasswordResetComponent,
-        PasswordResetRequestComponent,
-        SubscriptionComponent,
-        SuccessComponent,
-        BuyComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule, RouterModule, AppRoutingModule,
-        BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
-        MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent, SpinnerComponent, StockItemFormComponent, NormalItemFormComponent], providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }, provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    NavbarComponent,
+    ManageComponent,
+    HistoryComponent,
+    FooterComponent,
+    AssetBoxComponent,
+    SummaryBoxComponent,
+    SummaryCreationComponent,
+    AssetFormComponent,
+    AuthComponent,
+    DashboardComponent,
+    PasswordResetComponent,
+    PasswordResetRequestComponent,
+    SubscriptionComponent,
+    SuccessComponent,
+    BuyComponent
+  ],
+  bootstrap: [AppComponent],
+  imports: [BrowserModule, RouterModule, AppRoutingModule,
+    BrowserAnimationsModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatFormFieldModule,
+    MatNativeDateModule, MatInputModule, SignUpComponent, LoginComponent, SpinnerComponent, StockItemFormComponent,
+    NormalItemFormComponent
+  ],
+  providers: [DatePipe, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}, provideHttpClient(withInterceptorsFromDi())]
+})
 export class AppModule {
 }

@@ -1,13 +1,14 @@
 <!-- exchange-picker.component.html -->
-<div class="p-4">
+<div class="max-w-4xl mx-auto p-4 shadow mt-4">
   <div class="mb-4">
+    <label class="block text-4xl font-bold text-gray-800 mb-2">Explore stocks: </label>
     <input type="text" [(ngModel)]="searchText" (input)="filterExchanges()"
            placeholder="Search exchanges..."
-           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+           class="shadow appearance-none border-4 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
   </div>
-  <ul class="list-disc pl-5">
+  <ul class="list-none">
     <li *ngFor="let exchange of filteredExchanges" (click)="selectExchange(exchange)"
-        class="cursor-pointer hover:bg-blue-100 p-2">
+        class="shadow rounded-1 cursor-pointer hover:bg-slate-100 p-2">
       {{ exchange.Name }} ({{ exchange.Code }})
     </li>
   </ul>
@@ -19,23 +20,22 @@
            placeholder="Search exchanges..."
            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
   </div>
-  <ul class="divide-y divide-gray-200">
+  <div class="list-none">
     <li *ngFor="let ticker of filteredTickers; let i = index"
         (click)="selectTicker(i)"
-        [class.bg-blue-100]="selectedTickerIndex === i"
-        class="flex items-center p-4 hover:bg-blue-50 cursor-pointer transition-colors">
+        class="flex items-center p-4 hover:bg-blue-50 cursor-pointer transition-colors shadow-sm border list-none">
       <div class="flex-grow">
         <p class="text-lg font-semibold">{{ ticker.Code }}</p>
         <p>{{ ticker.Name }}</p>
         <p class="text-sm text-gray-600">{{ ticker.Currency }}</p>
       </div>
     </li>
-  </ul>
+  </div>
 </div>
 
 
 <!-- stock-display.component.html -->
-<div *ngIf="stock!=null" class="p-4 bg-white shadow-lg rounded-lg">
+<div *ngIf="stock!=null" class="max-w-4xl mx-auto my-4 p-4 bg-white shadow-lg rounded-lg">
   <h2 class="text-xl font-bold mb-2">Stock Details</h2>
   <div class="grid grid-cols-2 gap-4">
     <div><strong>Date:</strong> {{ stock.date }}</div>

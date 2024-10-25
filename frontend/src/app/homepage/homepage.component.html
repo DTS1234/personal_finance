@@ -1,39 +1,30 @@
 <!-- app-welcome.component.html -->
-<div class="container my-5">
-  <div class="text-center">
+<div class="container-sm">
+  <div class="text-center p-5 bg-gray-50">
     <h1 class="display-4">Welcome to WealthTracker</h1>
     <p class="lead">Your personal wealth management solution.</p>
   </div>
 
-  <div class="row mt-5">
-    <div class="col-md-6 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="h4 card-title">Why WealthTracker?</h2>
-          <p class="card-text">
-            With WealthTracker, you can monitor your assets and investments,
-            track your net worth, and make informed financial decisions.
-          </p>
-          <a href="#" class="btn btn-primary">Learn More</a>
-        </div>
-      </div>
-    </div>
+  <div class="bg-slate-100 mx-12 my-5 p-3 text-center">
+    <h2>Why WealthTracker?</h2>
+    <p>
+      With WealthTracker, you can monitor your assets and investments,
+      track your net worth, and make informed financial decisions.
+    </p>
+    <a href="#" class="bg-secondary text-white py-2 px-4 my-5 rounded w-1/6">Learn More</a>
+  </div>
 
-    <div class="col-md-6 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="h4 card-title">Get Started</h2>
-          <p class="card-text">
-            Sign up today to start managing your wealth. Our intuitive platform is easy to use and secure.
-          </p>
-          <a routerLink="/auth" class="btn btn-success">Sign Up</a>
-        </div>
-      </div>
-    </div>
+  <div class="bg-slate-100 mx-12 p-3 mt-5 text-center">
+    <h2>Get Started</h2>
+    <p>
+      Sign up today to start managing your wealth. Our intuitive platform is easy to use and secure.
+    </p>
+    <a routerLink="/auth" class="bg-secondary text-white py-2 px-4 my-5 rounded">Sign Up</a>
   </div>
 
   <div class="text-center mt-5">
     <p>Already have an account?</p>
-    <a routerLink="/auth" class="btn btn-outline-secondary">Log In</a>
+    <a routerLink="/auth" class="bg-secondary text-white py-2 px-4 rounded">Log In</a>
   </div>
+
 </div>

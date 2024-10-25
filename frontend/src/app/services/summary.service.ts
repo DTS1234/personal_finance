@@ -6,6 +6,7 @@ import {Summary} from '../models/summary.model';
 import {Asset} from '../models/asset.model';
 import {AuthService} from "../auth/auth.service";
 import {SearchCriteria} from "../models/search-criteria.model";
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class SummaryService {
   private newSummary: BehaviorSubject<Summary> = new BehaviorSubject<Summary>(null);
   newSummary$ = this.newSummary.asObservable();
 
-  private basePath = 'http://localhost:8080';
+  private basePath =  environment.useInMemoryDb ? 'http://localhost:3030' : "http://localhost:8080";
   private summaries: BehaviorSubject<Summary[]> = new BehaviorSubject<Summary[]>(null);
 
   constructor(private http: HttpClient, private authService: AuthService) {
@@ -96,10 +97,4 @@ export class SummaryService {
     let userId = JSON.parse(localStorage.getItem("userData")).id;
     return this.http.post<Asset>(`${this.basePath}/${userId}/summaries/${asset.summaryId}/asset/add`, asset)
   }
-
-  // updateAsset(asset: Asset) {
-  //   let userId = JSON.parse(localStorage.getItem("userData")).id;
-  //   return this.http.post<Asset>(`${this.basePath}/${userId}/summaries/${asset.summaryId}/asset/add`, asset)
-  // }
-
 }
