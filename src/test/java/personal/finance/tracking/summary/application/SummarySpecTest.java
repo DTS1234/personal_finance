@@ -5,9 +5,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import personal.finance.common.events.FakeEventPublisher;
+import personal.finance.tracking.asset.domain.Asset;
+import personal.finance.tracking.asset.domain.AssetId;
 import personal.finance.tracking.summary.application.exceptions.NoSummaryInDraftException;
 import personal.finance.tracking.summary.domain.Money;
 import personal.finance.tracking.summary.domain.Summary;
+import personal.finance.tracking.summary.domain.SummaryId;
 import personal.finance.tracking.summary.domain.SummaryState;
 import personal.finance.tracking.summary.domain.events.SummaryCreated;
 import personal.finance.tracking.summary.infrastracture.external.CurrencyFakeProvider;
@@ -19,6 +22,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static personal.finance.tracking.asset.domain.AssetType.CUSTOM;
 
 public class SummarySpecTest {
 

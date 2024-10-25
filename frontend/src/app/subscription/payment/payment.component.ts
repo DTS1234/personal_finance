@@ -28,7 +28,29 @@ export class PaymentComponent implements OnInit {
   async ngOnInit() {
     this.stripe = await loadStripe('pk_test_51O5VVwHb4TtyICkwV8q00bVbskRZj6ZsOkQzzSRdA2UpCQfGvdAjsr04EuTKwIUX7HXWpdHYGI1aSIhSNGICHxRq00bSMMX3pH');
     const elements = this.stripe.elements();
-    this.card = elements.create('card');
+    this.card = elements.create('card',
+      {
+        style: {
+          base: {
+            iconColor: '#000',
+            color: 'rgb(100 116 139)',  // Changed text color to black
+            fontWeight: '400',  // Changed font weight to normal
+            fontFamily: 'Arial, sans-serif',  // Changed font family
+            fontSize: '18px',  // Changed font size
+            fontSmoothing: 'antialiased',
+            ':-webkit-autofill': {
+              color: '#fce883',
+            },
+            '::placeholder': {
+              color: 'rgb(100 116 139)',  // Changed placeholder color
+            },
+          },
+          invalid: {
+            iconColor: '#e53e3e',  // Changed invalid icon color
+            color: '#e53e3e',  // Changed invalid text color
+          },
+        },
+      });
     this.card.mount('#card-element');
   }
 

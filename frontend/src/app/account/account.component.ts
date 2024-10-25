@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {User} from "../auth/user.model";
 import {AuthService} from "../auth/auth.service";
 import {Subscription} from "./subscription.model";
-import {NgIf} from "@angular/common";
+import {DatePipe, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {UserInformationData} from "../auth/user-updata.model";
@@ -12,7 +12,8 @@ import {UserInformationData} from "../auth/user-updata.model";
   standalone: true,
   imports: [
     NgIf,
-    FormsModule
+    FormsModule,
+    DatePipe
   ],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
@@ -43,7 +44,7 @@ export class AccountComponent {
   }
 
   updateUserInfo() {
-    this.authService.updateUserInfo(new UserInformationData(this.userModel.username, new Date(this.userModel.birthdate), this.userModel.gender, this.userModel.lastname, this.userModel.firstname))
+    this.authService.updateUserInfo(new UserInformationData(this.userModel.username, this.userModel.birthdate, this.userModel.gender, this.userModel.lastname, this.userModel.firstname))
       .subscribe(userData => {
         this.authService.user.next(this.userModel)
         this.toggleEditMode()

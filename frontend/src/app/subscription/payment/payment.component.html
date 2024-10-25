@@ -1,7 +1,8 @@
-<div *ngIf="!isLoading">
-  <div id="card-element">
+<div *ngIf="!isLoading" class="space-y-6 bg-slate-700 rounded p-6">
+
+  <div id="card-element" class="shadow-sm bg-slate-100 border rounded">
     <!-- Stripe's Card Element will be mounted here -->
   </div>
-  <button (click)="handlePayment()">SAVE CARD</button>
+  <button class="py-1 px-4 rounded bg-secondary border text-white" (click)="handlePayment()">SAVE CARD</button>
 </div>
 <app-spinner *ngIf="isLoading"></app-spinner>

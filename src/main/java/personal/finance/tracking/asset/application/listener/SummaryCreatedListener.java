@@ -22,16 +22,11 @@ import java.util.UUID;
 public class SummaryCreatedListener implements EventListener<SummaryCreated> {
 
     private final AssetRepository assetRepository;
-    private final EventPublisher eventPublisher;
 
     @Override
     @org.springframework.context.event.EventListener
     public void handle(SummaryCreated event) {
         log.info("Handling summary created, creating new assets ...");
-        List<Asset> assets = new CreateNewSummaryAssetsUseCase(assetRepository, new SummaryId(event.previousSummaryId),
-            new SummaryId(event.newSummaryId)).execute();
-        assets.forEach(a -> {
-            eventPublisher.publishEvent(new AssetCreated(event.newSummaryId, a, Instant.now(), UUID.randomUUID()));
-        });
+        new CreateNewSummaryAssetsUseCase(assetRepository, new SummaryId(event.previousSummaryId), new SummaryId(event.newSummaryId)).execute();
     }
 }

@@ -26,8 +26,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
     public Summary execute() {
         validatedIfThereAreNoDrafts();
 
-        List<Summary> confirmedSummaries =
-            summaryRepository.findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState.CONFIRMED, userId);
+        List<Summary> confirmedSummaries = summaryRepository.findSummaryByStateEqualsAndUserIdOrderByDateDesc(SummaryState.CONFIRMED, userId);
         SummaryId summaryId = SummaryId.random();
 
         if (!confirmedSummaries.isEmpty()) {
@@ -41,8 +40,7 @@ class CreateNewSummaryUseCase implements UseCase<Summary> {
                 SummaryState.DRAFT);
 
             Summary newSummary = summaryRepository.save(summary);
-            eventPublisher.publishEvent(
-                new SummaryCreated(newSummary.getIdValue(), lastConfirmed.getIdValue(), UUID.randomUUID()));
+            eventPublisher.publishEvent(new SummaryCreated(newSummary.getIdValue(), lastConfirmed.getIdValue(), UUID.randomUUID()));
 
             return newSummary;
         }

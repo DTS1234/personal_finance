@@ -31,5 +31,4 @@ public class AssetController {
         AssetDTO assetDTO) {
         return AssetDTOMapper.dto(facade.createAsset(summaryId, AssetDTOMapper.from(assetDTO)));
     }
-
 }

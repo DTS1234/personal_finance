@@ -1,6 +1,6 @@
-<div class="flex flex-col">
-  <h4 class="mx-4 mt-4 mb-2 text-lg font-semibold text-gray-800">Available assets:</h4>
-  <div class="overflow-x-auto mx-4">
+<div class="max-w-6xl mx-auto space-y-6">
+  <p class="p-4 text-xl font-semibold text-gray-600 border-y">Available assets:</p>
+  <div class="overflow-x-auto p-4">
     <table class="min-w-full divide-y divide-gray-300">
       <thead class="bg-gray-50">
       <tr>
@@ -41,10 +41,11 @@
       </tbody>
     </table>
   </div>
+  <div class="flex space-x-2 m-2 p-4 border rounded">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="confirmSummary()">SUBMIT SUMMARY</button>
+    <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" (click)="addAssetPage()">ADD ASSET</button>
+    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="cancelSummary()">CANCEL</button>
+  </div>
 </div>
 
-<div class="flex space-x-2 m-2">
-  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="confirmSummary()">SUBMIT SUMMARY</button>
-  <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" (click)="addAssetPage()">ADD ASSET</button>
-  <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="cancelSummary()">CANCEL</button>
-</div>
+

@@ -9,4 +9,17 @@ import personal.finance.tracking.summary.application.UpdateSummaryWithNewAssetUs
 import personal.finance.tracking.summary.domain.SummaryId;
 import personal.finance.tracking.summary.domain.SummaryRepository;
 
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class AssetCreatedListener implements EventListener<AssetCreated> {
 
+    private final SummaryRepository summaryRepository;
+
+    @Override
+    @org.springframework.context.event.EventListener
+    public void handle(AssetCreated event) {
+        log.info("Received asset created event.");
+        new UpdateSummaryWithNewAssetUseCase(summaryRepository, event.asset, new SummaryId(event.summaryId)).execute();
+    }
+}

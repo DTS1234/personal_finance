@@ -15,6 +15,7 @@ import personal.finance.iam.application.dto.AuthResponseDTO;
 import personal.finance.iam.application.dto.PasswordResetConfirmationDTO;
 import personal.finance.iam.application.dto.PasswordResetState;
 import personal.finance.iam.application.dto.RegistrationState;
+import personal.finance.iam.application.dto.UserInformationDTO;
 import personal.finance.iam.application.dto.UserRegistrationConfirmationDTO;
 import personal.finance.iam.application.dto.UserRegistrationDTO;
 import personal.finance.iam.domain.PasswordResetToken;
@@ -98,7 +99,7 @@ public class AccessManagementFacade {
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 return new AuthResponseDTO(username, found.getId().value.toString(),
-                    authTokenService.token(authentication), "3600", found.getUserInformation());
+                    authTokenService.token(authentication), "3600", UserInformationDTO.from(found.getUserInformation()));
             } else {
                 return null;
             }

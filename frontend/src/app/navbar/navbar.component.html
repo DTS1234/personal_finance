@@ -44,12 +44,12 @@
       <div class="relative" *ngIf="showDropdown" (mouseleave)="toggleDropdown()">
         <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu"
              aria-orientation="vertical" aria-labelledby="user-menu">
+          <a routerLink="/account" *ngIf="isAuthenticated" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Account Details</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Payment Method</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
              routerLinkActive="isActive" *ngIf="isAuthenticated" (click)="onLogout()">
             Logout
           </a>
-          <a routerLink="/account" *ngIf="isAuthenticated" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Account Details</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Payment Method</a>
         </div>
       </div>
     </div>
