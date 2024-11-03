@@ -1,4 +1,4 @@
-<div class="max-w-2xl bg-slate-300 m-auto">
+<div class="max-w-4xl bg-slate-300 m-auto">
   <form [formGroup]="assetForm" (ngSubmit)="onSubmit()" class="space-y-4 mt-10 font-medium">
     <div class="m-2 space-y-1">
       <label class="block" for="name">Name</label>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div formArrayName="items">
+    <div class="grid grid-cols-3 grid-rows-3 gap-4 p-2" formArrayName="items">
       <div *ngFor="let item of items.controls; let i = index">
         <div *ngIf="assetForm.get('type').value === 'STOCK'" [formGroupName]="i" class="bg-slate-400 relative p-5 shadow-sm">
           <label class="block" for="ticker">Ticker</label>
@@ -46,7 +46,7 @@
           <div class="absolute top-5 right-5 text-white hover:font-bold cursor-pointer" (click)="removeItem(i)">X</div>
         </div>
 
-        <div *ngIf="assetForm.get('type').value === 'CUSTOM'" [formGroupName]="i" class="p-5 shadow-sm bg-slate-400 relative">
+        <div *ngIf="assetForm.get('type').value === 'CUSTOM'" [formGroupName]="i" class="p-5 shadow-sm bg-slate-400 relative rounded">
           <label class="block" for="customName">Name</label>
           <input class="shadow-md rounded" id="customName" formControlName="name"/>
           <label class="block" for="customMoney">Money</label>

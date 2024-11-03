@@ -14,7 +14,7 @@ import {AssetBoxComponent} from './dashboard/asset-box/asset-box.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SummaryBoxComponent} from './dashboard/summary-box/summary-box.component';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
-import {AssetFormComponent} from './manage/summary-creation/add-asset/asset-form.component';
+import {AssetFormComponent} from './manage/summary-creation/asset-form/asset-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {AuthComponent} from './auth/auth.component';

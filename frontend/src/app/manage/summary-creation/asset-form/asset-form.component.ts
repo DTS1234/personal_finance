@@ -37,9 +37,9 @@ export class AssetFormComponent implements OnInit {
 
     this.assetForm.get('type').valueChanges.subscribe((type) => {
       this.clearItems(); // Clear existing items when type changes
-      if (type === 'STOCK') {
+      if (type === 'STOCK' && this.mode === 'add') {
         this.addStockItem();
-      } else if (type === 'CUSTOM') {
+      } else if (type === 'CUSTOM' && this.mode === 'add') {
         this.addCustomItem();
       }
     });
@@ -63,8 +63,32 @@ export class AssetFormComponent implements OnInit {
           this.assetForm.patchValue({
             name: this.asset.name,
             money: this.asset.money,
-            type: this.asset.type,
-            items: this.asset.items
+            type: this.asset.type
+          });
+
+          console.log("populating items: " + JSON.stringify(this.asset.items))
+
+          this.asset.items.forEach(item => {
+            if (item.type === 'STOCK') {
+              const stockItem = item as StockItem
+              const stockItemGroup = this.formBuilder.group({
+                ticker: [stockItem.ticker, [Validators.required]],
+                purchasePrice: [stockItem.purchasePrice, [Validators.required, Validators.min(0)]],
+                currentPrice: [stockItem.currentPrice, [Validators.required, Validators.min(0)]],
+                name: [item.name, [Validators.required]],
+                quantity: [stockItem.quantity, [Validators.required, Validators.min(0)]],
+                money: [item.money, [Validators.required, Validators.min(0)]],
+                type: ['STOCK']
+              });
+              this.items.push(stockItemGroup);
+            } else if (item.type === 'CUSTOM') {
+              const customItemGroup = this.formBuilder.group({
+                name: [item.name, [Validators.required]],
+                money: [item.money, [Validators.required, Validators.min(0)]],
+                type: ['CUSTOM']
+              });
+              this.items.push(customItemGroup);
+            }
           });
         }
       });

@@ -5,7 +5,7 @@ import {HistoryComponent} from './history/history.component';
 import {ManageComponent} from './manage/manage.component';
 import {CommonModule} from '@angular/common';
 import {SummaryCreationComponent} from './manage/summary-creation/summary-creation.component';
-import {AssetFormComponent} from './manage/summary-creation/add-asset/asset-form.component';
+import {AssetFormComponent} from './manage/summary-creation/asset-form/asset-form.component';
 import {AuthComponent} from "./auth/auth.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {PasswordResetComponent} from "./password/password-reset/password-reset.component";
