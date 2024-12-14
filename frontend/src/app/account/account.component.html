@@ -51,15 +51,15 @@
     </button>
   </div>
 
-  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-4">
     <h2 class="mb-6 text-2xl font-bold text-gray-700">Subscriptions Information</h2>
     <div *ngIf="subscription!=null">
       <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="type">
           Subscription Plan
         </label>
         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" disabled
-               id="status" type="text" placeholder="{{subscription.subscriptionType}}">
+               id="type" type="text" placeholder="{{subscription.subscriptionType}}">
       </div>
       <div class="mb-6">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
@@ -76,6 +76,20 @@
         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled
                id="expires" type="text" placeholder="{{subscription.expiresAt}}">
       </div>
+
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+          Status
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled
+               id="status" type="text" placeholder="{{subscription.status}}">
+        <p *ngIf="subscription.status == 'CANCELLED'" class="text-gray-500 text-sm mt-3 px-2 pt-2 italic">Your subscription will expire on {{subscription.expiresAt}}. You will lose access to the premium features after this date.</p>
+        <p *ngIf="subscription.status == 'ACTIVE'" class="text-gray-500 text-sm mt-3 px-2 pt-2 italic">Your subscription will auto-renew on {{subscription.expiresAt}}.</p>
+      </div>
+
+      <button *ngIf="subscription?.status != 'CANCELLED'" (click)="cancelSubscription()" class="w-1/5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        CANCEL SUBSCRIPTION
+      </button>
     </div>
     <div *ngIf="subscription==null" class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
       <div class="flex-shrink-0">

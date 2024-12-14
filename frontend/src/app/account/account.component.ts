@@ -6,6 +6,7 @@ import {DatePipe, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {UserInformationData} from "../auth/user-updata.model";
+import {PaymentService} from "../subscription/payment/payment.service";
 
 @Component({
   selector: 'app-account',
@@ -23,7 +24,7 @@ export class AccountComponent {
   protected userModel: User;
   protected subscription: Subscription | null = null;
   protected isEditMode = false;
-  constructor(private authService: AuthService, public router: Router) {
+  constructor(private authService: AuthService, public router: Router, private paymentService: PaymentService) {
     authService.user.subscribe(user => {
         console.log("user loaded: " + JSON.stringify(user))
         this.userModel = user
@@ -49,5 +50,12 @@ export class AccountComponent {
         this.authService.user.next(this.userModel)
         this.toggleEditMode()
       })
+  }
+
+  cancelSubscription() {
+    this.paymentService.cancelSubscription().subscribe(it => {
+      this.subscription.status = "CANCELED"
+      this.authService.subscription.next(this.subscription)
+    })
   }
 }

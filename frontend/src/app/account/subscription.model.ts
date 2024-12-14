@@ -1,4 +1,4 @@
 export class Subscription {
-  constructor(public expiresAt: Date, public start: Date, public subscriptionType: string) {
+  constructor(public expiresAt: Date, public start: Date, public subscriptionType: string, public status: string) {
   }
 }

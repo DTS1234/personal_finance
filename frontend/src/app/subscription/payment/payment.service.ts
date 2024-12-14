@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {Summary} from '../../models/summary.model';
 import {SubscriptionRequest} from "../../models/subscription-request.model";
 import {PaymentMethodSubmit} from "../../models/payment-method-submit.model";
 
@@ -25,5 +24,10 @@ export class PaymentService {
   submitPaymentMethod(token:string): Observable<any> {
     let id = JSON.parse(localStorage.getItem("userData")).id;
     return this.http.post<any>(`${this.basePath}/submit-payment-method`, new PaymentMethodSubmit(id, token))
+  }
+
+  cancelSubscription(): Observable<any> {
+    let id = JSON.parse(localStorage.getItem("userData")).id;
+    return this.http.post<any>(`${this.basePath}/cancel-subscription`, new SubscriptionRequest(id))
   }
 }

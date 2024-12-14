@@ -1,4 +1,4 @@
-package personal.finance.iam.infrastracture.persistance.repository;
+package personal.finance.iam;
 
 import personal.finance.iam.domain.User;
 import personal.finance.iam.domain.UserId;
@@ -6,37 +6,34 @@ import personal.finance.iam.domain.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class InMemoryUserRepository implements UserRepository {
 
-    private static final Map<UUID, User> USERS = new HashMap<>();
+    private final Map<UserId, User> store = new HashMap<>();
+    private final Map<String, User> emailStore = new HashMap<>();
 
     @Override
     public User findByEmail(String email) {
-        return USERS.values().stream().filter(u -> u.getUserInformation().getEmail().equals(email)).findFirst()
-            .orElse(null);
+        return emailStore.get(email);
     }
 
     @Override
     public User save(User user) {
-        user.setId(UserId.random());
-        USERS.put(user.getId().value, user);
-        return USERS.get(user.getId().value);
+        store.put(user.getId(), user);
+        emailStore.put(user.getUserInformation().getEmail(), user);
+        return user;
     }
 
     @Override
     public void deleteByEmail(String email) {
-        USERS.remove(findByEmail(email).getId().value);
+        User user = emailStore.remove(email);
+        if (user != null) {
+            store.remove(user.getId());
+        }
     }
 
     @Override
     public User findById(UserId userId) {
-        return USERS.get(userId.value);
-    }
-
-    public InMemoryUserRepository clear() {
-        USERS.clear();
-        return this;
+        return store.get(userId);
     }
 }
