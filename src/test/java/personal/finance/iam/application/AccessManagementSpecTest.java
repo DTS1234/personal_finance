@@ -104,7 +104,7 @@ class AccessManagementSpecTest {
         facade.confirmRegistration("mock token");
         // then
         String result = facade.login("user@user.com", "pass").token();
-        Assertions.assertThat(result).isEqualTo("jwt mock token");
+        assertThat(result).isEqualTo("jwt mock token");
     }
 
     @Test

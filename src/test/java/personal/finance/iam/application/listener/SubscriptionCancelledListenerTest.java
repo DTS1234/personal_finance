@@ -12,18 +12,20 @@ import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserSubscription;
 import personal.finance.iam.domain.UserSubscriptionId;
 import personal.finance.iam.domain.UserSubscriptionRepository;
-import personal.finance.iam.infrastracture.persistance.repository.InMemoryUserRepository;
 import personal.finance.payment.domain.events.SubscriptionCancelled;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class SubscriptionCancelledListenerTest {
 
-    private final SubscriptionExpiryScheduler subscriptionExpiryScheduler = new SubscriptionExpiryScheduler(new InMemoryUserSubscriptionRepository(),
-        new InMemoryUserRepository());
+    private final SubscriptionExpiryScheduler subscriptionExpiryScheduler = mock(SubscriptionExpiryScheduler.class);
     private final UserSubscriptionRepository repository = new InMemoryUserSubscriptionRepository();
     private final SubscriptionCancelledListener listener = new SubscriptionCancelledListener(subscriptionExpiryScheduler, repository);
 
@@ -45,6 +47,7 @@ class SubscriptionCancelledListenerTest {
 
         // then
         assertThat(repository.findByUserId(UserId.fromString(Fixtures.USER_ID)).getStatus() == SubscriptionStatus.CANCELLED).isTrue();
+        // and
+        verify(subscriptionExpiryScheduler, times(1)).schedule(any(), any());
     }
-
 }
