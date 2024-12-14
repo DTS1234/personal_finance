@@ -27,7 +27,20 @@ services:
       - ./monitoring/grafana/provisioning/:/etc/grafana/provisioning/
     env_file:
       - ./monitoring/grafana/config.monitoring
-
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: springdb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 networks:
   monitoring:
     driver: bridge
+volumes:
+  postgres-data:

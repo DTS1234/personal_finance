@@ -26,9 +26,11 @@ public class Customer {
     private String customerStripeId;
     @Column(name = "payment_method_id")
     private String paymentMethodId;
+    @Column(name = "stripe_subscription_id")
+    private String stripeSubscriptionId;
 
     public static Customer create() {
-        return new Customer(CustomerId.random(), null, null, null);
+        return new Customer(CustomerId.random(), null, null, null, null);
     }
 
     @Override

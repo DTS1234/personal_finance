@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import personal.finance.Fixtures;
-import personal.finance.iam.InMemoryUserRepository;
 import personal.finance.iam.InMemoryUserSubscriptionRepository;
 import personal.finance.iam.application.SubscriptionExpiryScheduler;
 import personal.finance.iam.domain.SubscriptionStatus;
@@ -13,6 +12,7 @@ import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserSubscription;
 import personal.finance.iam.domain.UserSubscriptionId;
 import personal.finance.iam.domain.UserSubscriptionRepository;
+import personal.finance.iam.infrastracture.persistance.repository.InMemoryUserRepository;
 import personal.finance.payment.domain.events.SubscriptionCancelled;
 
 import java.time.LocalDateTime;

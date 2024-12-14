@@ -25,10 +25,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static integration.Fixtures.USER_ID;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static personal.finance.Fixtures.USER_ID;
 
 @Transactional
 public class AssetIntegrationTest extends IntegrationTest {

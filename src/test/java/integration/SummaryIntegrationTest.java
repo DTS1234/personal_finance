@@ -13,10 +13,10 @@ import personal.finance.tracking.summary.domain.Summary;
 
 import java.util.UUID;
 
-import static integration.Fixtures.USER_ID;
 import static integration.SummaryAssert.assertThatSummary;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static personal.finance.Fixtures.USER_ID;
 
 
 @Transactional

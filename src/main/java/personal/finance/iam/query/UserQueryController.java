@@ -24,7 +24,8 @@ public class UserQueryController {
         return optionalUserSubscription.map(it -> new UserSubscriptionDTO(
                 it.getSubscriptionType(),
                 it.getExpires(),
-                it.getStart())
+                it.getStart(),
+                it.getStatus().name())
             ).orElseThrow(() -> new IllegalStateException("Subscription not found for user: " + userId));
     }
 

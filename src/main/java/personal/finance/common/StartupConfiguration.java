@@ -1,6 +1,7 @@
 package personal.finance.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,9 +52,15 @@ class StartupConfiguration {
     @Autowired
     private AssetRepository assetSqlRepository;
 
+    @Value("${run.script}")
+    boolean runScript;
+
     @Bean
     @Transactional
     public Object init(UserSubscriptionQueryRepository userSubscriptionQueryRepository) throws Exception {
+        if (!runScript) {
+            return null;
+        }
         currencyManager.updateExchangeRates();
 
         User user = userRepositorySql.save(userOne());
@@ -65,13 +72,13 @@ class StartupConfiguration {
         userRepositorySql.save(user);
         // stripe user 1 code customer
         customerRepository.save(
-            new Customer(new CustomerId(u1.value), user.getUserInformation().getEmail(), "cus_Phz6xa4OHy10mB", null));
+            new Customer(new CustomerId(u1.value), user.getUserInformation().getEmail(), "cus_Phz6xa4OHy10mB", null, null));
 
         User user2 = userRepositorySql.save(userTwo());
         UserId u2 = user2.getId();
         // stripe user 2 code customer
         customerRepository.save(
-            new Customer(new CustomerId(u2.value), user2.getUserInformation().getEmail(), "cus_Phz60VNLojAeut", null));
+            new Customer(new CustomerId(u2.value), user2.getUserInformation().getEmail(), "cus_Phz60VNLojAeut", null, null));
 
         userRepositorySql.save(userThree());
 

@@ -20,6 +20,10 @@ public class UserId implements Serializable {
     public UserId() {
     }
 
+    public static UserId fromString(String value) {
+        return new UserId(UUID.fromString(value));
+    }
+
     public static UserId random() {
         return new UserId(UUID.randomUUID());
     }

@@ -12,29 +12,33 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
 @Entity
 @NoArgsConstructor
 public class UserSubscription {
     @EmbeddedId
-    @Setter
     private UserSubscriptionId userSubscriptionId;
 
-    @Setter
     @Getter
     private LocalDate start;
 
-    @Setter
     @Getter
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate expires;
 
     @Getter
-    @Setter
     private SubscriptionType subscriptionType;
 
+    @Getter
+    private SubscriptionStatus status;
+
     @OneToOne
-    @Setter
+    @Getter
     private User user;
+
+    public UserSubscriptionId getId() {
+        return userSubscriptionId;
+    }
 
     public boolean isActive() {
         LocalDate now = LocalDate.now();

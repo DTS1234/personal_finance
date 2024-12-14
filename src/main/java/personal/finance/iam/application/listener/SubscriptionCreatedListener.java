@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import personal.finance.iam.domain.SubscriptionStatus;
 import personal.finance.iam.domain.User;
 import personal.finance.iam.domain.UserId;
 import personal.finance.iam.domain.UserRepository;
@@ -37,6 +38,7 @@ public class SubscriptionCreatedListener {
         userSubscription.setStart(subscriptionCreated.start);
         userSubscription.setExpires(subscriptionCreated.expiresAt);
         userSubscription.setSubscriptionType(subscriptionCreated.type);
+        userSubscription.setStatus(SubscriptionStatus.ACTIVE);
 
         return userSubscriptionRepo.save(userSubscription);
     }

@@ -10,5 +10,7 @@ public record UserSubscriptionDTO(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate expiresAt,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    LocalDate start) {
+    LocalDate start,
+    String status) {
+
 }

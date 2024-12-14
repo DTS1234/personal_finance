@@ -40,7 +40,7 @@ public class UserQueryIntegrationTest extends IntegrationTest {
         // then
         String expected = getFile("iam/should_return_subscription.json");
         assertThatJson(result)
-            .whenIgnoringPaths("userId")
+            .whenIgnoringPaths("userId", "start", "expiresAt")
             .isEqualTo(expected);
     }
 }

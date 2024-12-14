@@ -4,6 +4,8 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
+import com.stripe.param.SubscriptionListParams;
+import com.stripe.param.SubscriptionUpdateParams;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -63,5 +65,20 @@ public class StripeService {
     }
 
 
+    public Subscription cancelSubscription(String stripeSubscriptionId) {
+        try {
+            Subscription found = Subscription.retrieve(stripeSubscriptionId);
+            if (found == null) {
+                log.warn("No subscription found for customer {}", stripeSubscriptionId);
+                throw new IllegalStateException("No subscription found for customer " + stripeSubscriptionId);
+            } else {
+                SubscriptionUpdateParams subscriptionUpdateParams = SubscriptionUpdateParams.builder().setCancelAtPeriodEnd(true).build();
+                return found.update(subscriptionUpdateParams);
+            }
 
+        } catch (StripeException e) {
+            log.error("Failed to cancel subscription for customer {}", stripeSubscriptionId);
+            throw new IllegalStateException(e.getMessage());
+        }
+    }
 }

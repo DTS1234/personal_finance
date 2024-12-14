@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubscriptionRequest {
+public class SubscriptionRequestDTO {
     public String userId;
 }
 
